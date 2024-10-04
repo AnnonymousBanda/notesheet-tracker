@@ -16,8 +16,9 @@ const catchAsync = (fn) => {
 }
 
 const handleDevError = (err, res) => {
+	err.status = err.status || 500
 	return res.status(err.status).json({
-		status: err.status || 500,
+		status: err.status,
 		message: err.message,
 		stack: err.stack,
 	})
@@ -43,10 +44,10 @@ const globalErrorController = (err, req, res, next) => {
 	if (process.env.NODE_ENV !== 'test') console.log(err)
 
 	if (process.env.NODE_ENV === 'development') {
-		handleDevError(err, res)
+		return handleDevError(err, res)
 	}
 
-	handleProdError(err, res)
+	return handleProdError(err, res)
 }
 
 const notFound = (req, res, next) => {

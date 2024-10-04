@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const { apiRouter } = require('./routes')
+const { apiRouter, authRouter } = require('./routes')
 const {
 	globalErrorController,
 	notFound,
@@ -24,6 +24,7 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 
 app.route('*').all(notFound)
