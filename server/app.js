@@ -1,7 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const passport = require('passport')
 
+const configPassport = require('./config/oauth.config')
 const { apiRouter, authRouter } = require('./routes')
 const {
 	globalErrorController,
@@ -17,12 +19,15 @@ const corsOptions = {
 	credentials: true,
 	optionsSuccessStatus: 200,
 }
-
 app.use(cors(corsOptions))
+
 app.use(morgan('dev'))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(passport.initialize())
+configPassport(passport)
 
 app.use('/auth', authRouter)
 app.use('/api', apiRouter)
