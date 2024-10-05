@@ -1,5 +1,5 @@
 const { signToken } = require('../utils/auth.util')
-const { catchAsync } = require('../controllers/error.controller')
+const { catchAsync } = require('../utils/error.util')
 
 const login = catchAsync(async (req, res) => {
 	const { id } = req.body

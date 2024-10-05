@@ -9,12 +9,6 @@ class AppError extends Error {
 	}
 }
 
-const catchAsync = (fn) => {
-	return (req, res, next) => {
-		fn(req, res, next).catch(next)
-	}
-}
-
 const handleDevError = (err, res) => {
 	err.status = err.status || 500
 	return res.status(err.status).json({
@@ -54,4 +48,4 @@ const notFound = (req, res, next) => {
 	next(new AppError('Endpoint does not exist', 404))
 }
 
-module.exports = { globalErrorController, notFound, catchAsync, AppError }
+module.exports = { globalErrorController, notFound, AppError }

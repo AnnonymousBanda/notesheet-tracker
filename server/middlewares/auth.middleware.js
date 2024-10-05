@@ -1,5 +1,5 @@
 const { verifyToken } = require('../utils/auth.util')
-const { catchAsync } = require('../controllers/error.controller')
+const { catchAsync } = require('../utils/error.util')
 
 const protect = catchAsync(async (req, res, next) => {
 	const token = req.headers.authorization.split(' ')[1]
