@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const passport = require('passport')
 
 const configPassport = require('./config/oauth.config')
-const { apiRouter, authRouter } = require('./routes')
+const { apiRouter, authRouter, oauthRouter } = require('./routes')
 const {
 	globalErrorController,
 	notFound,
@@ -30,6 +30,7 @@ app.use(passport.initialize())
 configPassport(passport)
 
 app.use('/auth', authRouter)
+app.use('/oauth', oauthRouter)
 app.use('/api', apiRouter)
 
 app.route('*').all(notFound)

@@ -6,7 +6,7 @@ const configPassport = (passport) => {
 			{
 				clientID: process.env.OUTLOOK_CLIENT_ID,
 				clientSecret: process.env.OUTLOOK_CLIENT_SECRET,
-				callbackURL: '/auth/outlook/callback',
+				callbackURL: '/oauth/outlook/callback',
 			},
 			(accessToken, refreshToken, profile, done) => {
 				user = {

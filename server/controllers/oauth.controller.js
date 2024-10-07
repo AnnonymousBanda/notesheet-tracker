@@ -3,38 +3,37 @@ const passport = require('passport')
 const { catchAsync } = require('../utils/error.util')
 const { signToken } = require('../utils/auth.util')
 
-const outlookLogin = catchAsync(async (req, res) =>
-	passport.authenticate('windowslive', {
-		scope: [
-			'openid',
-			'profile',
-			'offline_access',
-			'https://outlook.office.com/Mail.Read',
-		],
-	})(req, res)
-)
+const outlookLogin = passport.authenticate('windowslive', {
+	scope: [
+		'openid',
+		'profile',
+		'offline_access',
+		'https://outlook.office.com/Mail.Read',
+	],
+})
 
-const oulookOauthCallback = catchAsync(async (req, res) =>
-	passport.authenticate('windowlive', {
-		session: false,
-		failureRedirect: '/failure',
-	})
-)
+const oulookOauthCallback = passport.authenticate('windowslive', {
+	session: false,
+	failureRedirect: 'oauth/failure',
+})
 
 const oauthCallback = catchAsync(async (req, res) => {
 	const user = {
 		email: req.user.profile.emails[0].value,
-		username: req.user.profile.displayName,
-		name: req.user.profile.givenName,
+		name: req.user.profile.displayName,
 	}
 
 	const token = signToken(user)
+	console.log(user)
 
 	return res.status(200).json({ status: 200, token })
 })
 
 const failure = catchAsync(async (req, res) => {
-	return res.status(401).send('Authentication Failed')
+	return res.status(401).json({
+		status: 401,
+		message: 'Authentication failed',
+	})
 })
 
 module.exports = {
