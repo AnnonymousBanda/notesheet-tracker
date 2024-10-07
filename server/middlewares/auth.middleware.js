@@ -1,21 +1,49 @@
 const { verifyToken } = require('../utils/auth.util')
 const { catchAsync } = require('../utils/error.util')
+const { AppError } = require('../controllers/error.controller')
+const userModel = require('../models/user.model')
 
-const protect = catchAsync(async (req, res, next) => {
+const isLoggedIn = catchAsync(async (req, res, next) => {
+	if (
+		!req.headers.authorization ||
+		!req.headers.authorization.startsWith('Bearer')
+	)
+		throw new AppError('You are not authenticated', 401)
+
 	const token = req.headers.authorization.split(' ')[1]
 
-	if (!token) {
-		return res.status(401).json({
-			status: 'fail',
-			message: 'You are not logged in',
-		})
-	}
+	if (!token) throw new AppError('You are not authenticated', 401)
 
 	const decoded = await verifyToken(token)
 
-	req.user = decoded
+	const user = await userModel.findById(decoded.id)
+
+	if (!user) throw new AppError('User not found', 404)
 
 	next()
 })
 
-module.exports = { protect }
+const isAdmin = catchAsync(async (req, res, next) => {
+	if (
+		!req.headers.authorization ||
+		!req.headers.authorization.startsWith('Bearer')
+	)
+		throw new AppError('You are not authenticated', 401)
+
+	const token = req.headers.authorization.split(' ')[1]
+
+	if (!token) throw new AppError('You are not authenticated', 401)
+
+	const decoded = await verifyToken(token)
+
+	const user = await userModel.findById(decoded.id)
+
+	if (!user) throw new AppError('User not found', 404)
+
+	if (user.role !== 'admin')
+		throw new AppError('You are not authorized to access this route', 403)
+
+	next()
+})
+
+module.exports = { isLoggedIn, isAdmin }

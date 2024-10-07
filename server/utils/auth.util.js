@@ -16,8 +16,13 @@ const comparePasswords = async (password, hashedPassword) => {
 	return await bcrypt.compare(password, hashedPassword)
 }
 
+const sendResetToken = (email, token) => {
+	console.log('Sending password reset token to ', email)
+}
+
 module.exports = {
 	signToken,
 	verifyToken,
 	comparePasswords,
+	sendResetToken,
 }
