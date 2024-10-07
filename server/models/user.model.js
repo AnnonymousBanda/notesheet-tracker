@@ -5,16 +5,18 @@ const { Schema, model } = require('mongoose')
 const { AppError } = require('../controllers/error.controller')
 
 const userSchema = new Schema({
-	username: {
+	email: {
 		type: String,
 		required: true,
 		unique: true,
 		trim: true,
-		minlength: 3,
 		validate: {
-			validator: (username) => /^[a-zA-Z0-9_@.]+$/.test(username),
-			message:
-				'Username can only contain letters, numbers, and the characters _@.',
+			validator: (email) =>
+				validator.isEmail(email) &&
+				/^[a-zA-Z0-9._%+-]+@(outlook\.com|hotmail\.com|live\.com|msn\.com)$/.test(
+					email
+				),
+			message: 'Please provide a valid outlook email address!',
 		},
 	},
 	password: {
@@ -49,10 +51,11 @@ const userSchema = new Schema({
 		type: String,
 		enum: ['user', 'admin'],
 		default: 'user',
+		immutable: true,
 	},
 	passwordChangedAt: Date,
 	passwordResetToken: String,
-	passwordResetExpires: Date,
+	passwordResetTokenExpires: Date,
 })
 
 userSchema.pre('save', async function (next) {
