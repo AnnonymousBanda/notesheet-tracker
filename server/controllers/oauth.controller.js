@@ -1,4 +1,5 @@
 const passport = require('passport')
+const { userModel } = require('../models')
 
 const { catchAsync } = require('../utils/error.util')
 const { signToken } = require('../utils/auth.util')
@@ -18,13 +19,19 @@ const oulookOauthCallback = passport.authenticate('windowslive', {
 })
 
 const oauthCallback = catchAsync(async (req, res) => {
-	const user = {
+	let user = {
 		email: req.user.profile.emails[0].value,
-		name: req.user.profile.displayName,
+	}
+
+	user = await userModel.findOne({ email: user.email })
+
+	if (!user) {
+		user = await userModel.create({
+			email: user.email,
+		})
 	}
 
 	const token = signToken(user)
-	console.log(user)
 
 	return res.status(200).json({ status: 200, token })
 })
