@@ -13,7 +13,7 @@ const userSchema = new Schema({
 		validate: {
 			validator: (email) =>
 				validator.isEmail(email) &&
-				/^[a-zA-Z0-9._%+-]+@(outlook\.com|hotmail\.com|live\.com|msn\.com)$/.test(
+				/^[a-zA-Z0-9._%+-]+@(outlook\.com|hotmail\.com|live\.com|msn\.com|iitp\.ac\.in)$/.test(
 					email
 				),
 			message: 'Please provide a valid outlook email address!',
@@ -57,8 +57,8 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('save', async function (next) {
-	if (this.isModified('role'))
-		throw new AppError('You cannot change your role', 400)
+	// if (this.isModified('role'))
+	// 	throw new AppError('You cannot change your role', 400)
 
 	if (!this.isModified('password')) return next()
 

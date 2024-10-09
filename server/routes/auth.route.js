@@ -1,19 +1,21 @@
 const express = require('express')
 
 const {
+	register,
 	login,
 	logout,
-	reset,
 	getResetToken,
-	forgotPassword,
+	verifyResetToken,
+	reset,
 } = require('../controllers/auth.controller')
 
 const router = express.Router()
 
+// router.route('/register').post(register) //used when hardcording the admin user
 router.route('/login').post(login)
 router.route('/logout').get(logout)
-// router.route('/reset-password').patch(getResetToken)
-// router.route('/forgot-password').post(getResetToken)
-// router.route('/reset/:token').patch(reset)
+router.route('/get-password-reset-token').get(getResetToken)
+router.route('/verify-password-reset-token').get(verifyResetToken)
+router.route('/password-reset/:token').patch(reset)
 
 module.exports = router

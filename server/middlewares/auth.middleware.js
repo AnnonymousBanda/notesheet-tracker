@@ -20,6 +20,9 @@ const isLoggedIn = catchAsync(async (req, res, next) => {
 
 	if (!user) throw new AppError('User not found', 404)
 
+	if (user.passwordChangedAt > decoded.iat)
+		throw new AppError('Password changed. Please login again', 401)
+
 	next()
 })
 
@@ -42,6 +45,9 @@ const isAdmin = catchAsync(async (req, res, next) => {
 
 	if (user.role !== 'admin')
 		throw new AppError('You are not authorized to access this route', 403)
+
+	if (user.passwordChangedAt > decoded.iat)
+		throw new AppError('Password changed. Please login again', 401)
 
 	next()
 })

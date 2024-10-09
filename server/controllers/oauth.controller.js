@@ -33,7 +33,7 @@ const oauthCallback = catchAsync(async (req, res) => {
 
 	const token = signToken(user)
 
-	return res.status(200).json({ status: 200, token })
+	return res.status(200).json({ status: 200, jwt: token })
 })
 
 const failure = catchAsync(async (req, res) => {
