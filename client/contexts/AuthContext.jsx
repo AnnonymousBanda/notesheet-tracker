@@ -1,8 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import jwtDecode from 'jwt-decode'
+import { useRouter } from 'next/navigation'
+import { jwtDecode } from 'jwt-decode'
 
 const AuthContext = createContext()
 
@@ -12,14 +12,26 @@ export const AuthProvider = ({ children }) => {
 	const router = useRouter()
 
 	useEffect(() => {
-		const token = localStorage.getItem('jwt')
+		const checkLoggedIn = async () => {
+			const token = localStorage.getItem('jwt')
 
-		if (token) {
-			const decoded = jwtDecode(token)
-			setUser(decoded)
+			if (token) {
+				const decoded = jwtDecode(token)
+
+				const user = await (
+					await fetch('http://localhost:8000/api/user/me', {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					})
+				).json()
+
+				setUser(user)
+			}
+
+			setLoading(false)
 		}
-
-		setLoading(false)
+		checkLoggedIn()
 	}, [])
 
 	const isAuthenticated = () => !!user

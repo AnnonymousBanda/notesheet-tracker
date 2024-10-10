@@ -19,19 +19,17 @@ const oulookOauthCallback = passport.authenticate('windowslive', {
 })
 
 const oauthCallback = catchAsync(async (req, res) => {
-	let user = {
-		email: req.user.profile.emails[0].value,
-	}
+	let email = req.user.profile.emails[0].value
 
-	user = await userModel.findOne({ email: user.email })
+	let user = await userModel.findOne({ email })
 
 	if (!user) {
 		user = await userModel.create({
-			email: user.email,
+			email,
 		})
 	}
 
-	const token = signToken(user)
+	const token = signToken(user.id)
 
 	return res.status(200).json({ status: 200, jwt: token })
 })

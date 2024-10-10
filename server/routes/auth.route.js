@@ -11,7 +11,7 @@ const {
 
 const router = express.Router()
 
-// router.route('/register').post(register) //used when hardcording the admin user
+router.route('/register').post(register) //used when hardcording the admin user
 router.route('/login').post(login)
 router.route('/logout').get(logout)
 router.route('/get-password-reset-token').get(getResetToken)

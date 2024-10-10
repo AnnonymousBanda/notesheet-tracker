@@ -9,20 +9,7 @@ export default function Login() {
           <h3>Login</h3>
         </div>
         <Loginform />
-        <div className="flex w-full items-center gap-2">
-            <hr className="border-black w-full border-solid" />
-            <p>OR</p>
-            <hr className="border-black w-full border-solid" />
-        </div>
         
-        <form className="w-full">
-          <div className="w-full flex justify-center items-center mt-8">
-            <button className="flex gap-3 items-center justify-center  bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202]">
-              <img src="/images/ms_logo.svg" alt="" />
-              <p>Sign In with Microsoft</p>
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   );

@@ -1,16 +1,10 @@
 const express = require('express')
-const { isLoggedIn, isAdmin } = require('../middlewares/auth.middleware')
+const { isAuthenticated, isAdmin } = require('../middlewares/auth.middleware')
 
-const {
-	notesheets,
-	loggedInNotesheets,
-	adminNotesheets,
-} = require('../controllers/api.controller')
+const router = express.Router()
 
-const router = express.Router(notesheets)
+const { getUserByID } = require('../controllers/api.controller')
 
-router.route('/').get(notesheets)
-router.route('/logged-in').get(isLoggedIn, loggedInNotesheets)
-router.route('/admin').get(isAdmin, adminNotesheets)
+router.route('/user/me').get(isAuthenticated, getUserByID)
 
 module.exports = router

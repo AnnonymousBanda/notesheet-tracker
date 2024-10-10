@@ -3,7 +3,7 @@ const { catchAsync } = require('../utils/error.util')
 const { AppError } = require('../controllers/error.controller')
 const userModel = require('../models/user.model')
 
-const isLoggedIn = catchAsync(async (req, res, next) => {
+const isAuthenticated = catchAsync(async (req, res, next) => {
 	if (
 		!req.headers.authorization ||
 		!req.headers.authorization.startsWith('Bearer')
@@ -52,4 +52,4 @@ const isAdmin = catchAsync(async (req, res, next) => {
 	next()
 })
 
-module.exports = { isLoggedIn, isAdmin }
+module.exports = { isAuthenticated, isAdmin }

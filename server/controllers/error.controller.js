@@ -20,6 +20,7 @@ const handleDevError = (err, res) => {
 
 const handleProdError = (err, res) => {
 	if (err.isOperational) {
+		console.log("here")
 		return res.status(err.status).json({
 			status: err.status,
 			message: err.message,
