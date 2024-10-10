@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 			if (token) {
 				const decoded = jwtDecode(token)
 
-				const user = await (
+				const res = await (
 					await fetch('http://localhost:8000/api/user/me', {
 						headers: {
 							Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 					})
 				).json()
 
-				setUser(user)
+				setUser(res.user)
 			}
 
 			setLoading(false)
