@@ -6,6 +6,7 @@ export const metadata = {
   description:
     "To keep track of your payment notesheets and share them with others",
 };
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

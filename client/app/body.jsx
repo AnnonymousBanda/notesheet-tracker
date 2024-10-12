@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import Sidebar from '@/components/sidebar'
 import Navbar from '@/components/navbar'
@@ -10,6 +11,7 @@ export default function Body({ children }) {
 	const pathname = usePathname()
 	const islogin = pathname.slice(0, 5) == '/auth'
 	const [issidebarOpen, setisSidebarOpen] = useState(false)
+	
 	return (
 		<body>
 			<AuthProvider>

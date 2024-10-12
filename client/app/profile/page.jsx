@@ -1,7 +1,7 @@
-import React from 'react'
+import withAuth from '@/hoc/withAuth'
 
-export default function Profile() {
-  return (
-    <div>Profile</div>
-  )
+const Profile = () => {
+	return <div>Profile</div>
 }
+
+export default withAuth(Profile, ['user', 'admin'])
