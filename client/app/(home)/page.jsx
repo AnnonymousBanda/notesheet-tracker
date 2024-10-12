@@ -9,17 +9,7 @@ function Home() {
 
 	console.log(user, isAuthenticated(), isAdmin())
 
-	return (
-		<div>
-			<h1>Home</h1>
-			<LazyBlurImage
-				src='image.jpg'
-				alt='Lazy Load'
-				width={500}
-				height={500}
-			/>
-		</div>
-	)
+	return <div>Home</div>
 }
 
 export default withAuth(Home, ['user', 'admin'])
