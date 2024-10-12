@@ -1,30 +1,67 @@
-import Image from 'next/image'
-import { getPlaiceholder } from 'plaiceholder'
-import fs from 'node:fs/promises'
+'use client'
 
-const LazyBlurImage = async ({ src, alt, width, height, className = '' }) => {
-	const buffer = await fs.readFile(`./public/images/${src}`)
-	const { base64 } = await getPlaiceholder(buffer)
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+
+const LazyBlurImage = ({ src, alt, width, height, className = '' }) => {
+	const [blurDataURL, setBlurDataURL] = useState(null)
+	const [loading, setLoading] = useState(true)
+	const [hasError, setHasError] = useState(false)
+
+	useEffect(() => {
+		const fetchBlurData = async () => {
+			try {
+				const response = await fetch(
+					'http://localhost:8000/api/blur-image',
+					{
+						method: 'POST',
+						body: JSON.stringify({ src }),
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization:
+								'Bearer ' + localStorage.getItem('jwt'),
+						},
+					}
+				)
+
+				if (!response.ok) {
+					throw new Error('Network response was not ok')
+				}
+
+				const { base64 } = await response.json()
+				setBlurDataURL(base64)
+			} catch (error) {
+				console.error('Error fetching blur image:', error)
+				setHasError(true)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchBlurData()
+	}, [src])
 
 	return (
 		<div
 			style={{
-				width: `${width/10}rem`,
-				height: `${height/10}rem`,
+				width: `${width / 10}rem`,
+				height: `${height / 10}rem`,
 				position: 'relative',
 			}}
 		>
-			<Image
-				src={`/images/${src}`}
-				alt={alt}
-				className={`object-cover object-center ${className}`}
-				loading='lazy'
-				placeholder='blur'
-				blurDataURL={base64}
-				layout='fill'
-				objectFit='cover'
-				objectPosition='center'
-			/>
+			{!loading && !hasError && (
+				<Image
+					src={`/images/${src}`}
+					alt={alt}
+					className={`object-cover object-center ${className}`}
+					loading='lazy'
+					placeholder='blur'
+					blurDataURL={blurDataURL}
+					layout='fill'
+					objectFit='cover'
+					objectPosition='center'
+				/>
+			)}
 		</div>
 	)
 }

@@ -1,3 +1,6 @@
+const path = require('path')
+const fs = require('fs').promises
+
 const { userModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
 const { verifyToken } = require('../utils/auth.util')
@@ -23,4 +26,27 @@ const getUserByID = catchAsync(async (req, res) => {
 	})
 })
 
-module.exports = { getUserByID }
+const blurImage = catchAsync(async (req, res) => {
+	const src = req.body.src
+
+	const { getPlaiceholder } = await import('plaiceholder')
+
+	const imagePath = path.join(
+		process.cwd(),
+		'..',
+		'server',
+		'public',
+		'images',
+		src
+	)
+
+	const buffer = await fs.readFile(imagePath)
+
+	const { base64 } = await getPlaiceholder(buffer)
+
+	return res.status(200).json({ base64 })
+})
+
+module.exports = blurImage
+
+module.exports = { getUserByID, blurImage }
