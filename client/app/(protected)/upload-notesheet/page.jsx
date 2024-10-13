@@ -1,7 +1,6 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import withAuth from '@/hoc/withAuth'
 
 const UploadNotesheets = () => {
 	const { isAdmin } = useAuth()
@@ -17,4 +16,4 @@ const UploadNotesheets = () => {
 	return isAdmin() ? <UploadAdminNotesheets /> : <UploadUserNotesheets />
 }
 
-export default withAuth(UploadNotesheets, ['user', 'admin'])
+export default UploadNotesheets

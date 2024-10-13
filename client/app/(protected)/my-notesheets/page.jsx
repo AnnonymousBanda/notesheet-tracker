@@ -1,7 +1,6 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import withAuth from '@/hoc/withAuth'
 
 const MyNotesheets = () => {
 	const { isAdmin } = useAuth()
@@ -17,4 +16,4 @@ const MyNotesheets = () => {
 	return isAdmin() ? <AdminNotesheets /> : <UserNotesheets />
 }
 
-export default withAuth(MyNotesheets, ['user', 'admin'])
+export default MyNotesheets
