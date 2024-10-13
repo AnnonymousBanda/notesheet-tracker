@@ -1,7 +1,10 @@
+'use client'
+
 import gsap from 'gsap'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useEffect } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 
 import LazyBlurImage from '@/components/LazyBlurImage'
 
@@ -50,6 +53,8 @@ export default function Sidebar({ isSidebarOpen }) {
 			})
 		}
 	}, [isSidebarOpen])
+	const { logout } = useAuth()
+
 	return (
 		<div
 			className={`sidecontainer lg:opacity-100 opacity-0 lg:w-4/12 w-full left-[100%] lg:static absolute p-4 h-screen`}
@@ -90,7 +95,10 @@ export default function Sidebar({ isSidebarOpen }) {
 						route='/profile'
 					/>
 				</div>
-				<button className='flex justify-start items-center gap-8 rounded-lg transition-all duration-500 cursor-pointer p-8 hover:bg-green-300'>
+				<button
+					className='flex justify-start items-center gap-8 rounded-lg transition-all duration-500 cursor-pointer p-8 hover:bg-green-300'
+					onClick={logout}
+				>
 					<img
 						src='/images/logout.svg'
 						width={30}

@@ -1,9 +1,10 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@/contexts/AuthContext'
+import DialogBox from '@/components/DialogBox'
 
-export default function Loginform() {
+export default function LoginForm() {
 	const {
 		register,
 		handleSubmit,
@@ -12,6 +13,11 @@ export default function Loginform() {
 	} = useForm()
 
 	const { login } = useAuth()
+
+	const [errorDialog, setErrorDialog] = useState({
+		isOpen: false,
+		message: '',
+	})
 
 	const handleLogin = async (data) => {
 		console.log(data)
@@ -31,10 +37,9 @@ export default function Loginform() {
 
 		if (res.status === 200) {
 			reset()
-
 			login(res.jwt)
 		} else {
-			alert(res.message)
+			showErrorDialog(res.message)
 		}
 	}
 
@@ -46,15 +51,42 @@ export default function Loginform() {
 		if (res.status === 200) {
 			console.log(res)
 		} else {
-			alert('Something went wrong')
+			showErrorDialog('Something went wrong')
+		}
+	}
+
+	const showErrorDialog = (message) => {
+		setErrorDialog({
+			isOpen: true,
+			message,
+		})
+	}
+
+	const closeErrorDialog = () => {
+		setErrorDialog({
+			isOpen: false,
+			message: '',
+		})
+	}
+
+	const onSubmit = (data) => {
+		handleLogin(data)
+	}
+
+	const onError = (errorList) => {
+		if (errorList.email) {
+			showErrorDialog(errorList.email.message)
+		} else if (errorList.password) {
+			showErrorDialog(errorList.password.message)
 		}
 	}
 
 	return (
 		<div>
 			<form
-				onSubmit={handleSubmit(handleLogin)}
+				onSubmit={handleSubmit(onSubmit, onError)}
 				className='w-full flex flex-col gap-4'
+				noValidate
 			>
 				<div className='flex flex-col gap-3'>
 					<label className='block text-[1.5rem] font-medium text-gray-700'>
@@ -62,19 +94,18 @@ export default function Loginform() {
 					</label>
 					<input
 						{...register('email', {
-							required: 'Email is required',
+							required:
+								'Please provide a valid outlook email address!',
 							pattern: {
 								value: /^[a-zA-Z0-9._%+-]+@(outlook\.com|hotmail\.com|live\.com|msn\.com|iitp\.ac\.in)$/,
-								message: 'Provide a valid outlook email',
+								message:
+									'Please provide a valid outlook email address!',
 							},
 						})}
 						className='text-[2rem] border-black border-solid w-full p-2'
 						type='email'
 						placeholder='Email'
 					/>
-					{errors.email && (
-						<p className='text-red-600'>{errors.email.message}</p>
-					)}
 				</div>
 				<div className='flex flex-col gap-3'>
 					<label className='block text-[1.5rem] font-medium text-gray-700'>
@@ -83,21 +114,11 @@ export default function Loginform() {
 					<input
 						{...register('password', {
 							required: 'Password is required',
-							minLength: {
-								value: 6,
-								message:
-									'Password must be at least 6 characters',
-							},
 						})}
 						className='text-[2rem] border-black border-solid w-full p-2'
 						type='password'
 						placeholder='Password'
 					/>
-					{errors.password && (
-						<p className='text-red-600'>
-							{errors.password.message}
-						</p>
-					)}
 				</div>
 				<div className='text-right'>
 					<a
@@ -132,6 +153,12 @@ export default function Loginform() {
 					<p>Sign In with Microsoft</p>
 				</button>
 			</div>
+
+			<DialogBox
+				isOpen={errorDialog.isOpen}
+				message={errorDialog.message}
+				onClose={closeErrorDialog}
+			/>
 		</div>
 	)
 }

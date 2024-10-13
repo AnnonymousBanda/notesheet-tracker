@@ -1,5 +1,5 @@
 import './index.css'
-import Body from './body'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 export const metadata = {
 	title: 'NoteSheet-Tracker',
@@ -10,7 +10,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
-			<Body>{children}</Body>
+			<body>
+				<AuthProvider>{children}</AuthProvider>
+			</body>
 		</html>
 	)
 }
