@@ -1,20 +1,21 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { jwtDecode } from 'jwt-decode'
+import { useRouter, usePathname } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null)
-	const [token, setToken] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const router = useRouter()
+	const pathname = usePathname()
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
-			const token = localStorage.getItem('jwt')
+			const token = Cookies.get('jwt')
+			// const token = localStorage.getItem('jwt')
 
 			if (token) {
 				const res = await (
@@ -34,7 +35,11 @@ export const AuthProvider = ({ children }) => {
 	}, [])
 
 	useEffect(() => {
-		if (!isAuthenticated()) {
+		if (
+			!isAuthenticated() &&
+			pathname !== '/auth/forgot-password' &&
+			pathname !== '/auth/reset-password'
+		) {
 			router.push('/auth/login')
 		}
 	}, [user])
@@ -44,7 +49,8 @@ export const AuthProvider = ({ children }) => {
 	const isAdmin = () => user && user.role === 'admin'
 
 	const login = async (token) => {
-		localStorage.setItem('jwt', token)
+		Cookies.set('jwt', token, { expires: 1 })
+		// localStorage.setItem('jwt', token)
 
 		const res = await (
 			await fetch('http://localhost:8000/api/user/me', {
@@ -58,7 +64,8 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	const logout = () => {
-		localStorage.removeItem('jwt')
+		Cookies.remove('jwt')
+		// localStorage.removeItem('jwt')
 
 		setUser(null)
 	}
