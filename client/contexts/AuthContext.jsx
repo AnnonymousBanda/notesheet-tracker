@@ -8,6 +8,7 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null)
+	const [token, setToken] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const router = useRouter()
 
@@ -16,8 +17,6 @@ export const AuthProvider = ({ children }) => {
 			const token = localStorage.getItem('jwt')
 
 			if (token) {
-				const decoded = jwtDecode(token)
-
 				const res = await (
 					await fetch('http://localhost:8000/api/user/me', {
 						headers: {
@@ -34,26 +33,34 @@ export const AuthProvider = ({ children }) => {
 		checkLoggedIn()
 	}, [])
 
+	useEffect(() => {
+		if (!isAuthenticated()) {
+			router.push('/auth/login')
+		}
+	}, [user])
+
 	const isAuthenticated = () => !!user
 
 	const isAdmin = () => user && user.role === 'admin'
 
-	const login = (token) => {
+	const login = async (token) => {
 		localStorage.setItem('jwt', token)
 
-		const decoded = jwtDecode(token)
+		const res = await (
+			await fetch('http://localhost:8000/api/user/me', {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+		).json()
 
-		setUser(decoded)
-
-		router.push('/')
+		setUser(res.user)
 	}
 
 	const logout = () => {
 		localStorage.removeItem('jwt')
 
 		setUser(null)
-
-		router.push('/auth/login')
 	}
 
 	return (

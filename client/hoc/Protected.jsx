@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
-const Protected = ({ children, allowedRoles = ['user', 'admin'] }) => {
+const Protected = ({ children, allowedRoles = [] }) => {
 	const { user, isAuthenticated } = useAuth()
 	const router = useRouter()
 	const [loading, setLoading] = useState(true)
@@ -17,7 +17,7 @@ const Protected = ({ children, allowedRoles = ['user', 'admin'] }) => {
 		} else {
 			setLoading(false)
 		}
-	}, [user, isAuthenticated, router])
+	}, [user])
 
 	const LoadingComponent = () => <div>Loading...</div>
 
