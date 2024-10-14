@@ -1,5 +1,5 @@
 'use client'
-import ResetPasswordForm from "@/components/resetpassword";
+import ResetPasswordForm from "@/components/resetpasswordform";
 import React from "react";
 
 export default function ForgotPassword() {

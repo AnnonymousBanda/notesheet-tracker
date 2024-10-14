@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@/contexts/AuthContext'
 import DialogBox from '@/components/DialogBox'
+import Link from 'next/link'
 
 export default function LoginForm() {
 	const {
@@ -82,7 +83,7 @@ export default function LoginForm() {
 	}
 
 	return (
-		<div>
+		<div className='flex flex-col gap-5'>
 			<form
 				onSubmit={handleSubmit(onSubmit, onError)}
 				className='w-full flex flex-col gap-4'
@@ -121,12 +122,12 @@ export default function LoginForm() {
 					/>
 				</div>
 				<div className='text-right'>
-					<a
+					<Link
 						href='/auth/forgot-password'
 						className='text-[1.2rem] text-slate-500 '
 					>
 						Forgot Password?
-					</a>
+					</Link>
 				</div>
 
 				<div className='w-full flex justify-center'>
@@ -144,7 +145,7 @@ export default function LoginForm() {
 				<hr className='border-black w-full border-solid' />
 			</div>
 
-			<div className='w-full flex justify-center items-center mt-8'>
+			<div className='w-full flex justify-center items-center'>
 				<button
 					className='flex gap-3 items-center justify-center  bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202]'
 					onClick={handleOutlookLogin}

@@ -14,6 +14,17 @@ export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setshowConfirmPassword] = useState(false);
   const [isopen, setIsOpen] = useState(false);
+  const [showDialogue, setShowDialogue] = useState({
+    isOpen: false,
+    message: "",
+  });
+
+  const showErrorDialog = (message) => {
+		setErrorDialog({
+			isOpen: true,
+			message,
+		})
+	}
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -30,16 +41,28 @@ export default function ResetPasswordForm() {
       setshowConfirmPassword(false);
       return;
     }
-    console.log(data);
+    console.log("data", data);
+    console.log(data.password.length);
     setShowPassword(false);
     setshowConfirmPassword(false);
     reset();
   };
 
+  const onError = (error)=>{
+    if(error.password.length < 6)
+    {
+      showErrorDialog(error.password.message);
+    }
+    else if(error.password !== error.confirmPassword)
+    {
+      showErrorDialog(error.confirmPassword.message);
+    }
+  }
+
   return (
     <>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, onError)}
         className="w-full flex flex-col gap-10"
       >
         <div className="flex flex-col gap-3 relative">
@@ -71,12 +94,6 @@ export default function ResetPasswordForm() {
               )}
             </button>
           </div>
-
-          {errors.password && (
-            <span className="text-red-500 text-lg">
-              {errors.password.message}
-            </span>
-          )}
         </div>
 
         <div className="flex flex-col gap-3 relative">
@@ -105,11 +122,6 @@ export default function ResetPasswordForm() {
               )}
             </button>
           </div>
-          {errors.confirmPassword && (
-            <span className="text-red-500 text-lg">
-              {errors.confirmPassword.message}
-            </span>
-          )}
         </div>
 
         <div className="w-full flex justify-center">
@@ -121,13 +133,7 @@ export default function ResetPasswordForm() {
           </button>
         </div>
       </form>
-      <DialogBox
-        isOpen={isopen}
-        onClose={() => {
-          setIsOpen(!isopen);
-        }}
-        message="Passwords do not match please re-enter your passwords."
-      />
+      <DialogBox isOpen={showDialogue.isOpen} message={showDialogue.message} />
     </>
   );
 }
