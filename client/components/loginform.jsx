@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@/contexts/AuthContext'
 import DialogBox from '@/components/DialogBox'
+import Link from 'next/link'
 
 export default function LoginForm() {
 	const {
@@ -121,12 +122,12 @@ export default function LoginForm() {
 					/>
 				</div>
 				<div className='text-right'>
-					<a
+					<Link
 						href='/auth/forgot-password'
 						className='text-[1.2rem] text-slate-500 '
 					>
 						Forgot Password?
-					</a>
+					</Link>
 				</div>
 
 				<div className='w-full flex justify-center'>
