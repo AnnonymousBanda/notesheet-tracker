@@ -14,8 +14,8 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
-			const token = Cookies.get('jwt')
-			// const token = localStorage.getItem('jwt')
+			// const token = Cookies.get('jwt')
+			const token = localStorage.getItem('jwt')
 
 			if (token) {
 				const res = await (
@@ -49,8 +49,8 @@ export const AuthProvider = ({ children }) => {
 	const isAdmin = () => user && user.role === 'admin'
 
 	const login = async (token) => {
-		Cookies.set('jwt', token, { expires: 1 })
-		// localStorage.setItem('jwt', token)
+		// Cookies.set('jwt', token, { expires: 1 })
+		localStorage.setItem('jwt', token)
 
 		const res = await (
 			await fetch('http://localhost:8000/api/user/me', {
@@ -64,8 +64,8 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	const logout = () => {
-		Cookies.remove('jwt')
-		// localStorage.removeItem('jwt')
+		// Cookies.remove('jwt')
+		localStorage.removeItem('jwt')
 
 		setUser(null)
 	}

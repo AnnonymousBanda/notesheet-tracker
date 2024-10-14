@@ -83,7 +83,7 @@ export default function LoginForm() {
 	}
 
 	return (
-		<div className='flex flex-col gap-5'>
+		<div className='flex flex-col gap-5 w-full px-5'>
 			<form
 				onSubmit={handleSubmit(onSubmit, onError)}
 				className='w-full flex flex-col gap-4'
@@ -103,7 +103,7 @@ export default function LoginForm() {
 									'Please provide a valid outlook email address!',
 							},
 						})}
-						className='text-[2rem] border-black border-solid w-full p-2'
+						className='text-[1.7rem] border-black border-solid w-full p-2'
 						type='email'
 						placeholder='Email'
 					/>
@@ -116,7 +116,7 @@ export default function LoginForm() {
 						{...register('password', {
 							required: 'Password is required',
 						})}
-						className='text-[2rem] border-black border-solid w-full p-2'
+						className='text-[1.7rem] border-black border-solid w-full p-2'
 						type='password'
 						placeholder='Password'
 					/>

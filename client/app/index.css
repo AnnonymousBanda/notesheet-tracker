@@ -7,7 +7,7 @@
     .max-container {
         max-width: 1600px;
         margin: 0 auto;
-        padding: 0 clamp(1rem, -0.3500rem + 4.2188vw, 6.4rem);
+        /* padding: 0 clamp(1rem, -0.3500rem + 4.2188vw, 6.4rem); */
     }
 
     h1 {

@@ -1,6 +1,7 @@
-"use client"; 
-import React from "react";
+"use client";
+import React, {useState} from "react";
 import { useForm } from "react-hook-form";
+import DialogBox from "./DialogBox";
 
 export default function ForgotPasswordForm() {
   const {
@@ -9,14 +10,38 @@ export default function ForgotPasswordForm() {
     reset,
     formState: { errors },
   } = useForm();
+  const [errorDialog, setErrorDialog] = useState({
+		isOpen: false,
+		message: '',
+	})
 
   const onSubmit = (data) => {
     console.log(data.email);
     reset();
   };
 
+  const showDialogBox = (message) => {
+    setErrorDialog({ 
+      isOpen: true,
+      message: message
+    });
+  };
+  const closeDialog = () => {
+    setErrorDialog({ 
+      isOpen: false,
+      message: ''
+    });
+  }
+  const onError = (errorList) => {
+    showDialogBox(errorList.email.message);
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-10">
+    <>
+    <form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      className="w-full flex flex-col gap-10"
+    >
       <div className="flex flex-col gap-3">
         <label className="block text-[1.5rem] font-medium text-gray-700">
           Email Address
@@ -33,7 +58,6 @@ export default function ForgotPasswordForm() {
           type="text"
           placeholder="Email Address"
         />
-        {errors.email && <p className="text-red-600">{errors.email.message}</p>}
       </div>
       <div className="w-full flex justify-center">
         <button
@@ -44,5 +68,7 @@ export default function ForgotPasswordForm() {
         </button>
       </div>
     </form>
+    <DialogBox isOpen={errorDialog.isOpen} message={errorDialog.message} onClose={closeDialog} />
+    </>
   );
 }

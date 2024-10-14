@@ -14,17 +14,23 @@ export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setshowConfirmPassword] = useState(false);
   const [isopen, setIsOpen] = useState(false);
-  const [showDialogue, setShowDialogue] = useState({
+  const [errorDialog, setErrorDialog] = useState({
     isOpen: false,
     message: "",
   });
 
   const showErrorDialog = (message) => {
-		setErrorDialog({
-			isOpen: true,
-			message,
-		})
-	}
+    setErrorDialog({
+      isOpen: true,
+      message,
+    });
+  };
+  const closeErrorDialog = () => {
+    setErrorDialog({
+      isOpen: false,
+      message: "",
+    });
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -35,29 +41,34 @@ export default function ResetPasswordForm() {
 
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
-      setIsOpen(true);
+      showErrorDialog("Passwords do not match. Please re-enter the password");
       reset();
       setShowPassword(false);
       setshowConfirmPassword(false);
+
       return;
     }
     console.log("data", data);
-    console.log(data.password.length);
     setShowPassword(false);
     setshowConfirmPassword(false);
     reset();
   };
 
-  const onError = (error)=>{
-    if(error.password.length < 6)
-    {
-      showErrorDialog(error.password.message);
+  const onError = (errorList) => {
+    if (
+      errorList.password &&
+      errorList.password.message == "Please enter a password"
+    ) {
+      showErrorDialog(errorList.password.message);
+    } else if (errorList.confirmPassword) {
+      console.log(errors);
+      showErrorDialog(errorList.confirmPassword.message);
     }
-    else if(error.password !== error.confirmPassword)
-    {
-      showErrorDialog(error.confirmPassword.message);
-    }
-  }
+  };
+
+  const onClose = () => {
+    closeErrorDialog();
+  };
 
   return (
     <>
@@ -69,28 +80,27 @@ export default function ResetPasswordForm() {
           <label className="block text-[1.5rem] font-medium text-gray-700">
             Password
           </label>
-          <div>
+          <div className="flex justify-between items-center gap-6 text-[2rem] border-black border-solid p-2">
             <input
               {...register("password", {
-                required: "Password is required",
+                required: "Please enter a password",
                 minLength: {
                   value: 6,
                   message: "Password should have at least 6 characters",
                 },
               })}
-              className="text-[2rem] border-black border-solid w-full p-2"
+              className="w-full"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute right-3 top-[40px] text-[2rem] cursor-pointer"
             >
               {showPassword ? (
-                <img className="w-8" src="/images/eye.svg" alt="" />
+                <img className="w-9" src="/images/eye.svg" alt="" />
               ) : (
-                <img className="w-8" src="/images/eyeslash.svg" alt="" />
+                <img className="w-9" src="/images/eyeslash.svg" alt="" />
               )}
             </button>
           </div>
@@ -100,12 +110,13 @@ export default function ResetPasswordForm() {
           <label className="block text-[1.5rem] font-medium text-gray-700">
             Confirm Password
           </label>
-          <div className="flex items-center">
+          <div className="flex justify-between items-center gap-6 text-[2rem] border-black border-solid p-2">
             <input
               {...register("confirmPassword", {
                 required: "Enter password again",
+                message: "Passwords do not match. Please re-enter the password",
               })}
-              className="text-[2rem] border-black border-solid w-full p-2"
+              className="w-full"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
             />
@@ -113,12 +124,11 @@ export default function ResetPasswordForm() {
             <button
               type="button"
               onClick={toggleConfirmPasswordVisibility}
-              className="absolute right-3 text-[2rem] cursor-pointer"
             >
               {showConfirmPassword ? (
-                <img className="w-8" src="/images/eye.svg" alt="" />
+                <img className="w-9" src="/images/eye.svg" alt="" />
               ) : (
-                <img className="w-8" src="/images/eyeslash.svg" alt="" />
+                <img className="w-9" src="/images/eyeslash.svg" alt="" />
               )}
             </button>
           </div>
@@ -133,7 +143,11 @@ export default function ResetPasswordForm() {
           </button>
         </div>
       </form>
-      <DialogBox isOpen={showDialogue.isOpen} message={showDialogue.message} />
+      <DialogBox
+        isOpen={errorDialog.isOpen}
+        message={errorDialog.message}
+        onClose={onClose}
+      />
     </>
   );
 }

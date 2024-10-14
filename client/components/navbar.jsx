@@ -26,26 +26,23 @@ export default function Navbar({isSidebarOpen, setisSidebarOpen}) {
       tl.to(".one",{
         rotate: "0deg",
         y: "0rem",
-        delay: 0.5,
-        duration: 0.2
+        duration: 0.5
       })
-      tl.to(".two",{
-        opacity: 1,
-        delay: 0.5,
-        duration: 0.2
-      },"-=0.5")
       tl.to(".three",{
         rotate: "0deg",
         y: "0rem",
-        delay: 0.5,
-        duration: 0.2
+        duration: 0.5
+      },"-=0.5")
+      tl.to(".two",{
+        opacity: 1,
+        delay: 0.3,
+        duration: 0.3
       },"-=0.5")
     }
   }, [isSidebarOpen])
   return (
-    <div className="p-4">
-      <div className="w-full bg-gray-200 h-[8vh] p-4 flex justify-between items-center rounded-lg">
-        <div onClick={()=>{setisSidebarOpen(!isSidebarOpen)}} className="relative z-100 flex flex-col gap-1 lg:hidden">
+      <div className="w-full bg-gray-200 h-[8vh] px-8 py-4 flex justify-between items-center rounded-lg">
+        <div onClick={()=>{setisSidebarOpen(!isSidebarOpen)}} className="relative z-[100] flex flex-col gap-1 lg:hidden">
           <div className="one relative w-8 h-1 bg-black"></div>
           <div className="two relative w-8 h-1 bg-black"></div>
           <div className="three relative w-8 h-1 bg-black"></div>
@@ -53,6 +50,5 @@ export default function Navbar({isSidebarOpen, setisSidebarOpen}) {
         <h4>DASHBOARD</h4>
         <img className="w-[3rem] h-[3rem]" src="/images/user.svg" alt="" />
       </div>
-    </div>
   );
 }
