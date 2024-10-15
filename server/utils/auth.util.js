@@ -12,7 +12,7 @@ const verifyToken = (token) => {
 }
 
 const sendResetToken = (email, token) => {
-	console.log('Sending password reset token to ', email)
+	console.log(`http://localhost:3000/auth/reset-password/${token}`)
 }
 
 module.exports = {

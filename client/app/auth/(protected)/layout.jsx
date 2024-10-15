@@ -10,11 +10,14 @@ const Layout = ({ children }) => {
 
 	useEffect(() => {
 		if (isAuthenticated()) {
+			console.log('user is authenticated')
 			router.push('/')
 		} else {
 			setLoading(false)
 		}
 	}, [user, isAuthenticated, router])
+
+	console.log(isAuthenticated())
 
 	if (loading) {
 		return <div>Loading...</div>

@@ -19,10 +19,10 @@ const Protected = ({ children, allowedRoles = [] }) => {
 		}
 	}, [user])
 
-	const LoadingComponent = () => <div>Loading...</div>
+	const Loading = () => <div>Loading...</div>
 
 	if (loading) {
-		return <LoadingComponent />
+		return <Loading />
 	}
 
 	return <>{children}</>

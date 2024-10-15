@@ -23,24 +23,28 @@ export default function LoginForm() {
 	const handleLogin = async (data) => {
 		console.log(data)
 
-		const res = await (
-			await fetch('http://localhost:8000/auth/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: data.email,
-					password: data.password,
-				}),
-			})
-		).json()
+		try {
+			const res = await (
+				await fetch('http://localhost:8000/auth/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						email: data.email,
+						password: data.password,
+					}),
+				})
+			).json()
 
-		if (res.status === 200) {
-			reset()
-			login(res.jwt)
-		} else {
-			showErrorDialog(res.message)
+			if (res.status === 200) {
+				reset()
+				login(res.jwt)
+			} else {
+				showErrorDialog(res.message)
+			}
+		} catch (error) {
+			showErrorDialog('Something went wrong! Please try again later.')
 		}
 	}
 
