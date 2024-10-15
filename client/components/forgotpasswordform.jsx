@@ -29,12 +29,12 @@ export default function ForgotPasswordForm() {
 			)
 			const result = await response.json()
 			if (response.ok) {
-				alert('Password reset link has been sent to your email')
+				showDialogBox(result.message)
 			} else {
-				alert(result.message)
+				showDialogBox(result.message)
 			}
 		} catch (error) {
-			alert(error.message)
+			showDialogBox(error.message)
 		} finally {
 			reset()
 		}

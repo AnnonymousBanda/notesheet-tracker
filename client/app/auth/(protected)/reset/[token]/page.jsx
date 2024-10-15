@@ -1,4 +1,5 @@
 'use client'
+import DialogBox from '@/components/DialogBox'
 import ResetPasswordForm from '@/components/resetpasswordform'
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -7,6 +8,24 @@ export default function ForgotPassword() {
 	const [loading, setLoading] = useState(true)
 	const { token } = useParams()
 	const Router = useRouter()
+
+	const [errorDialog, setErrorDialog] = useState({
+		isOpen: false,
+		message: '',
+	})
+
+	const showDialogBox = (message) => {
+		setErrorDialog({
+			isOpen: true,
+			message: message,
+		})
+	}
+	const closeDialog = () => {
+		setErrorDialog({
+			isOpen: false,
+			message: '',
+		})
+	}
 
 	useEffect(() => {
 		const verifyToken = async () => {
@@ -31,7 +50,7 @@ export default function ForgotPassword() {
 					Router.push('/not-found')
 				}
 			} catch (error) {
-				alert(error.message)
+				showDialogBox(error.message)
 			}
 		}
 		verifyToken()
@@ -44,13 +63,16 @@ export default function ForgotPassword() {
 	}
 
 	return (
-		<div className=' flex flex-col items-center justify-center min-h-screen p-5 bg-gray-200'>
-			<div className='w-full max-w-xl p-10 pb-20  bg-white rounded-lg shadow-lg flex flex-col gap-8 items-center border border-gray-300'>
-				<div className='flex flex-col items-center gap-4 w-full text-center'>
-					<h3>Reset Password</h3>
+		<>
+			<div className=' flex flex-col items-center justify-center min-h-screen p-5 bg-gray-200'>
+				<div className='w-full max-w-xl p-10 pb-20  bg-white rounded-lg shadow-lg flex flex-col gap-8 items-center border border-gray-300'>
+					<div className='flex flex-col items-center gap-4 w-full text-center'>
+						<h3>Reset Password</h3>
+					</div>
+					<ResetPasswordForm token={token} />
 				</div>
-				<ResetPasswordForm token={token} />
 			</div>
-		</div>
+			<DialogBox isOpen={errorDialog.isOpen} message={errorDialog.message} onClose={closeDialog}/>
+		</>
 	)
 }

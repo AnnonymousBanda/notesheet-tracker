@@ -14,7 +14,6 @@ export default function ResetPasswordForm({ token }) {
 
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setshowConfirmPassword] = useState(false)
-	const [isopen, setIsOpen] = useState(false)
 	const [errorDialog, setErrorDialog] = useState({
 		isOpen: false,
 		message: '',
@@ -56,13 +55,13 @@ export default function ResetPasswordForm({ token }) {
 			const result = await response.json()
 			if (response.ok) {
 				localStorage.removeItem('token')
-				alert('Password reset successful')
+				showErrorDialog("Password reset successful. Please login again")
 				Router.push('/auth/login')
 			} else {
-				alert(result.message)
+				showErrorDialog(result.message)
 			}
 		} catch (error) {
-			alert(error.message)
+			showErrorDialog(error.message)
 		} finally {
 			setShowPassword(false)
 			setshowConfirmPassword(false)

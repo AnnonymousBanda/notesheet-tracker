@@ -1,5 +1,6 @@
 'use client'
 
+import DialogBox from '@/components/DialogBox'
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 const AuthContext = createContext()
@@ -7,6 +8,24 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null)
 	const [loading, setLoading] = useState(true)
+
+	const [errorDialog, setErrorDialog] = useState({
+		isOpen: false,
+		message: '',
+	})
+
+	const showDialogBox = (message) => {
+		setErrorDialog({
+			isOpen: true,
+			message: message,
+		})
+	}
+	const closeDialog = () => {
+		setErrorDialog({
+			isOpen: false,
+			message: '',
+		})
+	}
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
@@ -49,10 +68,10 @@ export const AuthProvider = ({ children }) => {
 				console.log('login success')
 				setUser(data.user)
 			} else {
-				alert(data.message)
+				showDialogBox(data.message)
 			}
 		} catch (error) {
-			alert(error.message)
+			showDialogBox(error.message)
 		}
 	}
 
@@ -68,6 +87,7 @@ export const AuthProvider = ({ children }) => {
 			value={{ user, login, logout, isAuthenticated, isAdmin }}
 		>
 			{!loading && children}
+			<DialogBox isOpen={errorDialog.isOpen} message={errorDialog.message} onClose={closeDialog} />
 		</AuthContext.Provider>
 	)
 }
