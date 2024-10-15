@@ -10,6 +10,7 @@ export default function ForgotPassword() {
 
 	useEffect(() => {
 		const verifyToken = async () => {
+			console.log(token)
 			try {
 				const response = await fetch(
 					`http://localhost:8000/auth/verify-password-reset-token`,
