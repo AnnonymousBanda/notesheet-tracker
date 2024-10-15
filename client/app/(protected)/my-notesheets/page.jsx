@@ -3,7 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext'
 
 const MyNotesheets = () => {
-	const { isAdmin } = useAuth()
+	const { isAdmin, isAuthenticated } = useAuth()
 
 	const UserNotesheets = () => {
 		return <div>User Notesheets</div>
@@ -12,6 +12,9 @@ const MyNotesheets = () => {
 	const AdminNotesheets = () => {
 		return <div>Admin Notesheets - Admin Only</div>
 	}
+
+	if (!isAuthenticated())
+		return !isAdmin() ? <AdminNotesheets /> : <UserNotesheets />
 
 	return isAdmin() ? <AdminNotesheets /> : <UserNotesheets />
 }

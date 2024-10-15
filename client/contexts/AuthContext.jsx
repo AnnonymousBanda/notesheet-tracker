@@ -1,8 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import Cookies from 'js-cookie'
+import { useRouter } from 'next/navigation'
+// import Cookies from 'js-cookie'
 
 const AuthContext = createContext()
 
@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const router = useRouter()
-	const pathname = usePathname()
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
@@ -33,16 +32,6 @@ export const AuthProvider = ({ children }) => {
 		}
 		checkLoggedIn()
 	}, [])
-
-	useEffect(() => {
-		if (
-			!isAuthenticated() &&
-			pathname !== '/auth/forgot-password' &&
-			pathname !== '/auth/reset-password'
-		) {
-			router.push('/auth/login')
-		}
-	}, [user])
 
 	const isAuthenticated = () => !!user
 
