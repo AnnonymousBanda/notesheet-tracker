@@ -1,4 +1,5 @@
 'use client'
+import Loader from '@/components/Loader'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -20,7 +21,7 @@ const Layout = ({ children }) => {
 	console.log(isAuthenticated())
 
 	if (loading) {
-		return <div>Loading...</div>
+		return <Loader />
 	}
 
 	return <>{children}</>

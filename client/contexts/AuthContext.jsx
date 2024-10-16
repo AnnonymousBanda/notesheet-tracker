@@ -76,7 +76,6 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	const logout = () => {
-		// Cookies.remove('jwt')
 		localStorage.removeItem('jwt')
 
 		setUser(null)

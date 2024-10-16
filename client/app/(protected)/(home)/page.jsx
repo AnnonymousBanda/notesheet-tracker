@@ -1,5 +1,6 @@
 'use client'
 
+import Loader from '@/components/Loader'
 import { useAuth } from '@/contexts/AuthContext'
 
 const Dashboard = () => {
@@ -10,7 +11,8 @@ const Dashboard = () => {
 	}
 
 	const AdminDashboard = () => {
-		return <div>Admin Dashboard - Admin Only</div>
+		return <div>Admin Dashboard - Admin Only
+		</div>
 	}
 
 	if (!isAuthenticated())

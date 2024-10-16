@@ -58,18 +58,17 @@ export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
 
   return (
     <>
-      <div className="sidebar lg:z-0 z-10 top-0 lg:left-0 left-[-100%] lg:static absolute lg:w-4/12 md:w-1/2 w-[95vw]  p-4 h-full lg:px-8 bg-gray-200 rounded-lg flex flex-col justify-start lg:py-[6rem] pt-20 lg:gap-[8rem] gap-[6rem]">
+      <div className="sidebar lg:z-0 z-10 top-0 lg:left-0 left-[-100%] lg:static absolute lg:w-4/12 md:w-1/2 w-[95vw] p-4 h-full lg:px-8 bg-gray-200 rounded-lg flex flex-col justify-start py-[5rem] gap-[3rem]">
         <div className="w-full flex justify-center">
           <LazyBlurImage
             src="iitplogo.png"
             alt="IITP logo"
-            width={130}
-            height={130}
+            width={120}
+            height={120}
             className="rounded-full"
 			onClick={onClick}
           />
         </div>
-        <div className="lg:px-0 px-8 w-full h-[50vh] text-center flex flex-col justify-evenly gap-[1.5rem] container mx-auto">
           <SidebarButton
             text="Dashboard"
             image="dashboard.svg"
@@ -115,7 +114,6 @@ export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
             </div>
           </button>
         </div>
-      </div>
       <div className="bgblur opacity-0 fixed top-0 left-0 backdrop-blur-sm lg:hidden block h-screen w-screen bg-[#1e1e1eae]"></div>
     </>
   );

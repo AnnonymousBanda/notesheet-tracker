@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import Loader from '@/components/Loader'
 
 const Protected = ({ children, allowedRoles = [] }) => {
 	const { user, isAuthenticated } = useAuth()
@@ -19,10 +20,8 @@ const Protected = ({ children, allowedRoles = [] }) => {
 		}
 	}, [user])
 
-	const Loading = () => <div>Loading...</div>
-
 	if (loading) {
-		return <Loading />
+		return <Loader />
 	}
 
 	return <>{children}</>
