@@ -35,7 +35,7 @@ const blurImage = catchAsync(async (req, res) => {
 	const imagePath = path.join(
 		process.cwd(),
 		'..',
-		'server',
+		'client',
 		'public',
 		'images',
 		src
