@@ -4,6 +4,7 @@ const fs = require('fs').promises
 const { userModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
 const { verifyToken } = require('../utils/auth.util')
+const saveImage = require('../utils/api.util')
 
 const getUserByID = catchAsync(async (req, res) => {
 	const token = req.headers.authorization.split(' ')[1]
@@ -34,7 +35,7 @@ const blurImage = catchAsync(async (req, res) => {
 	const imagePath = path.join(
 		process.cwd(),
 		'..',
-		'server',
+		'client',
 		'public',
 		'images',
 		src
@@ -44,9 +45,22 @@ const blurImage = catchAsync(async (req, res) => {
 
 	const { base64 } = await getPlaiceholder(buffer)
 
-	return res.status(200).json({ base64 })
-})
+	const savePath = path.join(
+		process.cwd(),
+		'..',
+		'client',
+		'public',
+		'images',
+		'blurred',
+		src
+	)
 
-module.exports = blurImage
+	await saveImage(base64, savePath)
+
+	return res.status(200).json({
+		status: '200',
+		message: 'Image blurred generated and saved successfully',
+	})
+})
 
 module.exports = { getUserByID, blurImage }

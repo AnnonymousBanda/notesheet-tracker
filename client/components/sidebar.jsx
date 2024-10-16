@@ -1,60 +1,60 @@
-"use client";
+'use client'
 
-import gsap from "gsap";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import gsap from 'gsap'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+import { useEffect } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 
-import LazyBlurImage from "@/components/LazyBlurImage";
+import LazyBlurImage from '@/components/LazyBlurImage'
 
 function SidebarButton({ text, image, alt, route, onClick }) {
-  const router = useRouter();
-  return (
-    <button
-      onClick={() => {
-        router.push(route);
-		onClick()
-      }}
-      className="flex items-center justify-start gap-4 rounded-lg transition-all duration-500 cursor-pointer hover:bg-blue-200 p-6 lg:py-6 lg:px-4 xl:p-8"
-    >
-      <img
-        src={`/images/${image}`}
-        className="w-[2.5rem] h-[2.5rem]"
-        alt={alt}
-      />
-      <h4 className="xl:text-[2.5rem]">{text}</h4>
-    </button>
-  );
+	const router = useRouter()
+	return (
+		<button
+			onClick={() => {
+				router.push(route)
+				onClick()
+			}}
+			className='flex items-center justify-start gap-4 rounded-lg transition-all duration-500 cursor-pointer hover:bg-blue-200 p-6 lg:py-6 lg:px-4 xl:p-8'
+		>
+			<img
+				src={`/images/${image}`}
+				className='w-[2.5rem] h-[2.5rem]'
+				alt={alt}
+			/>
+			<h4 className='xl:text-[2.5rem]'>{text}</h4>
+		</button>
+	)
 }
 
 export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
-  const onClick = () => {
-    setisSidebarOpen(!isSidebarOpen);
-  };
-  const tl = gsap.timeline();
-  useEffect(() => {
-    if (isSidebarOpen) {
-      tl.to(".bgblur", {
-        opacity: 1,
-        duration: 0.5,
-      });
-      tl.to(".sidebar", {
-        left: "1.5%",
-        duration: 0.5,
-      });
-    } else {
-      tl.to(".sidebar", {
-        left: "-100%",
-        duration: 0.5,
-      });
-      tl.to(".bgblur", {
-        opacity: 0,
-        duration: 0.5,
-      });
-    }
-  }, [isSidebarOpen]);
-  const { logout } = useAuth();
+	const onClick = () => {
+		setisSidebarOpen(!isSidebarOpen)
+	}
+	const tl = gsap.timeline()
+	useEffect(() => {
+		if (isSidebarOpen) {
+			tl.to('.bgblur', {
+				opacity: 1,
+				duration: 0.5,
+			})
+			tl.to('.sidebar', {
+				left: '1.5%',
+				duration: 0.5,
+			})
+		} else {
+			tl.to('.sidebar', {
+				left: '-100%',
+				duration: 0.5,
+			})
+			tl.to('.bgblur', {
+				opacity: 0,
+				duration: 0.5,
+			})
+		}
+	}, [isSidebarOpen])
+	const { logout } = useAuth()
 
   return (
     <>
