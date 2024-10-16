@@ -53,8 +53,8 @@ export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
 	const { logout } = useAuth()
 
   return (<>
-    <div className='lg:z-0 z-10 top-0 lg:left-0 left-[-100%] sidebar lg:static absolute lg:w-4/12 md:w-1/2 lg:p-0 p-4 w-[95vw] flex justify-around items-center h-full overflow-sl'>
-      <div className="min-h-96 overflow-scroll w-full md:p-4 px-10 lg:px-8 h-full bg-gray-200 rounded-lg flex flex-col justify-around py-[5rem] lg:gap-[3rem] gap-[2rem] ">
+    <div className='lg:z-0 z-10 top-0 lg:left-0 left-[-100%] sidebar lg:static absolute lg:w-4/12 md:w-1/2 lg:p-0 p-4 w-[95vw] flex justify-around items-center h-full'>
+      <div className="min-h-96 overflow-y-auto w-full md:p-4 px-10 lg:px-8 h-full bg-gray-200 rounded-lg flex flex-col justify-around py-[5rem] lg:gap-[3rem] gap-[2rem] ">
         <div className="w-full flex justify-center">
           <LazyBlurImage
             src="iitplogo.png"
