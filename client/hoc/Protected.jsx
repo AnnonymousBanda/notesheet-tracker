@@ -11,6 +11,7 @@ const Protected = ({ children, allowedRoles = [] }) => {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		console.log('Here')
 		if (!isAuthenticated()) {
 			router.push('/auth/login')
 		} else if (allowedRoles.length && !allowedRoles.includes(user?.role)) {

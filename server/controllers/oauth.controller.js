@@ -31,7 +31,8 @@ const oauthCallback = catchAsync(async (req, res) => {
 
 	const token = signToken(user.id)
 
-	return res.status(200).json({ status: 200, jwt: token })
+	// return res.status(200).json({ status: 200, jwt: token })
+	res.redirect(`http://localhost:3000/auth/outlook/success?token=${token}`)
 })
 
 const failure = catchAsync(async (req, res) => {

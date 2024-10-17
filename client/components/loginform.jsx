@@ -25,8 +25,6 @@ export default function LoginForm() {
 	}
 
 	const handleLogin = async (data) => {
-		console.log(data)
-
 		try {
 			const res = await fetch('http://localhost:8000/auth/login', {
 				method: 'POST',
@@ -55,15 +53,7 @@ export default function LoginForm() {
 	}
 
 	const handleOutlookLogin = async () => {
-		const res = await (
-			await fetch('http://localhost:8000/oauth/outlook')
-		).json()
-
-		if (res.status === 200) {
-			console.log(res)
-		} else {
-			showErrorDialog('Something went wrong')
-		}
+		window.location.href = 'http://localhost:8000/oauth/outlook'
 	}
 
 	const showErrorDialog = (message) => {

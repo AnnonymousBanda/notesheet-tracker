@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }) => {
 
 			if (res.status === 200) {
 				console.log('login success')
+				console.log(data.user)
 				setUser(data.user)
 			} else {
 				showDialogBox(data.message)
