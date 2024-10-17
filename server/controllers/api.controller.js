@@ -63,4 +63,42 @@ const blurImage = catchAsync(async (req, res) => {
 	})
 })
 
-module.exports = { getUserByID, blurImage }
+const dynamicBlurImage = catchAsync(async (req, res) => {
+	const url = req.body.url
+
+	const fetch = (await import('node-fetch')).default
+
+	const response = await fetch(url)
+
+	if (!response.ok) throw new AppError('Image not found', 404)
+
+	const buffer = await response.buffer()
+
+	const { getPlaiceholder } = await import('plaiceholder')
+
+	const { base64 } = await getPlaiceholder(buffer)
+
+	// const savePath = path.join(
+	// 	process.cwd(),
+	// 	'..',
+	// 	'client',
+	// 	'public',
+	// 	'images',
+	// 	'blurred',
+	// 	'random.jpg'
+	// )
+
+	// await saveImage(base64, savePath)
+
+	// return res.status(200).json({
+	// 	status: '200',
+	// 	message: 'Image blurred generated and saved successfully',
+	// })
+
+	return res.status(200).json({
+		status: '200',
+		base64,
+	})
+})
+
+module.exports = { getUserByID, blurImage, dynamicBlurImage }
