@@ -1,5 +1,6 @@
 'use client'
 import DialogBox from '@/components/DialogBox'
+import Loader from '@/components/Loader'
 import ResetPasswordForm from '@/components/resetpasswordform'
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
@@ -56,10 +57,8 @@ export default function ForgotPassword() {
 		verifyToken()
 	}, [])
 
-	const Loading = () => <>Loading...</>
-
 	if (loading) {
-		return <Loading />
+		return <Loader />
 	}
 
 	return (
