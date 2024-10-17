@@ -58,7 +58,8 @@ export default function ResetPasswordForm({ token }) {
 				localStorage.removeItem('token')
 
 				showErrorDialog('Password reset successful. Please login again')
-				Router.push('/auth/login')
+				setTimeout(() =>
+					Router.push('/auth/login'), 1500)
 			} else {
 				showErrorDialog(result.message)
 			}
