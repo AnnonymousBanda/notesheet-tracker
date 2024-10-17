@@ -101,7 +101,7 @@ export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
 									logout()
 									onClick()
 								}}
-								className='flex items-center justify-start gap-4 rounded-lg transition-all duration-500 cursor-pointer hover:bg-green-300 p-6 lg:py-6 lg:px-4 xl:p-8'
+								className='flex items-center justify-start gap-4 rounded-lg transition-all duration-500 cursor-pointer hover:bg-red-300 p-6 lg:py-6 lg:px-4 xl:p-8'
 							>
 								<img
 									src='/images/logout.svg'
