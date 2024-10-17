@@ -5,7 +5,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
-import LazyBlurImage from '@/components/LazyBlurImage'
+import { LazyBlurImage } from '@/components/LazyBlurImage'
 import Link from 'next/link'
 
 function SidebarButton({ text, image, alt, route, onClick }) {
