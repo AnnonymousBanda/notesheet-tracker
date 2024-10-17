@@ -30,17 +30,16 @@ const AuthSuccess = () => {
 						localStorage.setItem('jwt', token)
 						setUser(data.user)
 						router.push('/')
-					} else {
-						alert('Invalid token')
-						router.push('/auth/login')
-					}
+					} else router.push('/auth/login')
 				} catch (error) {
 					router.push('/not-found')
 				}
 			}
 			login()
+		} else {
+			router.push('/not-found')
 		}
-	}, [token])
+	}, [])
 
 	return <Loader />
 }
