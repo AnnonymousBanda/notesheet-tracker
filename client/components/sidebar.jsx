@@ -62,7 +62,6 @@ export default function Sidebar({ isSidebarOpen, setisSidebarOpen }) {
 							alt='IITP logo'
 							width={120}
 							height={120}
-							className='rounded-full'
 							onClick={onClick}
 						/>
 					</div>

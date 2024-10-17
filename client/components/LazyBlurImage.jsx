@@ -1,6 +1,13 @@
 import Image from 'next/image'
 
-const LazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }) => {
+const LazyBlurImage = ({
+	src,
+	alt,
+	width,
+	height,
+	rounded = true,
+	className = '',
+}) => {
 	return (
 		<div
 			style={{
@@ -14,7 +21,7 @@ const LazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }
 			<Image
 				src={`/images/${src}`}
 				alt={alt}
-				className={`object-cover object-center ${className}`}
+				className={`object-cover object-center ${rounded ? 'rounded-full' : ''} ${className}`}
 				loading='lazy'
 				placeholder='blur'
 				blurDataURL={`/images/blurred/${src}`}
@@ -26,7 +33,14 @@ const LazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }
 	)
 }
 
-const DynamicLazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }) => {
+const DynamicLazyBlurImage = ({
+	src,
+	alt,
+	width,
+	height,
+	rounded = true,
+	className = '',
+}) => {
 	const [blurDataURL, setBlurDataURL] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [hasError, setHasError] = useState(false)
@@ -71,14 +85,14 @@ const DynamicLazyBlurImage = ({ src, alt, width, height, rounded=true, className
 				height: `${height / 10}rem`,
 				position: 'relative',
 				backgroundColor: 'rgba(0, 0, 0, 0.1)',
-				borderRadius: rounded?'100%':'0%',
+				borderRadius: rounded ? '100%' : '0',
 			}}
 		>
 			{!loading && !hasError && (
 				<Image
 					src={`/images/${src}`}
 					alt={alt}
-					className={`object-cover object-center ${className}`}
+					className={`object-cover object-center ${rounded ? 'rounded-full' : ''} ${className}`}
 					loading='lazy'
 					placeholder='blur'
 					blurDataURL={blurDataURL}
