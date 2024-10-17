@@ -11,7 +11,10 @@ const layout = ({ children }) => {
 	return (
 		<Protected>
 			<main className='flex h-screen w-screen max-container p-4 gap-4'>
-				<Sidebar isSidebarOpen={issidebarOpen} setisSidebarOpen={setisSidebarOpen} />
+				<Sidebar
+					isSidebarOpen={issidebarOpen}
+					setisSidebarOpen={setisSidebarOpen}
+				/>
 				<div className='w-full flex flex-col gap-5'>
 					<Navbar
 						isSidebarOpen={issidebarOpen}
@@ -20,7 +23,6 @@ const layout = ({ children }) => {
 					<div className='bg-gray-200 h-full rounded-lg p-5'>
 						{children}
 					</div>
-					
 				</div>
 			</main>
 		</Protected>

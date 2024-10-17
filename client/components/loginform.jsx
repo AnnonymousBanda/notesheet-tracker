@@ -38,8 +38,8 @@ export default function LoginForm() {
 					password: data.password,
 				}),
 			})
-``
-			const data = await res.json()
+
+			data = await res.json()
 
 			if (res.status === 200) {
 				reset()

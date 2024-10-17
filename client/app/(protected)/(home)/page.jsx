@@ -1,24 +1,23 @@
 'use client'
 
-import Loader from '@/components/Loader'
 import { useAuth } from '@/contexts/AuthContext'
+import { useState } from 'react'
 
 const Dashboard = () => {
-	const { isAdmin, isAuthenticated } = useAuth()
+	const { isAdmin } = useAuth()
+	const [admin] = useState(isAdmin())
 
 	const UserDashboard = () => {
+		console.log('User Dashboard')
 		return <div>User Dashboard</div>
 	}
 
 	const AdminDashboard = () => {
-		return <div>Admin Dashboard - Admin Only
-		</div>
+		console.log('Admin Dashboard')
+		return <div>Admin Dashboard - Admin Only</div>
 	}
 
-	if (!isAuthenticated())
-		return !isAdmin() ? <AdminDashboard /> : <UserDashboard />
-
-	return isAdmin() ? <AdminDashboard /> : <UserDashboard />
+	return admin ? <AdminDashboard /> : <UserDashboard />
 }
 
 export default Dashboard

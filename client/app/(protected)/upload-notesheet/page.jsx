@@ -1,9 +1,11 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
+import { useState } from 'react'
 
 const UploadNotesheets = () => {
-	const { isAdmin, isAuthenticated } = useAuth()
+	const { isAdmin } = useAuth()
+	const [admin] = useState(isAdmin())
 
 	const UploadUserNotesheets = () => {
 		return <div>Upload User Notesheets</div>
@@ -12,11 +14,7 @@ const UploadNotesheets = () => {
 	const UploadAdminNotesheets = () => {
 		return <div>Upload Admin Notesheets - Admin Only</div>
 	}
-
-	if (!isAuthenticated())
-		return !isAdmin() ? <UploadAdminNotesheets /> : <UploadUserNotesheets />
-
-	return isAdmin() ? <UploadAdminNotesheets /> : <UploadUserNotesheets />
+	return admin ? <UploadAdminNotesheets /> : <UploadUserNotesheets />
 }
 
 export default UploadNotesheets

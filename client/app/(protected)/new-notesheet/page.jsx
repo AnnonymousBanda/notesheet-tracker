@@ -1,9 +1,11 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
+import { useState } from 'react'
 
 const NewNotesheets = () => {
-	const { isAdmin, isAuthenticated } = useAuth()
+	const { isAdmin } = useAuth()
+	const [admin] = useState(isAdmin())
 
 	const NewUserNotesheets = () => {
 		return <div>New User Notesheets</div>
@@ -13,10 +15,7 @@ const NewNotesheets = () => {
 		return <div>New Admin Notesheets - Admin Only</div>
 	}
 
-	if (!isAuthenticated())
-		return !isAdmin() ? <NewAdminNotesheets /> : <NewUserNotesheets />
-
-	return isAdmin() ? <NewAdminNotesheets /> : <NewUserNotesheets />
+	return admin ? <NewAdminNotesheets /> : <NewUserNotesheets />
 }
 
 export default NewNotesheets

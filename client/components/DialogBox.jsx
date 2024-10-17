@@ -10,10 +10,10 @@ const DialogBox = ({ isOpen, message, onClose }) => {
 				</p>
 				<div className='flex justify-end mt-4'>
 					<button
-						className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-[1.4rem]'
+						className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-[1.4rem]'
 						onClick={onClose}
 					>
-						Close
+						close
 					</button>
 				</div>
 			</div>
