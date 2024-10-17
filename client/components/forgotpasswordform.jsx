@@ -32,7 +32,7 @@ export default function ForgotPasswordForm() {
 			showDialogBox(result.message)
 		} catch (error) {
 			showDialogBox('Something went wrong. Please try again later.')
-			console.log(error.message)
+			console.error(error.message)
 		} finally {
 			reset()
 		}

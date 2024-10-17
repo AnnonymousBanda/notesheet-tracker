@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 					else console.log(data.message)
 				}
 			} catch (error) {
-				console.log(error.message)
+				console.error(error.message)
 			}
 
 			setLoading(false)
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
 			}
 		} catch (error) {
 			showDialogBox('Something went wrong! Please try again later.')
-			console.log(error.message)
+			console.error(error.message)
 		}
 	}
 
@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }) => {
 
 	return (
 		<AuthContext.Provider
-			value={{ user, login, logout, isAuthenticated, isAdmin }}
+			value={{ user, setUser, login, logout, isAuthenticated, isAdmin }}
 		>
 			{!loading && children}
 			<DialogBox

@@ -7,19 +7,36 @@ import { useEffect } from 'react'
 
 const AuthSuccess = () => {
 	const router = useRouter()
-	const { login } = useAuth()
+	const { setUser } = useAuth()
 	const searchParams = useSearchParams()
 	const token = searchParams.get('token')
 
 	useEffect(() => {
 		console.log(token)
 		if (token) {
-			localStorage.setItem('jwt', token)
+			const login = async () => {
+				try {
+					const res = await fetch(
+						'http://localhost:8000/api/user/me',
+						{
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						}
+					)
 
-			console.log('Log in successful')
+					const data = await res.json()
 
-			login(token)
-			router.push('/')
+					if (res.status === 200) {
+						localStorage.setItem('jwt', token)
+						setUser(data.user)
+						router.push('/')
+					} else console.log(data.message)
+				} catch (error) {
+					router.push('/not-found')
+				}
+			}
+			login()
 		}
 	}, [token])
 

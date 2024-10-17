@@ -48,7 +48,7 @@ export default function LoginForm() {
 			}
 		} catch (error) {
 			showErrorDialog('Something went wrong! Please try again later.')
-			console.log(error.message)
+			console.error(error.message)
 		}
 	}
 

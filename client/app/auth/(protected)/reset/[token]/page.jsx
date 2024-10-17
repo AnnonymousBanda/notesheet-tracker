@@ -51,7 +51,7 @@ export default function ForgotPassword() {
 					Router.push('/not-found')
 				}
 			} catch (error) {
-				console.log(error.message)
+				console.error(error.message)
 			}
 		}
 		verifyToken()

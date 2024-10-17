@@ -64,7 +64,7 @@ export default function ResetPasswordForm({ token }) {
 			}
 		} catch (error) {
 			showErrorDialog('Something went wrong. Please try again later.')
-			console.log(error.message)
+			console.error(error.message)
 		} finally {
 			setShowPassword(false)
 			setshowConfirmPassword(false)
