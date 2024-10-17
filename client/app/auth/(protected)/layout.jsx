@@ -17,8 +17,6 @@ const Layout = ({ children }) => {
 		}
 	}, [user, isAuthenticated, router])
 
-	console.log(isAuthenticated())
-
 	if (loading) {
 		return <Loader />
 	}
