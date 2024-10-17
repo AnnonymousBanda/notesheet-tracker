@@ -1,6 +1,7 @@
 'use client'
 
 import DialogBox from '@/components/DialogBox'
+import Loader from '@/components/Loader'
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 const AuthContext = createContext()
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 		<AuthContext.Provider
 			value={{ user, setUser, login, logout, isAuthenticated, isAdmin }}
 		>
-			{!loading && children}
+			{loading ? <Loader /> : children}
 			<DialogBox
 				isOpen={errorDialog.isOpen}
 				message={errorDialog.message}
