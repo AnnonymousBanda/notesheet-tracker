@@ -79,7 +79,7 @@ export default function ResetPasswordForm({ token }) {
 		) {
 			showErrorDialog(errorList.password.message)
 		} else if (errorList.confirmPassword) {
-			console.log(errors)
+			console.error(errors)
 			showErrorDialog(errorList.confirmPassword.message)
 		}
 	}

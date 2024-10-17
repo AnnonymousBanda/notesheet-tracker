@@ -12,7 +12,6 @@ const AuthSuccess = () => {
 	const token = searchParams.get('token')
 
 	useEffect(() => {
-		console.log(token)
 		if (token) {
 			const login = async () => {
 				try {
@@ -31,7 +30,10 @@ const AuthSuccess = () => {
 						localStorage.setItem('jwt', token)
 						setUser(data.user)
 						router.push('/')
-					} else console.log(data.message)
+					} else {
+						alert('Invalid token')
+						router.push('/auth/login')
+					}
 				} catch (error) {
 					router.push('/not-found')
 				}

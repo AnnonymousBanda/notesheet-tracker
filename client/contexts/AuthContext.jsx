@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 					const data = await res.json()
 
 					if (res.status === 200) setUser(data.user)
-					else console.log(data.message)
+					else console.error(data.message)
 				}
 			} catch (error) {
 				console.error(error.message)
@@ -74,8 +74,6 @@ export const AuthProvider = ({ children }) => {
 			const data = await res.json()
 
 			if (res.status === 200) {
-				console.log('login success')
-				console.log(data.user)
 				setUser(data.user)
 			} else {
 				showDialogBox(data.message)

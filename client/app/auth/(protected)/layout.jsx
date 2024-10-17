@@ -11,7 +11,6 @@ const Layout = ({ children }) => {
 
 	useEffect(() => {
 		if (isAuthenticated()) {
-			console.log('user is authenticated')
 			router.push('/')
 		} else {
 			setLoading(false)

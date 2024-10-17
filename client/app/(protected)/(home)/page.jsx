@@ -8,12 +8,10 @@ const Dashboard = () => {
 	const [admin] = useState(isAdmin())
 
 	const UserDashboard = () => {
-		console.log('User Dashboard')
 		return <div>User Dashboard</div>
 	}
 
 	const AdminDashboard = () => {
-		console.log('Admin Dashboard')
 		return <div>Admin Dashboard - Admin Only</div>
 	}
 
