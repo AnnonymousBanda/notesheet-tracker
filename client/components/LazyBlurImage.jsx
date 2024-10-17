@@ -1,12 +1,14 @@
 import Image from 'next/image'
 
-const LazyBlurImage = ({ src, alt, width, height, className = '' }) => {
+const LazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }) => {
 	return (
 		<div
 			style={{
 				width: `${width / 10}rem`,
 				height: `${height / 10}rem`,
 				position: 'relative',
+				backgroundColor: 'rgba(0, 0, 0, 0.1)',
+				borderRadius: rounded?'100%':'0%',
 			}}
 		>
 			<Image
@@ -24,7 +26,7 @@ const LazyBlurImage = ({ src, alt, width, height, className = '' }) => {
 	)
 }
 
-const DynamicLazyBlurImage = ({ src, alt, width, height, className = '' }) => {
+const DynamicLazyBlurImage = ({ src, alt, width, height, rounded=true, className = '' }) => {
 	const [blurDataURL, setBlurDataURL] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [hasError, setHasError] = useState(false)
@@ -68,6 +70,8 @@ const DynamicLazyBlurImage = ({ src, alt, width, height, className = '' }) => {
 				width: `${width / 10}rem`,
 				height: `${height / 10}rem`,
 				position: 'relative',
+				backgroundColor: 'rgba(0, 0, 0, 0.1)',
+				borderRadius: rounded?'100%':'0%',
 			}}
 		>
 			{!loading && !hasError && (
