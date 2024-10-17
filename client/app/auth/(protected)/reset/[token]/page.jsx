@@ -51,7 +51,7 @@ export default function ForgotPassword() {
 					Router.push('/not-found')
 				}
 			} catch (error) {
-				showDialogBox(error.message)
+				console.log(error.message)
 			}
 		}
 		verifyToken()
@@ -71,7 +71,11 @@ export default function ForgotPassword() {
 					<ResetPasswordForm token={token} />
 				</div>
 			</div>
-			<DialogBox isOpen={errorDialog.isOpen} message={errorDialog.message} onClose={closeDialog}/>
+			<DialogBox
+				isOpen={errorDialog.isOpen}
+				message={errorDialog.message}
+				onClose={closeDialog}
+			/>
 		</>
 	)
 }

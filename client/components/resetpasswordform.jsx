@@ -52,16 +52,19 @@ export default function ResetPasswordForm({ token }) {
 					body: JSON.stringify(data),
 				}
 			)
+
 			const result = await response.json()
 			if (response.ok) {
 				localStorage.removeItem('token')
-				showErrorDialog("Password reset successful. Please login again")
+
+				showErrorDialog('Password reset successful. Please login again')
 				Router.push('/auth/login')
 			} else {
 				showErrorDialog(result.message)
 			}
 		} catch (error) {
-			showErrorDialog(error.message)
+			showErrorDialog('Something went wrong. Please try again later.')
+			console.log(error.message)
 		} finally {
 			setShowPassword(false)
 			setshowConfirmPassword(false)

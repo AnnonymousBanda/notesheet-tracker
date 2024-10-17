@@ -28,13 +28,11 @@ export default function ForgotPasswordForm() {
 				}
 			)
 			const result = await response.json()
-			if (response.ok) {
-				showDialogBox(result.message)
-			} else {
-				showDialogBox(result.message)
-			}
+
+			showDialogBox(result.message)
 		} catch (error) {
-			showDialogBox(error.message)
+			showDialogBox('Something went wrong. Please try again later.')
+			console.log(error.message)
 		} finally {
 			reset()
 		}

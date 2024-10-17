@@ -31,16 +31,24 @@ export const AuthProvider = ({ children }) => {
 		const checkLoggedIn = async () => {
 			const token = localStorage.getItem('jwt')
 
-			if (token) {
-				const res = await (
-					await fetch('http://localhost:8000/api/user/me', {
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					})
-				).json()
+			try {
+				if (token) {
+					const res = await fetch(
+						'http://localhost:8000/api/user/me',
+						{
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						}
+					)
 
-				setUser(res.user)
+					const data = await res.json()
+
+					if (res.status === 200) setUser(data.user)
+					else console.log(data.message)
+				}
+			} catch (error) {
+				console.log(error.message)
 			}
 
 			setLoading(false)
@@ -71,7 +79,8 @@ export const AuthProvider = ({ children }) => {
 				showDialogBox(data.message)
 			}
 		} catch (error) {
-			showDialogBox(error.message)
+			showDialogBox('Something went wrong! Please try again later.')
+			console.log(error.message)
 		}
 	}
 
@@ -86,7 +95,11 @@ export const AuthProvider = ({ children }) => {
 			value={{ user, login, logout, isAuthenticated, isAdmin }}
 		>
 			{!loading && children}
-			<DialogBox isOpen={errorDialog.isOpen} message={errorDialog.message} onClose={closeDialog} />
+			<DialogBox
+				isOpen={errorDialog.isOpen}
+				message={errorDialog.message}
+				onClose={closeDialog}
+			/>
 		</AuthContext.Provider>
 	)
 }
