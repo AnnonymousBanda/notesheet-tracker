@@ -34,7 +34,7 @@ const oauthCallback = catchAsync(async (req, res) => {
 	const token = signToken(user.id)
 
 	return res.redirect(
-		`http://localhost:3000/auth/outlook/success?token=${token}`
+		`${process.env.CLIENT_URL}/auth/outlook/success?token=${token}`
 	)
 })
 

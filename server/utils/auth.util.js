@@ -12,7 +12,7 @@ const verifyToken = (token) => {
 }
 
 const sendResetToken = (email, token) => {
-	console.log(`http://localhost:3000/auth/reset/${token}`)
+	console.log(`${process.env.CLIENT_URL}/auth/reset/${token}`)
 }
 
 module.exports = {
