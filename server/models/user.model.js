@@ -51,6 +51,9 @@ const userSchema = new Schema({
 		default: 'user',
 		immutable: true,
 	},
+	picture: {
+		type: String,
+	},
 	passwordChangedAt: Date,
 	passwordResetToken: String,
 	passwordResetTokenExpires: Date,
