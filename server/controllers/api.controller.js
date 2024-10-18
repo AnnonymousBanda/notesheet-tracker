@@ -78,27 +78,27 @@ const dynamicBlurImage = catchAsync(async (req, res) => {
 
 	const { base64 } = await getPlaiceholder(buffer)
 
-	const savePath = path.join(
-		process.cwd(),
-		'..',
-		'client',
-		'public',
-		'images',
-		'blurred',
-		'random.jpg'
-	)
+	// const savePath = path.join(
+	// 	process.cwd(),
+	// 	'..',
+	// 	'client',
+	// 	'public',
+	// 	'images',
+	// 	'blurred',
+	// 	'random.jpg'
+	// )
 
-	await saveImage(base64, savePath)
-
-	return res.status(200).json({
-		status: '200',
-		message: 'Image blurred generated and saved successfully',
-	})
+	// await saveImage(base64, savePath)
 
 	// return res.status(200).json({
 	// 	status: '200',
-	// 	base64,
+	// 	message: 'Image blurred generated and saved successfully',
 	// })
+
+	return res.status(200).json({
+		status: '200',
+		base64,
+	})
 })
 
 module.exports = { getUserByID, blurImage, dynamicBlurImage }

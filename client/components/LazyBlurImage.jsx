@@ -1,4 +1,7 @@
+"use client"
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 const LazyBlurImage = ({
 	src,
@@ -15,7 +18,7 @@ const LazyBlurImage = ({
 				height: `${height / 10}rem`,
 				position: 'relative',
 				backgroundColor: 'rgba(0, 0, 0, 0.1)',
-				borderRadius: rounded?'100%':'0%',
+				borderRadius: rounded ? '100%' : '0%',
 			}}
 		>
 			<Image
@@ -49,14 +52,12 @@ const DynamicLazyBlurImage = ({
 		const fetchBlurData = async () => {
 			try {
 				const response = await fetch(
-					'http://localhost:8000/api/blur-image',
+					'http://localhost:8000/api/get-dynamic-blur-image',
 					{
 						method: 'POST',
-						body: JSON.stringify({ src }),
+						body: JSON.stringify({ url: src }),
 						headers: {
 							'Content-Type': 'application/json',
-							Authorization:
-								'Bearer ' + localStorage.getItem('jwt'),
 						},
 					}
 				)
@@ -90,7 +91,7 @@ const DynamicLazyBlurImage = ({
 		>
 			{!loading && !hasError && (
 				<Image
-					src={`/images/${src}`}
+					src={src}
 					alt={alt}
 					className={`object-cover object-center ${rounded ? 'rounded-full' : ''} ${className}`}
 					loading='lazy'
