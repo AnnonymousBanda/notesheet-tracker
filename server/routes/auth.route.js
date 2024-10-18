@@ -7,6 +7,7 @@ const {
 	getResetToken,
 	verifyResetToken,
 	reset,
+	changePassword,
 } = require('../controllers/auth.controller')
 
 const router = express.Router()
@@ -17,5 +18,6 @@ router.route('/logout').get(logout)
 router.route('/get-password-reset-token').post(getResetToken)
 router.route('/verify-password-reset-token').post(verifyResetToken)
 router.route('/password-reset/:token').patch(reset)
+router.route('/change-password').patch(changePassword)
 
 module.exports = router

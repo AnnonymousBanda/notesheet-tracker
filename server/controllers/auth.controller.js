@@ -12,7 +12,6 @@ const register = catchAsync(async (req, res) => {
 		email,
 		password,
 		confirmPassword,
-		role: 'admin',
 	})
 
 	const token = await signToken(user.id)
@@ -58,6 +57,9 @@ const getResetToken = catchAsync(async (req, res) => {
 	const user = await userModel.findOne({ email })
 
 	if (!user) throw new AppError('User not found', 404)
+
+	if (user.passwordResetToken && Date.now() < user.passwordResetTokenExpires)
+		throw new AppError('A reset link has already been sent', 400)
 
 	const resetToken = await signToken(email)
 	user.passwordResetToken = await bcrypt.hash(resetToken, 12)
@@ -129,45 +131,28 @@ const reset = catchAsync(async (req, res) => {
 		.json({ status: 200, message: 'Password reset successful' })
 })
 
-// const reset = catchAsync(async (req, res) => {
-// 	const token = req.headers.authorization.split(' ')[1]
+const changePassword = catchAsync(async (req, res) => {
+	const { password, confirmPassword } = req.body
 
-// 	if (!token) throw new AppError('Please login in to change password', 401)
+	if (!password || !confirmPassword)
+		throw new AppError('Please provide password and confirm password', 400)
 
-// 	const { password, confirmPassword } = req.body
+	if (password !== confirmPassword)
+		throw new AppError('Passwords do not match', 400)
 
-// 	if (!password || !confirmPassword)
-// 		throw new AppError('Please provide password and confirm password', 400)
+	const user = await userModel.findById(req.body.id)
 
-// 	if (password !== confirmPassword)
-// 		throw new AppError('Passwords do not match', 400)
+	if (!user) throw new AppError('User not found', 404)
 
-// 	const decoded = await verifyToken(token)
+	user.password = password
+	user.confirmPassword = confirmPassword
+	user.passwordChangedAt = Date.now()
+	await user.save()
 
-// 	const user = await userModel.findById(decoded.id)
-
-// 	if (!user) throw new AppError('User not found', 404)
-
-// 	const resetToken = req.params.token
-// 	if (!resetToken) throw new AppError('Please provide reset token', 400)
-
-// 	if (!(await bcrypt.compare(resetToken, user.passwordResetToken)))
-// 		throw new AppError('Invalid link', 404)
-
-// 	if (Date.now() > user.passwordResetTokenExpires)
-// 		throw new AppError('Reset link has expired', 400)
-
-// 	user.password = password
-// 	user.confirmPassword = confirmPassword
-// 	user.passwordResetToken = undefined
-// 	user.passwordResetTokenExpires = undefined
-// 	user.passwordChangedAt = Date.now()
-// 	await user.save()
-
-// 	return res
-// 		.status(200)
-// 		.json({ status: 200, message: 'Password reset successful' })
-// })
+	return res
+		.status(200)
+		.json({ status: 200, message: 'Password reset successful' })
+})
 
 module.exports = {
 	register,
@@ -176,4 +161,5 @@ module.exports = {
 	getResetToken,
 	verifyResetToken,
 	reset,
+	changePassword,
 }

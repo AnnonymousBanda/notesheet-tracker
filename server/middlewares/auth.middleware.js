@@ -14,6 +14,8 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
 
 	if (!token) throw new AppError('You are not authenticated', 401)
 
+	//blacklist token check
+
 	const decoded = await verifyToken(token)
 
 	const user = await userModel.findById(decoded.id)
@@ -25,6 +27,8 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
 		parseInt(user.passwordChangedAt.getTime() / 1000, 10) > decoded.iat
 	)
 		throw new AppError('Password changed. Please login again', 401)
+
+	req.body.id = user.id
 
 	next()
 })
@@ -39,6 +43,8 @@ const isAdmin = catchAsync(async (req, res, next) => {
 	const token = req.headers.authorization.split(' ')[1]
 
 	if (!token) throw new AppError('You are not authenticated', 401)
+
+	//blacklist token check
 
 	const decoded = await verifyToken(token)
 
