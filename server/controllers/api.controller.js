@@ -3,18 +3,13 @@ const fs = require('fs').promises
 
 const { userModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const { verifyToken } = require('../utils/auth.util')
 const saveImage = require('../utils/api.util')
 
 const getUserByID = catchAsync(async (req, res) => {
-	const token = req.headers.authorization.split(' ')[1]
-
-	if (!token) throw new AppError('You are not authenticated', 401)
-
-	const decoded = await verifyToken(token)
+	const id = req.params.id
 
 	const user = await userModel
-		.findById(decoded.id)
+		.findById(id)
 		.select(
 			'-password -__v -passwordResetToken -passwordResetTokenExpires -passwordChangedAt'
 		)
