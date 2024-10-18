@@ -20,12 +20,14 @@ const oulookOauthCallback = passport.authenticate('windowslive', {
 
 const oauthCallback = catchAsync(async (req, res) => {
 	let email = req.user.profile.emails[0].value
+	picture = null //retrive picture
 
 	let user = await userModel.findOne({ email })
 
 	if (!user) {
 		user = await userModel.create({
 			email,
+			picture,
 		})
 	}
 
