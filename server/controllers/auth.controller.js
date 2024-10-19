@@ -56,18 +56,18 @@ const getResetToken = catchAsync(async (req, res) => {
 
 	const user = await userModel.findOne({ email })
 
-	if (!user) throw new AppError('User not found', 404)
-
-	if (user.passwordResetToken && Date.now() < user.passwordResetTokenExpires)
-		throw new AppError('A reset link has already been sent', 400)
-
-	const resetToken = await signToken(email)
-	user.passwordResetToken = await bcrypt.hash(resetToken, 12)
-	user.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000
-
-	await user.save()
-
-	sendResetToken(email, resetToken)
+	if(user) {		
+		if (user.passwordResetToken && Date.now() < user.passwordResetTokenExpires)
+			throw new AppError('A reset link has already been sent', 400)
+		
+		const resetToken = await signToken(email)
+		user.passwordResetToken = await bcrypt.hash(resetToken, 12)
+		user.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000
+		
+		await user.save()
+		
+		sendResetToken(email, resetToken)
+	}
 
 	return res.status(200).json({
 		status: 200,
