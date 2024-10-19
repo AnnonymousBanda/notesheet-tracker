@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import DialogBox from './DialogBox'
+import { useDialog } from '@/contexts/DialogBoxContext'
 
 export default function ForgotPasswordForm() {
 	const {
@@ -10,11 +10,10 @@ export default function ForgotPasswordForm() {
 		reset,
 		formState: { errors },
 	} = useForm()
-	const [errorDialog, setErrorDialog] = useState({
-		isOpen: false,
-		message: '',
-	})
-
+	const { openDialog } = useDialog()
+	const onError = (errorList) => {
+			openDialog(errorList.email.message)
+		}
 	const onSubmit = async (data) => {
 		try {
 			const response = await fetch(
@@ -29,30 +28,16 @@ export default function ForgotPasswordForm() {
 			)
 			const result = await response.json()
 
-			showDialogBox(result.message)
+			openDialog(result.message)
 		} catch (error) {
-			showDialogBox('Something went wrong. Please try again later.')
+			openDialog('Something went wrong. Please try again later.')
 			console.error(error.message)
 		} finally {
 			reset()
 		}
 	}
 
-	const showDialogBox = (message) => {
-		setErrorDialog({
-			isOpen: true,
-			message: message,
-		})
-	}
-	const closeDialog = () => {
-		setErrorDialog({
-			isOpen: false,
-			message: '',
-		})
-	}
-	const onError = (errorList) => {
-		showDialogBox(errorList.email.message)
-	}
+	
 
 	return (
 		<>
@@ -86,11 +71,6 @@ export default function ForgotPasswordForm() {
 					</button>
 				</div>
 			</form>
-			<DialogBox
-				isOpen={errorDialog.isOpen}
-				message={errorDialog.message}
-				onClose={closeDialog}
-			/>
 		</>
 	)
 }

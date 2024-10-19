@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@/contexts/AuthContext'
-import DialogBox from '@/components/DialogBox'
 import Link from 'next/link'
+import { useDialog } from '@/contexts/DialogBoxContext'
 
 export default function LoginForm() {
 	const {
@@ -15,10 +15,8 @@ export default function LoginForm() {
 
 	const { login } = useAuth()
 
-	const [errorDialog, setErrorDialog] = useState({
-		isOpen: false,
-		message: '',
-	})
+	const {openDialog} = useDialog()
+
 	const [showPassword, setShowPassword] = useState(false)
 	const togglePasswordVisibility = () => {
 		setShowPassword(!showPassword)
@@ -44,10 +42,10 @@ export default function LoginForm() {
 				setShowPassword(false)
 				login(data.jwt)
 			} else {
-				showErrorDialog(data.message)
+				openDialog(data.message)
 			}
 		} catch (error) {
-			showErrorDialog('Something went wrong! Please try again later.')
+			openDialog('Something went wrong! Please try again later.')
 			console.error(error.message)
 		}
 	}
@@ -56,29 +54,15 @@ export default function LoginForm() {
 		window.location.href = 'http://localhost:8000/oauth/outlook'
 	}
 
-	const showErrorDialog = (message) => {
-		setErrorDialog({
-			isOpen: true,
-			message,
-		})
-	}
-
-	const closeErrorDialog = () => {
-		setErrorDialog({
-			isOpen: false,
-			message: '',
-		})
-	}
-
 	const onSubmit = (data) => {
 		handleLogin(data)
 	}
 
 	const onError = (errorList) => {
 		if (errorList.email) {
-			showErrorDialog(errorList.email.message)
+			openDialog(errorList.email.message)
 		} else if (errorList.password) {
-			showErrorDialog(errorList.password.message)
+			openDialog(errorList.password.message)
 		}
 	}
 
@@ -179,12 +163,6 @@ export default function LoginForm() {
 					<p>Sign In with Microsoft</p>
 				</button>
 			</div>
-
-			<DialogBox
-				isOpen={errorDialog.isOpen}
-				message={errorDialog.message}
-				onClose={closeErrorDialog}
-			/>
 		</div>
 	)
 }

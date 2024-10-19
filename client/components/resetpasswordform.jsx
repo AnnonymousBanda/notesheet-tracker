@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import { set, useForm } from 'react-hook-form'
-import DialogBox from './DialogBox'
 import { useRouter } from 'next/navigation'
+import { useDialog } from '@/contexts/DialogBoxContext'
 
 export default function ResetPasswordForm({ token }) {
 	const {
@@ -14,24 +14,9 @@ export default function ResetPasswordForm({ token }) {
 
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setshowConfirmPassword] = useState(false)
-	const [errorDialog, setErrorDialog] = useState({
-		isOpen: false,
-		message: '',
-	})
 	const Router = useRouter()
 
-	const showErrorDialog = (message) => {
-		setErrorDialog({
-			isOpen: true,
-			message,
-		})
-	}
-	const closeErrorDialog = () => {
-		setErrorDialog({
-			isOpen: false,
-			message: '',
-		})
-	}
+	const {openDialog} = useDialog()
 
 	const togglePasswordVisibility = () => {
 		setShowPassword(!showPassword)
@@ -57,14 +42,14 @@ export default function ResetPasswordForm({ token }) {
 			if (response.ok) {
 				localStorage.removeItem('token')
 
-				showErrorDialog('Password reset successful. Please login again')
+				openDialog('Password reset successful. Please login again')
 				setTimeout(() =>
 					Router.push('/auth/login'), 1500)
 			} else {
-				showErrorDialog(result.message)
+				openDialog(result.message)
 			}
 		} catch (error) {
-			showErrorDialog('Something went wrong. Please try again later.')
+			openDialog('Something went wrong. Please try again later.')
 			console.error(error.message)
 		} finally {
 			setShowPassword(false)
@@ -78,15 +63,11 @@ export default function ResetPasswordForm({ token }) {
 			errorList.password &&
 			errorList.password.message == 'Please enter a password'
 		) {
-			showErrorDialog(errorList.password.message)
+			openDialog(errorList.password.message)
 		} else if (errorList.confirmPassword) {
 			console.error(errors)
-			showErrorDialog(errorList.confirmPassword.message)
+			openDialog(errorList.confirmPassword.message)
 		}
-	}
-
-	const onClose = () => {
-		closeErrorDialog()
 	}
 
 	return (
@@ -180,11 +161,6 @@ export default function ResetPasswordForm({ token }) {
 					</button>
 				</div>
 			</form>
-			<DialogBox
-				isOpen={errorDialog.isOpen}
-				message={errorDialog.message}
-				onClose={onClose}
-			/>
 		</>
 	)
 }

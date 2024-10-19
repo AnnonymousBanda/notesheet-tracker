@@ -1,5 +1,4 @@
 'use client'
-import DialogBox from '@/components/DialogBox'
 import Loader from '@/components/Loader'
 import ResetPasswordForm from '@/components/resetpasswordform'
 import { useParams, useRouter } from 'next/navigation'
@@ -9,24 +8,6 @@ export default function ForgotPassword() {
 	const [loading, setLoading] = useState(true)
 	const { token } = useParams()
 	const Router = useRouter()
-
-	const [errorDialog, setErrorDialog] = useState({
-		isOpen: false,
-		message: '',
-	})
-
-	const showDialogBox = (message) => {
-		setErrorDialog({
-			isOpen: true,
-			message: message,
-		})
-	}
-	const closeDialog = () => {
-		setErrorDialog({
-			isOpen: false,
-			message: '',
-		})
-	}
 
 	useEffect(() => {
 		const verifyToken = async () => {
@@ -70,11 +51,6 @@ export default function ForgotPassword() {
 					<ResetPasswordForm token={token} />
 				</div>
 			</div>
-			<DialogBox
-				isOpen={errorDialog.isOpen}
-				message={errorDialog.message}
-				onClose={closeDialog}
-			/>
 		</>
 	)
 }
