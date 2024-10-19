@@ -6,12 +6,14 @@ const { userModel } = require('../models')
 const { AppError } = require('../controllers/error.controller')
 
 const register = catchAsync(async (req, res) => {
-	const { email, password, confirmPassword } = req.body
+	const { email, password, confirmPassword, role, admin } = req.body
 
 	const user = await userModel.create({
 		email,
 		password,
 		confirmPassword,
+		role,
+		admin,
 	})
 
 	const token = await signToken(user.id)
@@ -56,16 +58,19 @@ const getResetToken = catchAsync(async (req, res) => {
 
 	const user = await userModel.findOne({ email })
 
-	if(user) {		
-		if (user.passwordResetToken && Date.now() < user.passwordResetTokenExpires)
+	if (user) {
+		if (
+			user.passwordResetToken &&
+			Date.now() < user.passwordResetTokenExpires
+		)
 			throw new AppError('A reset link has already been sent', 400)
-		
+
 		const resetToken = await signToken(email)
 		user.passwordResetToken = await bcrypt.hash(resetToken, 12)
 		user.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000
-		
+
 		await user.save()
-		
+
 		sendResetToken(email, resetToken)
 	}
 

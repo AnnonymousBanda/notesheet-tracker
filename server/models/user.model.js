@@ -64,17 +64,19 @@ const userSchema = new Schema({
 			'drsa',
 			'adean',
 		],
+		unqiue: true,
+		default: null,
 	},
-	notesheetsToApprove: {
-		type: [Schema.Types.ObjectId],
-		ref: 'Notesheet',
-		default: [],
-	},
-	notesheetRaised: {
-		type: [Schema.Types.ObjectId],
-		ref: 'Notesheet',
-		default: [],
-	},
+	// notesheetsToApprove: {
+	// 	type: [Schema.Types.ObjectId],
+	// 	ref: 'Notesheet',
+	// 	default: [],
+	// },
+	// notesheetRaised: {
+	// 	type: [Schema.Types.ObjectId],
+	// 	ref: 'Notesheet',
+	// 	default: [],
+	// },
 	picture: {
 		type: String,
 	},

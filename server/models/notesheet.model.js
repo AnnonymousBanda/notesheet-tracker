@@ -35,12 +35,14 @@ const notesheetSchema = new Schema({
 	requiredApprovals: {
 		type: [Schema.Types.ObjectId],
 		ref: 'User',
-		required: [true, 'Required approvals is required'],
+		// required: [true, 'Required approvals is required'],
 	},
 	currentRequiredApproval: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
-		required: [true, 'Current required approval is required'],
+		default: function () {
+			return this.requiredApprovals[0]
+		},
 	},
 	status: {
 		passedApprovals: {
@@ -74,9 +76,27 @@ const notesheetSchema = new Schema({
 
 notesheetSchema.pre('save', function (next) {
 	if (this.requiredApprovals && this.requiredApprovals.length > 0) {
-		this.status.currentRequiredApproval = this.requiredApprovals[0]
-		this.status.pendingApprovals = this.requiredApprovals
+		const index = this.requiredApprovals.indexOf(
+			this.currentRequiredApproval
+		)
+
+		if (index !== -1 && index < this.requiredApprovals.length - 1) {
+			this.status.passedApprovals = this.requiredApprovals.slice(0, index)
+			this.status.currentRequiredApproval = this.currentRequiredApproval
+			this.status.pendingApprovals = this.requiredApprovals.slice(
+				index + 1
+			)
+		} else {
+			this.status.passedApprovals = this.requiredApprovals
+			this.status.currentRequiredApproval = null
+			this.status.pendingApprovals = []
+		}
+	} else {
+		this.status.passedApprovals = []
+		this.status.currentRequiredApproval = null
+		this.status.pendingApprovals = []
 	}
+
 	next()
 })
 

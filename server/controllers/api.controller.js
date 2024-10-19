@@ -1,9 +1,9 @@
 const path = require('path')
 const fs = require('fs').promises
 
-const { userModel } = require('../models')
+const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const saveImage = require('../utils/api.util')
+const { saveImage, populateOptions } = require('../utils/api.util')
 
 const getUserByID = catchAsync(async (req, res) => {
 	const id = req.params.id
@@ -19,6 +19,149 @@ const getUserByID = catchAsync(async (req, res) => {
 	return res.status(200).json({
 		status: '200',
 		user,
+	})
+})
+
+const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
+	const id = req.params.id
+
+	const notesheets = await notesheetModel
+		.find({ raisedBy: id })
+		.populate(populateOptions)
+
+	if (!notesheets) throw new AppError('Notesheets not found', 404)
+
+	return res.status(200).json({
+		status: '200',
+		notesheets,
+	})
+})
+
+const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
+	const id = req.params.id
+
+	const notesheets = await notesheetModel
+		.find({ currentRequiredApproval: id })
+		.populate(populateOptions)
+
+	if (!notesheets) throw new AppError('Notesheets not found', 404)
+
+	return res.status(200).json({
+		status: '200',
+		notesheets,
+	})
+})
+
+const createNotesheet = catchAsync(async (req, res) => {
+	const raisedBy = req.params.id
+	const { subject, amount, pdf, requiredApprovals } = req.body
+
+	const user = await userModel.findById(raisedBy)
+
+	if (
+		(!requiredApprovals || requiredApprovals.length === 0) &&
+		user.admin !== 'adean'
+	)
+		throw new AppError('Required approvals are required', 400)
+
+	let approvals = []
+	for (const requiredApproval of requiredApprovals) {
+		const user = await userModel.findOne({ admin: requiredApproval })
+
+		if (!user)
+			throw new AppError(
+				'There might be error in required approvals',
+				400
+			)
+		approvals.push(user._id)
+	}
+
+	const notesheet = await notesheetModel.create({
+		subject,
+		amount,
+		raisedBy,
+		pdf,
+		requiredApprovals: approvals,
+	})
+
+	return res.status(201).json({
+		status: '201',
+		message: 'Notesheet created successfully',
+		notesheet,
+	})
+})
+
+const approveNotesheet = catchAsync(async (req, res) => {
+	const id = req.params.id
+	const { notesheetID } = req.body
+
+	const notesheet = await notesheetModel
+		.findById(notesheetID)
+		.populate(populateOptions)
+
+	if (!notesheet) throw new AppError('Notesheet not found', 404)
+
+	const user = await userModel.findById(id)
+
+	if (!user) throw new AppError('User not found', 404)
+
+	if (!notesheet.currentRequiredApproval.equals(user._id))
+		throw new AppError('You are not the required approver', 401)
+
+	const index = notesheet.requiredApprovals.indexOf(currentRequiredApproval)
+	if (index === notesheet.requiredApprovals.length - 1)
+		notesheet.currentRequiredApproval = null
+	else
+		notesheet.currentRequiredApproval =
+			notesheet.requiredApprovals[
+				notesheet.requiredApprovals.indexOf(
+					notesheet.currentRequiredApproval
+				) + 1
+			]
+
+	await notesheet.save()
+
+	return res.status(200).json({
+		status: '200',
+		message: 'Notesheet approved successfully',
+		notesheet,
+	})
+})
+
+const rejectNotesheet = catchAsync(async (req, res) => {
+	const id = req.params.id
+	const { notesheetID, comment } = req.body
+
+	if (!notesheetID) throw new AppError('Notesheet ID is required', 400)
+
+	if (!comment) throw new AppError('Comment is required', 400)
+
+	const notesheet = await notesheetModel
+		.findById(notesheetID)
+		.populate(populateOptions)
+
+	if (!notesheet) throw new AppError('Notesheet not found', 404)
+
+	const user = await userModel.findById(id)
+
+	if (!user) throw new AppError('User not found', 404)
+
+	if (!user.admin) throw new AppError('You are not an admin', 401)
+
+	if (!notesheet.currentRequiredApproval.equals(user.id))
+		throw new AppError('You are not the required rejector', 401)
+
+	notesheet.status.rejectedBy = {
+		admin: user.id,
+		comment,
+	}
+
+	await notesheet.save()
+
+	return res.status(200).json({
+		status: '200',
+		message: 'Notesheet rejected successfully',
+		notesheet,
 	})
 })
 
@@ -96,4 +239,13 @@ const dynamicBlurImage = catchAsync(async (req, res) => {
 	})
 })
 
-module.exports = { getUserByID, blurImage, dynamicBlurImage }
+module.exports = {
+	getUserByID,
+	getRaisedNotesheetsByUserID,
+	getNotesheetsToApproveByUserID,
+	createNotesheet,
+	approveNotesheet,
+	rejectNotesheet,
+	blurImage,
+	dynamicBlurImage,
+}
