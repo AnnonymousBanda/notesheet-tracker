@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt')
 const validator = require('validator')
 
 const { Schema, model } = require('mongoose')
-const { AppError } = require('../controllers/error.controller')
 
 const userSchema = new Schema({
 	email: {
@@ -51,6 +50,31 @@ const userSchema = new Schema({
 		default: 'user',
 		immutable: true,
 	},
+	admin: {
+		type: String,
+		enum: [
+			null,
+			'gensec-wel',
+			'gensec-tech',
+			'gensec-cult',
+			'gensec-sports',
+			'vpg',
+			'pic',
+			'arsa',
+			'drsa',
+			'adean',
+		],
+	},
+	notesheetsToApprove: {
+		type: [Schema.Types.ObjectId],
+		ref: 'Notesheet',
+		default: [],
+	},
+	notesheetRaised: {
+		type: [Schema.Types.ObjectId],
+		ref: 'Notesheet',
+		default: [],
+	},
 	picture: {
 		type: String,
 	},
@@ -60,9 +84,6 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('save', async function (next) {
-	// if (this.isModified('role'))
-	// 	throw new AppError('You cannot change your role', 400)
-
 	if (!this.isModified('password')) return next()
 
 	this.password = await bcrypt.hash(this.password, 12)
