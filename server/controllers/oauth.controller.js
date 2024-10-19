@@ -15,7 +15,7 @@ const outlookLogin = passport.authenticate('windowslive', {
 
 const oulookOauthCallback = passport.authenticate('windowslive', {
 	session: false,
-	failureRedirect: 'oauth/failure',
+	failureRedirect: '/oauth/failure',
 })
 
 const oauthCallback = catchAsync(async (req, res) => {
