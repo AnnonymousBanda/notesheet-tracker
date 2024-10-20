@@ -3,7 +3,8 @@ const fs = require('fs').promises
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const { saveImage, populateOptions } = require('../utils/api.util')
+const { saveImage, populateOptions, indexOfById } = require('../utils/api.util')
+const { AppError } = require('../controllers/error.controller')
 
 const getUserByID = catchAsync(async (req, res) => {
 	const id = req.params.id
@@ -65,16 +66,17 @@ const createNotesheet = catchAsync(async (req, res) => {
 		throw new AppError('Required approvals are required', 400)
 
 	let approvals = []
-	for (const requiredApproval of requiredApprovals) {
-		const user = await userModel.findOne({ admin: requiredApproval })
+	if (requiredApprovals?.length > 0)
+		for (const requiredApproval of requiredApprovals) {
+			const user = await userModel.findOne({ admin: requiredApproval })
 
-		if (!user)
-			throw new AppError(
-				'There might be error in required approvals',
-				400
-			)
-		approvals.push(user._id)
-	}
+			if (!user)
+				throw new AppError(
+					'There might be error in required approvals',
+					400
+				)
+			approvals.push(user._id)
+		}
 
 	const notesheet = await notesheetModel.create({
 		subject,
@@ -83,6 +85,9 @@ const createNotesheet = catchAsync(async (req, res) => {
 		pdf,
 		requiredApprovals: approvals,
 	})
+
+	// if(!requiredApprovals||requiredApprovals.length===0)
+	//notify the user who raised the notesheet
 
 	return res.status(201).json({
 		status: '201',
@@ -100,26 +105,29 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		.populate(populateOptions)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
+	console.log(notesheet.currentRequiredApproval)
 
 	const user = await userModel.findById(id)
 
 	if (!user) throw new AppError('User not found', 404)
 
-	if (!notesheet.currentRequiredApproval.equals(user._id))
+	if (notesheet.currentRequiredApproval.id !== user.id)
 		throw new AppError('You are not the required approver', 401)
 
-	const index = notesheet.requiredApprovals.indexOf(currentRequiredApproval)
+	const index = indexOfById(
+		notesheet.requiredApprovals,
+		notesheet.currentRequiredApproval.id
+	)
 	if (index === notesheet.requiredApprovals.length - 1)
 		notesheet.currentRequiredApproval = null
 	else
 		notesheet.currentRequiredApproval =
-			notesheet.requiredApprovals[
-				notesheet.requiredApprovals.indexOf(
-					notesheet.currentRequiredApproval
-				) + 1
-			]
+			notesheet.requiredApprovals[index + 1]
 
 	await notesheet.save()
+
+	// if (notesheet.currentRequiredApproval === null)
+	//notify the user who raised the notesheet
 
 	return res.status(200).json({
 		status: '200',
@@ -148,7 +156,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 
 	if (!user.admin) throw new AppError('You are not an admin', 401)
 
-	if (!notesheet.currentRequiredApproval.equals(user.id))
+	if (notesheet.currentRequiredApproval.id !== user.id)
 		throw new AppError('You are not the required rejector', 401)
 
 	notesheet.status.rejectedBy = {
@@ -157,6 +165,8 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 	}
 
 	await notesheet.save()
+
+	//notify the user who raised the notesheet
 
 	return res.status(200).json({
 		status: '200',

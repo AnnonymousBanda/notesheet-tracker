@@ -33,10 +33,10 @@ router
 	.post(isAuthenticated, getUserID, createNotesheet)
 router
 	.route('/notesheet/approve')
-	.post(isAuthenticated, isAdmin, approveNotesheet)
+	.patch(isAuthenticated, isAdmin, getUserID, approveNotesheet)
 router
 	.route('/notesheet/reject')
-	.post(isAuthenticated, isAdmin, rejectNotesheet)
+	.patch(isAuthenticated, isAdmin, getUserID, rejectNotesheet)
 
 //image-related routes
 router.route('/get-blur-image').post(blurImage)

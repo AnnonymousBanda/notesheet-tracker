@@ -41,7 +41,10 @@ const populateOptions = [
 	},
 ]
 
+const indexOfById = (arr, id) => arr.findIndex((obj) => obj.id === id)
+
 module.exports = {
 	saveImage,
 	populateOptions,
+	indexOfById,
 }

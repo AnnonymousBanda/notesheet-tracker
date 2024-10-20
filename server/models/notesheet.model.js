@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { indexOfById } = require('../utils/api.util')
 
 const notesheetSchema = new Schema({
 	subject: {
@@ -76,11 +77,12 @@ const notesheetSchema = new Schema({
 
 notesheetSchema.pre('save', function (next) {
 	if (this.requiredApprovals && this.requiredApprovals.length > 0) {
-		const index = this.requiredApprovals.indexOf(
-			this.currentRequiredApproval
+		const index = indexOfById(
+			this.requiredApprovals,
+			this.currentRequiredApproval?.id
 		)
 
-		if (index !== -1 && index < this.requiredApprovals.length - 1) {
+		if (index !== -1 && index < this.requiredApprovals.length) {
 			this.status.passedApprovals = this.requiredApprovals.slice(0, index)
 			this.status.currentRequiredApproval = this.currentRequiredApproval
 			this.status.pendingApprovals = this.requiredApprovals.slice(
