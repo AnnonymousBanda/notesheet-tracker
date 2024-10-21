@@ -1,8 +1,72 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DynamicLazyBlurImage, LazyBlurImage } from "./LazyBlurImage";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const DropdownMenu = ({ isOpen, setIsOpen }) => {
+  const handlecloseMenu = () => {
+    setIsOpen(false);
+  };
+  const {logout} = useAuth()
+  const handleLogout = async () => {
+    await logout();
+    handlecloseMenu();
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.onkeydown = function (event) {
+        if (event.key === "Escape") {
+          setIsOpen(false);
+        }
+      };
+    }
+    return () => {
+      document.onkeydown = null;
+    };
+  }, [isOpen]);
+
+  return (
+    <div
+      className={`${
+        isOpen ? "block" : "hidden"
+      } absolute z-10 bg-white w-72 right-10 top-32 p-2 rounded-md transition-all duration-1000`}
+    >
+      <div className="flex flex-col">
+        <Link
+          onClick={handlecloseMenu}
+          href="/"
+          className="flex gap-3 hover:bg-gray-100 p-4 transition-all duration-500"
+        >
+          <img
+            src="/images/dashboard.svg"
+            alt=""
+            className="w-8 text-gray-500"
+          />
+          <p className="text-[1.5rem] text-gray-500 font-bold">HOME</p>
+        </Link>
+        <Link
+          onClick={handlecloseMenu}
+          href="/profile"
+          className="flex gap-3 hover:bg-gray-100 p-4 transition-all duration-500"
+        >
+          <img src="/images/user.svg" alt="" className="w-8 text-gray-500" />
+          <p className="text-[1.5rem] text-gray-500 font-bold">PROFILE</p>
+        </Link>
+
+        <button
+          onClick={handleLogout}
+          className="flex gap-3 items-center hover:bg-red-100 p-4 transition-all duration-500"
+        >
+          <img src="/images/logout.svg" alt="" className="w-8 text-gray-500" />
+          <p className="text-[1.5rem] text-gray-500 font-bold">LOGOUT</p>
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +98,7 @@ export default function Navbar() {
           />
         )}
       </div>
+      <DropdownMenu isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
