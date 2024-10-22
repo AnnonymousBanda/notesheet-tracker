@@ -41,10 +41,19 @@ const populateOptions = [
 	},
 ]
 
-const indexOfById = (arr, id) => arr.findIndex((obj) => obj.id === id)
+const sendMail = async (to, subject, text, html) => {
+	console.log(text)
+}
+
+const hierarchyMantained = (requiredApprovals) => {
+	if (requiredApprovals.length === 0) return false
+
+	return true
+}
 
 module.exports = {
 	saveImage,
 	populateOptions,
-	indexOfById,
+	sendMail,
+	hierarchyMantained,
 }

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { sendMail } = require('./api.util')
 
 const signToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -12,7 +13,7 @@ const verifyToken = (token) => {
 }
 
 const sendResetToken = (email, token) => {
-	console.log(`${process.env.CLIENT_URL}/auth/reset/${token}`)
+	sendMail((text = `${process.env.CLIENT_URL}/auth/reset/${token}`))
 }
 
 module.exports = {

@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
-const { indexOfById } = require('../utils/api.util')
+const { hierarchyMantained } = require('../utils/api.util')
+const { AppError } = require('../controllers/error.controller')
 
 const notesheetSchema = new Schema({
 	subject: {
@@ -36,7 +37,12 @@ const notesheetSchema = new Schema({
 	requiredApprovals: {
 		type: [Schema.Types.ObjectId],
 		ref: 'User',
-		// required: [true, 'Required approvals is required'],
+		validate: {
+			validator: function () {
+				return hierarchyMantained(this.requiredApprovals)
+			},
+			message: 'Hierarchy for notesheet approval is not maintained',
+		},
 	},
 	currentRequiredApproval: {
 		type: Schema.Types.ObjectId,
@@ -46,6 +52,19 @@ const notesheetSchema = new Schema({
 		},
 	},
 	status: {
+		state: {
+			type: String,
+			enum: ['pending', 'approved', 'rejected'],
+			default: 'pending',
+		},
+		// progress: {
+		// 	type: Number,
+		// 	default: function () {
+		// 		return this.requiredApprovals.length > 0
+		// 			? this.passedApprovals.length
+		// 			: 0
+		// 	},
+		// },
 		passedApprovals: {
 			type: [Schema.Types.ObjectId],
 			ref: 'User',
@@ -76,27 +95,58 @@ const notesheetSchema = new Schema({
 })
 
 notesheetSchema.pre('save', function (next) {
-	if (this.requiredApprovals && this.requiredApprovals.length > 0) {
-		const index = indexOfById(
-			this.requiredApprovals,
-			this.currentRequiredApproval?.id
+	// if (this.requiredApprovals && this.requiredApprovals.length > 0) {
+	// 	const index = indexOfById(
+	// 		this.requiredApprovals,
+	// 		this.currentRequiredApproval?.id
+	// 	)
+
+	// 	if (index !== -1 && index < this.requiredApprovals.length) {
+	// 		this.status.passedApprovals = this.requiredApprovals.slice(0, index)
+	// 		this.status.currentRequiredApproval = this.currentRequiredApproval
+	// 		this.status.pendingApprovals = this.requiredApprovals.slice(
+	// 			index + 1
+	// 		)
+	// 	} else {
+	// 		this.status.passedApprovals = this.requiredApprovals
+	// 		this.status.currentRequiredApproval = null
+	// 		this.status.pendingApprovals = []
+	// 	}
+	// } else {
+	// 	this.status.passedApprovals = []
+	// 	this.status.currentRequiredApproval = null
+	// 	this.status.pendingApprovals = []
+	// }
+
+	if (this.status.rejectedBy.admin) {
+		this.currentRequiredApproval = null
+		this.status.currentRequiredApproval = null
+		this.status.pendingApprovals = []
+		this.status.state = 'rejected'
+	} else {
+		const index = this.requiredApprovals.indexOf(
+			this.currentRequiredApproval
 		)
 
-		if (index !== -1 && index < this.requiredApprovals.length) {
+		if (
+			index === this.requiredApprovals.length - 1 ||
+			index >= this.requiredApprovals.length
+		)
+			throw new AppError('Invalid current required approval', 400)
+
+		if (this.currentRequiredApproval) {
 			this.status.passedApprovals = this.requiredApprovals.slice(0, index)
 			this.status.currentRequiredApproval = this.currentRequiredApproval
 			this.status.pendingApprovals = this.requiredApprovals.slice(
 				index + 1
 			)
+			this.status.state = 'pending'
 		} else {
 			this.status.passedApprovals = this.requiredApprovals
 			this.status.currentRequiredApproval = null
 			this.status.pendingApprovals = []
+			this.status.state = 'approved'
 		}
-	} else {
-		this.status.passedApprovals = []
-		this.status.currentRequiredApproval = null
-		this.status.pendingApprovals = []
 	}
 
 	next()

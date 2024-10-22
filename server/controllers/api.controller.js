@@ -3,7 +3,7 @@ const fs = require('fs').promises
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const { saveImage, populateOptions, indexOfById } = require('../utils/api.util')
+const { saveImage, populateOptions, sendMail } = require('../utils/api.util')
 const { AppError } = require('../controllers/error.controller')
 
 const getUserByID = catchAsync(async (req, res) => {
@@ -59,35 +59,36 @@ const createNotesheet = catchAsync(async (req, res) => {
 
 	const user = await userModel.findById(raisedBy)
 
-	if (
-		(!requiredApprovals || requiredApprovals.length === 0) &&
-		user.admin !== 'adean'
-	)
+	if (!user)
+		throw new AppError('Your token has expired please login again', 401)
+
+	if (user.admin === 'adean')
+		throw new AppError('Adean cannot raise notesheet', 400)
+
+	if (!requiredApprovals || requiredApprovals.length === 0)
 		throw new AppError('Required approvals are required', 400)
 
-	let approvals = []
-	if (requiredApprovals?.length > 0)
-		for (const requiredApproval of requiredApprovals) {
-			const user = await userModel.findOne({ admin: requiredApproval })
+	const users = await userModel.find({
+		admin: { $in: requiredApprovals },
+	})
 
-			if (!user)
-				throw new AppError(
-					'There might be error in required approvals',
-					400
-				)
-			approvals.push(user._id)
-		}
+	if (!users) throw new AppError('Required approvals not found', 404)
+
+	if (users.length !== requiredApprovals.length) {
+		throw new AppError('There might be an error in required approvals', 400)
+	}
+
+	let newRequiredApprovals = users.map((user) => user._id)
 
 	const notesheet = await notesheetModel.create({
 		subject,
 		amount,
 		raisedBy,
 		pdf,
-		requiredApprovals: approvals,
+		requiredApprovals: newRequiredApprovals,
 	})
 
-	// if(!requiredApprovals||requiredApprovals.length===0)
-	//notify the user who raised the notesheet
+	sendMail((text = 'notesheet with id ${notesheet.id} has been raised'))
 
 	return res.status(201).json({
 		status: '201',
@@ -100,23 +101,19 @@ const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
 
-	const notesheet = await notesheetModel
-		.findById(notesheetID)
-		.populate(populateOptions)
+	const notesheet = await notesheetModel.findById(notesheetID)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
-	console.log(notesheet.currentRequiredApproval)
 
 	const user = await userModel.findById(id)
 
 	if (!user) throw new AppError('User not found', 404)
 
-	if (notesheet.currentRequiredApproval.id !== user.id)
+	if (!notesheet.currentRequiredApproval?.equals(user.id))
 		throw new AppError('You are not the required approver', 401)
 
-	const index = indexOfById(
-		notesheet.requiredApprovals,
-		notesheet.currentRequiredApproval.id
+	const index = notesheet.requiredApprovals.indexOf(
+		notesheet.currentRequiredApproval
 	)
 	if (index === notesheet.requiredApprovals.length - 1)
 		notesheet.currentRequiredApproval = null
@@ -126,8 +123,10 @@ const approveNotesheet = catchAsync(async (req, res) => {
 
 	await notesheet.save()
 
-	// if (notesheet.currentRequiredApproval === null)
-	//notify the user who raised the notesheet
+	if (notesheet.currentRequiredApproval === null)
+		sendMail(
+			(text = `Your notesheet with id ${notesheet.id} has been approved`)
+		)
 
 	return res.status(200).json({
 		status: '200',
@@ -144,9 +143,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 
 	if (!comment) throw new AppError('Comment is required', 400)
 
-	const notesheet = await notesheetModel
-		.findById(notesheetID)
-		.populate(populateOptions)
+	const notesheet = await notesheetModel.findById(notesheetID)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
 
@@ -156,7 +153,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 
 	if (!user.admin) throw new AppError('You are not an admin', 401)
 
-	if (notesheet.currentRequiredApproval.id !== user.id)
+	if (!notesheet.currentRequiredApproval?.equals(user.id))
 		throw new AppError('You are not the required rejector', 401)
 
 	notesheet.status.rejectedBy = {
@@ -166,7 +163,9 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 
 	await notesheet.save()
 
-	//notify the user who raised the notesheet
+	sendMail(
+		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
+	)
 
 	return res.status(200).json({
 		status: '200',

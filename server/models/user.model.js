@@ -67,16 +67,6 @@ const userSchema = new Schema({
 		unqiue: true,
 		default: null,
 	},
-	// notesheetsToApprove: {
-	// 	type: [Schema.Types.ObjectId],
-	// 	ref: 'Notesheet',
-	// 	default: [],
-	// },
-	// notesheetRaised: {
-	// 	type: [Schema.Types.ObjectId],
-	// 	ref: 'Notesheet',
-	// 	default: [],
-	// },
 	picture: {
 		type: String,
 	},
