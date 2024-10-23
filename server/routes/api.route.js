@@ -1,6 +1,6 @@
 const express = require('express')
 const { isAuthenticated, isAdmin } = require('../middlewares/auth.middleware')
-const { uploadPDF } = require('../middlewares/api.middleware')
+const { uploadPDF, reuploadPDF } = require('../middlewares/api.middleware')
 
 const router = express.Router()
 
@@ -38,7 +38,7 @@ router
 	.post(isAuthenticated, getUserID, uploadPDF, createNotesheet)
 router
 	.route('/notesheet/approve')
-	.patch(isAuthenticated, isAdmin, getUserID, uploadPDF, approveNotesheet)
+	.patch(isAuthenticated, isAdmin, getUserID, reuploadPDF, approveNotesheet)
 router
 	.route('/notesheet/reject')
 	.patch(isAuthenticated, isAdmin, getUserID, rejectNotesheet)

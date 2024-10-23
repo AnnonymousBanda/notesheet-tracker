@@ -104,7 +104,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		requiredApprovals: newRequiredApprovals,
 	})
 
-	sendMail((text = 'notesheet with id ${notesheet.id} has been raised'))
+	sendMail((text = `notesheet with id ${notesheet.id} has been raised`))
 
 	return res.status(201).json({
 		status: '201',
@@ -144,7 +144,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 
 	if (notesheet.currentRequiredApproval === null)
 		sendMail(
-			(text = `Your notesheet with id ${notesheet.id} has been approved`)
+			(text = `Your notesheet with id ${notesheet.id} has been approved by ${user.admin === 'adean' ? 'all required approvals' : user.admin}`)
 		)
 
 	return res.status(200).json({

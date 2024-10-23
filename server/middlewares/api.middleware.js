@@ -27,9 +27,28 @@ const upload = multer({
 	},
 })
 
+const reuploadPDF = multer({
+	storage: multer.diskStorage({
+		destination: (req, file, cb) => {
+			cb(null, 'public/uploads/')
+		},
+		filename: (req, file, cb) => {
+			cb(null, file.originalname)
+		},
+	}),
+	fileFilter: (req, file, cb) => {
+		if (file.mimetype === 'application/pdf') {
+			cb(null, true)
+		} else {
+			cb(new AppError('Upload pdf file!', 400), false)
+		}
+	},
+})
+
 const uploadPDF = upload.single('pdfFile')
 
 module.exports = {
 	getUserID,
 	uploadPDF,
+	reuploadPDF,
 }
