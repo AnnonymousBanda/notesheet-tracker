@@ -101,9 +101,9 @@ export default function LoginForm() {
 							{...register('password', {
 								required: 'Please enter a password',
 								minLength: {
-									value: 6,
+									value: 8,
 									message:
-										'Password should have at least 6 characters',
+										'Password should have at least 8 characters',
 								},
 							})}
 							className='w-full'
