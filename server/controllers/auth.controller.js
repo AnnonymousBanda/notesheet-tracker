@@ -6,9 +6,10 @@ const { userModel } = require('../models')
 const { AppError } = require('../controllers/error.controller')
 
 const register = catchAsync(async (req, res) => {
-	const { email, password, confirmPassword, role, admin } = req.body
+	const { name, email, password, confirmPassword, role, admin } = req.body
 
 	const user = await userModel.create({
+		name,
 		email,
 		password,
 		confirmPassword,

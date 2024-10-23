@@ -4,6 +4,10 @@ const validator = require('validator')
 const { Schema, model } = require('mongoose')
 
 const userSchema = new Schema({
+	name: {
+		type: String,
+		trim: true,
+	},
 	email: {
 		type: String,
 		required: true,
