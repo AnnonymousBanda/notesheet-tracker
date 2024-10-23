@@ -53,6 +53,21 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 	})
 })
 
+const getNotesheetsToApprovedByUserID = catchAsync(async (req, res) => {
+	const id = req.params.id
+
+	const notesheets = await notesheetModel
+		.find({ passedApprovals: { $in: [id] } })
+		.populate(populateOptions)
+
+	if (!notesheets) throw new AppError('Notesheets not found', 404)
+
+	return res.status(200).json({
+		status: '200',
+		notesheets,
+	})
+})
+
 const createNotesheet = catchAsync(async (req, res) => {
 	const raisedBy = req.params.id
 	const { subject, amount, pdf, requiredApprovals } = req.body
@@ -252,6 +267,7 @@ module.exports = {
 	getUserByID,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
+	getNotesheetsToApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,

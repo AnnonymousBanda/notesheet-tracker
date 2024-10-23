@@ -9,6 +9,7 @@ const {
 	dynamicBlurImage,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
+	getNotesheetsToApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,
@@ -26,6 +27,9 @@ router
 router
 	.route('/notesheet/to-approve/user/me')
 	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsToApproveByUserID)
+router
+	.route('/notesheet/approved/user/me')
+	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsToApprovedByUserID)
 
 //notesheet-related CRUD routes
 router

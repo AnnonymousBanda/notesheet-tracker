@@ -24,6 +24,14 @@ const notesheetSchema = new Schema({
 		default: () => Date.now(),
 		immutable: true,
 	},
+	approvedAt: {
+		type: Date,
+		default: null,
+	},
+	rejectedAt: {
+		type: Date,
+		default: null,
+	},
 	pdf: {
 		type: String,
 		required: [true, 'PDF link is required'],
@@ -95,34 +103,12 @@ const notesheetSchema = new Schema({
 })
 
 notesheetSchema.pre('save', function (next) {
-	// if (this.requiredApprovals && this.requiredApprovals.length > 0) {
-	// 	const index = indexOfById(
-	// 		this.requiredApprovals,
-	// 		this.currentRequiredApproval?.id
-	// 	)
-
-	// 	if (index !== -1 && index < this.requiredApprovals.length) {
-	// 		this.status.passedApprovals = this.requiredApprovals.slice(0, index)
-	// 		this.status.currentRequiredApproval = this.currentRequiredApproval
-	// 		this.status.pendingApprovals = this.requiredApprovals.slice(
-	// 			index + 1
-	// 		)
-	// 	} else {
-	// 		this.status.passedApprovals = this.requiredApprovals
-	// 		this.status.currentRequiredApproval = null
-	// 		this.status.pendingApprovals = []
-	// 	}
-	// } else {
-	// 	this.status.passedApprovals = []
-	// 	this.status.currentRequiredApproval = null
-	// 	this.status.pendingApprovals = []
-	// }
-
 	if (this.status.rejectedBy.admin) {
 		this.currentRequiredApproval = null
 		this.status.currentRequiredApproval = null
 		this.status.pendingApprovals = []
 		this.status.state = 'rejected'
+		this.rejectedAt = Date.now()
 	} else {
 		const index = this.requiredApprovals.indexOf(
 			this.currentRequiredApproval
@@ -146,6 +132,7 @@ notesheetSchema.pre('save', function (next) {
 			this.status.currentRequiredApproval = null
 			this.status.pendingApprovals = []
 			this.status.state = 'approved'
+			this.approvedAt = Date.now()
 		}
 	}
 
