@@ -1,5 +1,6 @@
 const fs = require('fs').promises
 const path = require('path')
+const { catchAsync } = require('./error.util')
 
 const saveImage = async (base64, destPath) => {
 	const base64Data = base64.replace(/^data:image\/\w+;base64,/, '')
@@ -51,9 +52,31 @@ const hierarchyMantained = (requiredApprovals) => {
 	return true
 }
 
+const rejectExpiredNotesheet = catchAsync(async () => {
+	const notesheets = await notesheetModel.find({
+		expiresAt: { $lt: new Date() },
+		'status.state': 'pending',
+	})
+
+	if (notesheets?.length > 0) {
+		notesheets.forEach(async (notesheet) => {
+			notesheet.status.rejectedBy.admin =
+				notesheet.currentRequiredApproval
+			notesheet.status.rejectedBy.comment = 'Expired'
+
+			await notesheet.save()
+
+			sendMail(
+				(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
+			)
+		})
+	}
+})
+
 module.exports = {
 	saveImage,
 	populateOptions,
 	sendMail,
 	hierarchyMantained,
+	rejectExpiredNotesheet,
 }
