@@ -20,6 +20,9 @@ module.exports = {
       animation: {
         bounce: 'bounce 0.6s infinite',
       },
+      width: {
+        'screen-md': '768px',
+      }
     },
   },
   plugins: [],

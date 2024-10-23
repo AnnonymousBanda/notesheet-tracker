@@ -145,7 +145,7 @@ const NewNotesheetForm = () => {
                   "Please provide the name of the authority raising the notesheet",
               })}
               className="text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2"
-              defaultValue={user.admin}
+              defaultValue={user?.name}
               type="text"
               placeholder="Authority raising the notesheet"
             />
