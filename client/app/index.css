@@ -7,7 +7,7 @@
     .max-container {
         max-width: 1600px;
         margin: 0 auto;
-        /* padding: 0 clamp(1rem, -0.3500rem + 4.2188vw, 6.4rem); */
+        min-height: 100vh;
     }
 
     h1 {
@@ -60,3 +60,22 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; 
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #2f2f2f; 
+    border-radius: 8px;
+    border: 2px solid #f0f0f0; 
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #0e0202; 
+  }
