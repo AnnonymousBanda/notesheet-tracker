@@ -9,7 +9,15 @@ const Dashboard = () => {
   const [admin] = useState(isAdmin());
 
   const UserDashboard = () => {
-    return <div>User Dashboard</div>;
+    return (
+      <div>
+        <Link
+          href="/new-notesheet"
+          className="fixed bottom-12 right-12 flex justify-center items-center bg-[#04AA6D] hover:bg-[#3bb588] p-4 rounded-xl">
+          <img src="/images/plus.svg" alt="" className="w-12" />
+        </Link>
+      </div>
+    );
   };
 
   const AdminDashboard = () => {
