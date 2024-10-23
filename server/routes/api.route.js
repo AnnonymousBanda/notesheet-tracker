@@ -1,5 +1,6 @@
 const express = require('express')
 const { isAuthenticated, isAdmin } = require('../middlewares/auth.middleware')
+const { uploadPDF } = require('../middlewares/api.middleware')
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ const {
 	approveNotesheet,
 	rejectNotesheet,
 } = require('../controllers/api.controller')
-const { getUserID } = require('../middlewares/api.middleware')
+const { getUserID, uploadPDF } = require('../middlewares/api.middleware')
 
 //user-related fetch routes
 router.route('/user/me').get(isAuthenticated, getUserID, getUserByID)
@@ -34,10 +35,10 @@ router
 //notesheet-related CRUD routes
 router
 	.route('/notesheet/create')
-	.post(isAuthenticated, getUserID, createNotesheet)
+	.post(isAuthenticated, getUserID, uploadPDF, createNotesheet)
 router
 	.route('/notesheet/approve')
-	.patch(isAuthenticated, isAdmin, getUserID, approveNotesheet)
+	.patch(isAuthenticated, isAdmin, getUserID, uploadPDF, approveNotesheet)
 router
 	.route('/notesheet/reject')
 	.patch(isAuthenticated, isAdmin, getUserID, rejectNotesheet)

@@ -70,7 +70,8 @@ const getNotesheetsToApprovedByUserID = catchAsync(async (req, res) => {
 
 const createNotesheet = catchAsync(async (req, res) => {
 	const raisedBy = req.params.id
-	const { subject, amount, pdf, requiredApprovals } = req.body
+	const { subject, amount, requiredApprovals } = req.body
+	const pdf = `http://localhost:3000/uploads/${req.file.filename}`
 
 	const user = await userModel.findById(raisedBy)
 
@@ -115,6 +116,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
+	const pdf = `http://localhost:3000/uploads/${req.file.filename}`
 
 	const notesheet = await notesheetModel.findById(notesheetID)
 
@@ -135,6 +137,8 @@ const approveNotesheet = catchAsync(async (req, res) => {
 	else
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
+
+	notesheet.pdf = pdf
 
 	await notesheet.save()
 
