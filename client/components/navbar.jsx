@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DynamicLazyBlurImage, LazyBlurImage } from "./LazyBlurImage";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const DropdownMenu = ({ isOpen, setIsOpen }) => {
   const handlecloseMenu = () => {
@@ -42,8 +42,8 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
         >
           <img
             src="/images/dashboard.svg"
-            alt=""
-            className="w-8 text-gray-500"
+            alt="Home icon"
+            className="w-8"
           />
           <p className="text-[1.5rem] text-gray-500 font-bold">HOME</p>
         </Link>
@@ -52,15 +52,15 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
           href="/profile"
           className="flex gap-3 hover:bg-gray-100 p-4 transition-all duration-500"
         >
-          <img src="/images/user.svg" alt="" className="w-8 text-gray-500" />
+          <img src="/images/user.svg" alt="User icon" className="w-8 " />
           <p className="text-[1.5rem] text-gray-500 font-bold">PROFILE</p>
         </Link>
 
         <button
           onClick={handleLogout}
-          className="flex gap-3 items-center hover:bg-red-100 p-4 transition-all duration-500"
+          className="flex gap-3 items-center hover:bg-red-300  p-4 transition-all duration-500"
         >
-          <img src="/images/logout.svg" alt="" className="w-8 text-gray-500" />
+          <img src="/images/logout.svg" alt="Logout icon" className="w-8" />
           <p className="text-[1.5rem] text-gray-500 font-bold">LOGOUT</p>
         </button>
       </div>
@@ -69,13 +69,17 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
 };
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const pathSegments = pathname.split('/');
+  const route = pathSegments.length > 2 ? pathSegments[2] : pathSegments[1] || '';
+  
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   const { user } = useAuth();
 
   return (
     <div className="w-full bg-gray-200 h-[8vh] px-8 py-4 flex justify-between items-center rounded-lg">
-      <h4>DASHBOARD</h4>
+      <h4 className="text-gray-500 font-bold">{route.toUpperCase() == "" ? "DASHBOARD" : route.toUpperCase()}</h4>
       <div
         onClick={toggleMenu}
         className="cursor-pointer h-full flex justify-center items-center"
