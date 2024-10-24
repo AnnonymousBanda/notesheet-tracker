@@ -19,8 +19,6 @@ const NewNotesheetForm = () => {
 	const onSubmit = async (data) => {
 		submitBtnRef.current.style.opacity = '0.5'
 
-		data.requiredApprovals.push('adean')
-
 		const formData = new FormData()
 		formData.append('pdfFile', data.pdfFile)
 		formData.append('subject', data.subject)
@@ -43,7 +41,7 @@ const NewNotesheetForm = () => {
 			openDialog('Notesheet submitted successfully')
 			setTimeout(() => {
 				onClose()
-				router.push('/')
+				router.push('/') //redirect to the notesheet deatil page /notesheet/:id
 			}, 2500)
 		} catch (error) {
 			openDialog(error.response.data.message)
@@ -62,12 +60,12 @@ const NewNotesheetForm = () => {
 			openDialog(errorList.subject.message)
 		} else if (errorList.date) {
 			openDialog(errorList.date.message)
-		} else if (errorList.raisedBy) {
-			openDialog(errorList.raisedBy.message)
-		} else if (errorList.Amount) {
-			openDialog(errorList.Amount.message)
-		} else if (errorList.approvals) {
-			openDialog(errorList.approvals.message)
+		} else if (errorList.raiser) {
+			openDialog(errorList.raiser.message)
+		} else if (errorList.amount) {
+			openDialog(errorList.amount.message)
+		} else if (errorList.requiredApprovals) {
+			openDialog(errorList.requiredApprovals.message)
 		}
 	}
 
@@ -96,38 +94,43 @@ const NewNotesheetForm = () => {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit, onError)}
-			className='flex items-center justify-start gap-10 w-full p-4 h-full'
+			className='flex items-center justify-center gap-[5rem] w-full p-4 h-full'
 			noValidate
 		>
 			<div
 				onDrop={handleDrop}
 				onDragOver={(e) => e.preventDefault()}
-				className='overflow-hidden h-full flex flex-col items-center justify-center text-center w-1/3 hover:bg-gray-100 border-gray-400 hover:border-black border-dashed border-[4px] rounded-lg gap-8 transition-all duration-500 flex-wrap px-4'
+				className='flex flex-col items-center justify-center text-center h-1/2 w-1/3 hover:bg-gray-100 border-gray-400 hover:border-black border-dashed border-[2px] px-[2.5rem] rounded-lg gap-8 transition-all duration-500 flex-wrap'
 			>
-				<h4 className='px-4 lg:text-[2rem] text-[1.5rem] break-words whitespace-normal text-center overflow-hidden text-ellipsis'>
+				<div className='w-full'>
 					{pdfFile ? (
-						<a
-							className='text-blue-400 text-wrap'
-							target='#'
-							href={pdfFileUrl}
-						>
-							{pdfFile.name}
-						</a>
+						<div className='overflow-hidden'>
+							<a
+								href={pdfFileUrl}
+								className='text-[2.5rem] text-blue-600 truncate'
+								target='_blank'
+							>
+								{pdfFile.name}
+							</a>
+							<div className='flex justify-center'>
+								<button
+									onClick={() => {
+										setPdfFile(null)
+										setPdfFileUrl(null)
+									}}
+									className='w-[12rem] flex items-center justify-center bg-[#2f2f2f] text-white h-[40px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.5rem]'
+								>
+									<h4>Reset PDF</h4>
+								</button>
+							</div>
+						</div>
 					) : (
-						'Please drag and drop or upload a pdf'
+						<h4 className='lg:text-[2rem] text-[1.5rem]'>
+							Please drag and drop or upload a pdf
+						</h4>
 					)}
-				</h4>
-				{pdfFile ? (
-					<button
-						onClick={() => {
-							setPdfFile(null)
-							setPdfFileUrl(null)
-						}}
-						className='w-[12rem] flex items-center justify-center bg-[#2f2f2f] text-white h-[40px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.5rem]'
-					>
-						<h4>Reset PDF</h4>
-					</button>
-				) : (
+				</div>
+				{pdfFile ? null : (
 					<input
 						type='file'
 						accept='application/pdf'
@@ -137,12 +140,12 @@ const NewNotesheetForm = () => {
 					/>
 				)}
 			</div>
-			<div className='flex flex-col justify-start h-full w-2/3 gap-10 overflow-auto'>
+			<div className='flex flex-col justify-start h-full w-1/2 gap-10 overflow-auto'>
 				<h3 className='text-gray-700 font-semibold'>
 					Notesheet Details
 				</h3>
 				<div className='w-full flex flex-col gap-4'>
-					<div className='flex flex-col gap-3 w-2/3'>
+					<div className='flex flex-col gap-3 w-[90%]'>
 						<label className='text-[2rem] font-medium text-gray-700'>
 							Subject
 						</label>
@@ -192,8 +195,7 @@ const NewNotesheetForm = () => {
 						</label>
 						<input
 							{...register('amount', {
-								required:
-									'Please provide the name of the authority raising the notesheet',
+								required: 'Please provide the amount required',
 							})}
 							className='text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2'
 							type='number'
@@ -206,8 +208,25 @@ const NewNotesheetForm = () => {
 							Approvals needed
 						</label>
 						<div className='flex flex-wrap gap-10'>
-							{['gensec-tech', 'pic', 'vpg', 'arsa', 'drsa'].map(
-								(approval) => (
+							{[
+								'Gensec-Tech',
+								'VPG',
+								'PIC',
+								'ARSA',
+								'DRSA',
+								'ADean',
+							]
+								.slice(
+									[
+										'gensec-tech',
+										'vpg',
+										'pic',
+										'arsa',
+										'drsa',
+										'adean',
+									].indexOf(user?.admin) + 1
+								)
+								.map((approval) => (
 									<label
 										key={approval}
 										className='flex items-center cursor-pointer'
@@ -219,25 +238,18 @@ const NewNotesheetForm = () => {
 													'Please select at least one approval',
 											})}
 											value={approval.toLowerCase()}
+											checked={
+												approval === 'ADean'
+													? true
+													: null
+											}
 											className='mr-2 w-7 h-7 border-black border-solid bg-transparent text-[2rem] cursor-pointer'
 										/>
 										<p className='text-[2rem]'>
 											{approval}
 										</p>
 									</label>
-								)
-							)}
-
-							<label key='adean' className='flex items-center'>
-								<input
-									type='checkbox'
-									value='adean'
-									checked={true}
-									disabled
-									className='mr-2 w-7 h-7 border-black border-solid bg-transparent text-[2rem] cursor-not-allowed'
-								/>
-								<p className='text-[2rem]'>Adean</p>
-							</label>
+								))}
 						</div>
 					</div>
 				</div>

@@ -18,14 +18,11 @@ const upload = multer({
 			cb(null, 'public/uploads/')
 		},
 		filename: (req, file, cb) => {
-			console.log('Filename')
 			cb(null, `${req.user.id}-${Date.now()}.pdf`)
 		},
 	}),
 	fileFilter: (req, file, cb) => {
 		if (file.mimetype === 'application/pdf') {
-			console.log('Filename')
-
 			cb(null, true)
 		} else {
 			cb(new AppError('Upload pdf file!', 400), false)
