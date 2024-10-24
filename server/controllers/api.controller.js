@@ -53,7 +53,7 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 	})
 })
 
-const getNotesheetsToApprovedByUserID = catchAsync(async (req, res) => {
+const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
 	const notesheets = await notesheetModel
@@ -274,7 +274,7 @@ module.exports = {
 	getUserByID,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
-	getNotesheetsToApprovedByUserID,
+	getNotesheetsApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,
