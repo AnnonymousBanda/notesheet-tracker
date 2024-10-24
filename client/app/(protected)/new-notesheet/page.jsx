@@ -41,14 +41,14 @@ const NewNotesheetForm = () => {
 			openDialog('Notesheet submitted successfully')
 			setTimeout(() => {
 				onClose()
-				router.push('/') //redirect to the notesheet deatil page /notesheet/:id
+				router.push(`/notesheet/${response.data.id}`)
 			}, 2500)
 		} catch (error) {
 			openDialog(error.response.data.message)
 		} finally {
-			// reset()
-			// setPdfFile(null)
-			// setPdfFileUrl(null)
+			reset()
+			setPdfFile(null)
+			setPdfFileUrl(null)
 			submitBtnRef.current.style.opacity = '1'
 		}
 	}
