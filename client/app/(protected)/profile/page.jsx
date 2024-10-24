@@ -32,8 +32,30 @@ const Profile = () => {
 	const onProfileError = (errorList) => {
 		console.log('ErrorList', errorList)
 	}
-	const onProfileSubmit = (data) => {
-		console.log('Data', data)
+	const onProfileSubmit = async (data) => {
+		if (!data.name) {
+			openDialog('Please provide the new name to update')
+			return
+		}
+
+		try {
+			const response = await axios.patch(
+				'http://localhost:8000/auth/update-profile',
+				{
+					name: data.name,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						authorization: `Bearer ${localStorage.getItem('jwt')}`,
+					},
+				}
+			)
+
+			openDialog(response.data.message)
+		} catch (error) {
+			openDialog(error.response.data.message)
+		}
 	}
 
 	const onPasswordError = (errorList) => {
@@ -49,7 +71,7 @@ const Profile = () => {
 	const onPasswordSubmit = async (data) => {
 		if (!data.oldPassword) {
 			openDialog('Please provide the old password to change the password')
-			reset()
+			return
 		} else if (!data.newPassword) {
 			openDialog('Please provide the new password to change the password')
 			return
@@ -60,7 +82,6 @@ const Profile = () => {
 			openDialog('New password and confirm password should be same')
 			return
 		}
-		console.log('Data', data)
 
 		try {
 			const response = await axios.patch(
@@ -116,15 +137,22 @@ const Profile = () => {
 						Name
 					</label>
 					<input
-						{...register('raisedBy', {
-							required:
-								'Please provide the name of the authority raising the notesheet',
+						{...register('name', {
+							required: 'Please provide the new name to update',
 						})}
 						className='text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2'
 						defaultValue={user?.name}
 						type='text'
-						placeholder='Authority raising the notesheet'
+						placeholder='Name'
 					/>
+				</div>
+				<div className='w-full flex justify-center'>
+					<button
+						type='submit'
+						className='flex items-center justify-center bg-[#2f2f2f] text-white py-1 px-2 rounded-sm hover:bg-[#0e0202] text-[1.5rem]'
+					>
+						Update Name
+					</button>
 				</div>
 				<div className='flex flex-col gap-3'>
 					<label className='block text-[2rem] font-medium text-gray-700'>
