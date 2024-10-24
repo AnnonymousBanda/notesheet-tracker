@@ -71,7 +71,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
 export default function Navbar() {
   const pathname = usePathname();
   const pathSegments = pathname.split('/');
-  const route = pathSegments.length > 2 ? pathSegments[2] : pathSegments[1] || '';
+  const route = pathSegments.length > 2 ? pathSegments[1] : pathSegments[1] || '';
   
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);

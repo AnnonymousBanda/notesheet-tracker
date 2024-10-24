@@ -23,6 +23,20 @@ const getUserByID = catchAsync(async (req, res) => {
 	})
 })
 
+const getNotesheetById = catchAsync(async (req, res) => {
+	const notesheetID = req.params.id
+	const notesheet = await notesheetModel
+		.findById(notesheetID)
+		.populate(populateOptions)
+
+	if (!notesheet) throw new AppError('Notesheet not found', 404)
+	
+	return res.status(200).json({
+		status: '200',
+		notesheet,
+	})
+})
+
 const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
@@ -275,6 +289,7 @@ const dynamicBlurImage = catchAsync(async (req, res) => {
 
 module.exports = {
 	getUserByID,
+	getNotesheetById,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
 	getNotesheetsApprovedByUserID,
