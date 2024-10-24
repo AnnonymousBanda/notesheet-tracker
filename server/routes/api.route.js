@@ -1,6 +1,10 @@
 const express = require('express')
 const { isAuthenticated, isAdmin } = require('../middlewares/auth.middleware')
-const { uploadPDF, reuploadPDF } = require('../middlewares/api.middleware')
+const {
+	uploadPDF,
+	reuploadPDF,
+	getUserID,
+} = require('../middlewares/api.middleware')
 
 const router = express.Router()
 
@@ -15,7 +19,6 @@ const {
 	approveNotesheet,
 	rejectNotesheet,
 } = require('../controllers/api.controller')
-const { getUserID, uploadPDF } = require('../middlewares/api.middleware')
 
 //user-related fetch routes
 router.route('/user/me').get(isAuthenticated, getUserID, getUserByID)

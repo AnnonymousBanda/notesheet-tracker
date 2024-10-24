@@ -19,6 +19,11 @@ const notesheetSchema = new Schema({
 		required: [true, 'Raised by detail is required'],
 		immutable: true,
 	},
+	raiser: {
+		type: String,
+		required: [true, 'Raiser detail is required'],
+		immutable: true,
+	},
 	raisedAt: {
 		type: Date,
 		default: () => Date.now(),

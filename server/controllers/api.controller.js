@@ -70,8 +70,10 @@ const getNotesheetsToApprovedByUserID = catchAsync(async (req, res) => {
 
 const createNotesheet = catchAsync(async (req, res) => {
 	const raisedBy = req.params.id
-	const { subject, amount, requiredApprovals } = req.body
-	const pdf = `http://localhost:3000/uploads/${req.file.filename}`
+	const { subject, amount, raiser } = req.body
+	const requiredApprovals = req.body.requiredApprovals.split(',')
+
+	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
 	const user = await userModel.findById(raisedBy)
 
@@ -100,6 +102,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		subject,
 		amount,
 		raisedBy,
+		raiser,
 		pdf,
 		requiredApprovals: newRequiredApprovals,
 	})
@@ -116,7 +119,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
-	const pdf = `http://localhost:3000/uploads/${req.file.filename}`
+	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
 	const notesheet = await notesheetModel.findById(notesheetID)
 
