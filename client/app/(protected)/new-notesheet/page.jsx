@@ -200,6 +200,7 @@ const NewNotesheetForm = () => {
 							className='text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2'
 							type='number'
 							placeholder='Enter Amount'
+							autoComplete='off'
 						/>
 					</div>
 
