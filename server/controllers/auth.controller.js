@@ -138,17 +138,22 @@ const reset = catchAsync(async (req, res) => {
 })
 
 const changePassword = catchAsync(async (req, res) => {
-	const { password, confirmPassword } = req.body
+	const { oldPassword, password, confirmPassword } = req.body
+
+	if (!oldPassword) throw new AppError('Please provide old password', 400)
 
 	if (!password || !confirmPassword)
 		throw new AppError('Please provide password and confirm password', 400)
 
 	if (password !== confirmPassword)
-		throw new AppError('Passwords do not match', 400)
+		throw new AppError('Passwords and confirm password do not match', 400)
 
 	const user = await userModel.findById(req.body.id)
 
 	if (!user) throw new AppError('User not found', 404)
+
+	if (!(await bcrypt.compare(oldPassword, user.password)))
+		throw new AppError('Old password is incorrect', 400)
 
 	user.password = password
 	user.confirmPassword = confirmPassword
@@ -157,7 +162,7 @@ const changePassword = catchAsync(async (req, res) => {
 
 	return res
 		.status(200)
-		.json({ status: 200, message: 'Password reset successful' })
+		.json({ status: 200, message: 'Password changed successful' })
 })
 
 module.exports = {
