@@ -4,12 +4,14 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useDialog } from '@/contexts/DialogBoxContext'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import axios from 'axios'
 
 const Profile = () => {
 	const [showPassword, setShowPassword] = useState(false)
 	const [shownewPassword, setShowNewPassword] = useState(false)
 	const [showconfirmPassword, setShowConfirmPassword] = useState(false)
 	const { openDialog } = useDialog()
+	const { logout } = useAuth()
 	const togglePasswordVisibility = () => {
 		setShowPassword(!showPassword)
 	}
@@ -27,7 +29,14 @@ const Profile = () => {
 	} = useForm()
 	const { user } = useAuth()
 
-	const onError = (errorList) => {
+	const onProfileError = (errorList) => {
+		console.log('ErrorList', errorList)
+	}
+	const onProfileSubmit = (data) => {
+		console.log('Data', data)
+	}
+
+	const onPasswordError = (errorList) => {
 		if (errorList.oldPassword) {
 			openDialog(errorList.oldPassword.message)
 		} else if (errorList.newPassword) {
@@ -37,26 +46,45 @@ const Profile = () => {
 		}
 	}
 
-	const onSubmit = (data) => {
-		data.email = user?.email
-		if (data.oldPassword == '' && data.newPassword != '') {
+	const onPasswordSubmit = async (data) => {
+		if (!data.oldPassword) {
 			openDialog('Please provide the old password to change the password')
 			reset()
-		} else if (data.oldPassword != '' && data.newPassword == '') {
+		} else if (!data.newPassword) {
 			openDialog('Please provide the new password to change the password')
 			return
-		} else if (
-			data.oldPassword != '' &&
-			data.newPassword != '' &&
-			data.confirmPassword == ''
-		) {
-			openDialog('Please confirm the new password')
+		} else if (!data.confirmPassword) {
+			openDialog('Please re-enter the new password')
 			return
-		} else if (data.newPassword != data.confirmPassword) {
+		} else if (data.newPassword !== data.confirmPassword) {
 			openDialog('New password and confirm password should be same')
 			return
 		}
 		console.log('Data', data)
+
+		try {
+			const response = await axios.patch(
+				'http://localhost:8000/auth/change-password',
+				{
+					oldPassword: data.oldPassword,
+					password: data.newPassword,
+					confirmPassword: data.confirmPassword,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						authorization: `Bearer ${localStorage.getItem('jwt')}`,
+					},
+				}
+			)
+
+			openDialog(response.data.message)
+			setTimeout(() => {
+				logout()
+			}, 2000)
+		} catch (error) {
+			openDialog(error.response.data.message)
+		}
 	}
 	return (
 		<div className='flex flex-col justify-center items-center gap-8 lg:w-screen-md  mx-auto'>
@@ -80,7 +108,7 @@ const Profile = () => {
 				)}
 			</div>
 			<form
-				onSubmit={handleSubmit(onSubmit, onError)}
+				onSubmit={handleSubmit(onProfileSubmit, onProfileError)}
 				className='md:w-1/2 flex flex-col gap-8'
 			>
 				<div className='flex flex-col gap-3'>
@@ -117,7 +145,11 @@ const Profile = () => {
 						placeholder='Email'
 					/>
 				</div>
-
+			</form>
+			<form
+				onSubmit={handleSubmit(onPasswordSubmit, onPasswordError)}
+				className='md:w-1/2 flex flex-col gap-8'
+			>
 				<div className='flex flex-col gap-3 relative'>
 					<label className='block text-[2rem] font-medium text-gray-700'>
 						Old Password
@@ -235,9 +267,9 @@ const Profile = () => {
 				<div className='w-full flex justify-center'>
 					<button
 						type='submit'
-						className='w-[15rem] flex items-center justify-center bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.7rem]'
+						className='flex items-center justify-center bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.7rem]'
 					>
-						<p>Update Profile</p>
+						<p>Change Password</p>
 					</button>
 				</div>
 			</form>
