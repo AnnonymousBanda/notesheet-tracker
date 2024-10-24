@@ -73,6 +73,9 @@ const createNotesheet = catchAsync(async (req, res) => {
 	const { subject, amount, raiser } = req.body
 	const requiredApprovals = req.body.requiredApprovals.split(',')
 
+	if(!req.file) 
+		throw new AppError('Please upload a pdf file', 400)
+
 	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
 	const user = await userModel.findById(raisedBy)
