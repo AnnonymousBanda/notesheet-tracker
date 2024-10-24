@@ -8,6 +8,7 @@ const {
 	verifyResetToken,
 	reset,
 	changePassword,
+	updateProfile,
 } = require('../controllers/auth.controller')
 const { isAuthenticated } = require('../middlewares/auth.middleware')
 
@@ -20,5 +21,6 @@ router.route('/get-password-reset-token').post(getResetToken)
 router.route('/verify-password-reset-token').post(verifyResetToken)
 router.route('/password-reset/:token').patch(reset)
 router.route('/change-password').patch(isAuthenticated, changePassword)
+router.route('/update-profile').patch(isAuthenticated, updateProfile)
 
 module.exports = router

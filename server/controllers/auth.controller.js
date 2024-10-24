@@ -165,6 +165,24 @@ const changePassword = catchAsync(async (req, res) => {
 		.json({ status: 200, message: 'Password changed successful' })
 })
 
+const updateProfile = catchAsync(async (req, res) => {
+	const { name } = req.body
+
+	if (!name) throw new AppError('Please provide name', 400)
+
+	const user = await userModel.findById(req.body.id)
+
+	if (!user) throw new AppError('User not found', 404)
+
+	user.name = name
+
+	await user.save()
+
+	return res
+		.status(200)
+		.json({ status: 200, message: 'Profile updated successful' })
+})
+
 module.exports = {
 	register,
 	login,
@@ -173,4 +191,5 @@ module.exports = {
 	verifyResetToken,
 	reset,
 	changePassword,
+	updateProfile,
 }
