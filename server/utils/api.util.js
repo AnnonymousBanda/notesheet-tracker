@@ -16,31 +16,31 @@ const saveImage = async (base64, destPath) => {
 const populateOptions = [
 	{
 		path: 'requiredApprovals',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'currentRequiredApproval',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'status.passedApprovals',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'status.currentRequiredApproval',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'status.pendingApprovals',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'raisedBy',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 	{
 		path: 'status.rejectedBy.admin',
-		select: 'email role admin picture',
+		select: 'email role admin picture name',
 	},
 ]
 

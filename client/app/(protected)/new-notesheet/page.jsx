@@ -25,7 +25,7 @@ const NewNotesheetForm = () => {
 		formData.append('raiser', data.raiser)
 		formData.append('amount', data.amount)
 		formData.append('requiredApprovals', data.requiredApprovals)
-
+		
 		try {
 			const response = await axios.post(
 				'http://localhost:8000/api/notesheet/create',
@@ -41,7 +41,8 @@ const NewNotesheetForm = () => {
 			openDialog('Notesheet submitted successfully')
 			setTimeout(() => {
 				onClose()
-				router.push(`/notesheet/${response.data.id}`)
+				console.log(response.data.notesheet)
+				router.push(`/notesheet/${response.data.notesheet._id}`)
 			}, 2500)
 		} catch (error) {
 			openDialog(error.response.data.message)
