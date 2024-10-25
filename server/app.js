@@ -23,23 +23,26 @@ const corsOptions = {
 	credentials: true,
 	optionsSuccessStatus: 200,
 }
-// const helmetConfig = helmet.contentSecurityPolicy({
-// 	directives: {
-// 		defaultSrc: ["'self'"],
-// 		scriptSrc: ["'self'", 'https://trustedscripts.example.com'],
-// 		objectSrc: ["'none'"],
-// 		upgradeInsecureRequests: [],
-// 	},
-// })
+
+const helmetConfig = helmet.contentSecurityPolicy({
+	directives: {
+		defaultSrc: ["'self'"],
+		scriptSrc: ["'self'"],
+		objectSrc: ["'none'"],
+		frameAncestors: ["'self'", "http://localhost:3000", "http://localhost:8000"],
+		upgradeInsecureRequests: [],
+	},
+})
+
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000,
-	max: 100,
+	max: 1000,
 	message: 'Too many requests from this IP, please try again later.',
 })
 
 app.use(cors(corsOptions))
 app.use(helmet())
-// app.use(helmetConfig)
+app.use(helmetConfig)
 app.use(mongoSanitize())
 app.use(limiter)
 
