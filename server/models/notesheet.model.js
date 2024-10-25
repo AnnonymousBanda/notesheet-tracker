@@ -120,7 +120,7 @@ notesheetSchema.pre('save', function (next) {
 		)
 
 		if (
-			index === this.requiredApprovals.length - 1 ||
+			index === -1 ||
 			index >= this.requiredApprovals.length
 		)
 			throw new AppError('Invalid current required approval', 400)
