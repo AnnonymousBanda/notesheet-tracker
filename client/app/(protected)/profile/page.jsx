@@ -174,7 +174,7 @@ const Profile = () => {
 					/>
 				</div>
 			</form>
-			<form
+			{user.admin ? <form
 				onSubmit={handleSubmit(onPasswordSubmit, onPasswordError)}
 				className='md:w-1/2 flex flex-col gap-8'
 			>
@@ -300,7 +300,7 @@ const Profile = () => {
 						<p>Change Password</p>
 					</button>
 				</div>
-			</form>
+			</form> : null}
 		</div>
 	)
 }
