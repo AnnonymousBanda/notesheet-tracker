@@ -111,7 +111,7 @@ export default function NoteSheet() {
               Past Approvals :{" "}
             </p>
             {notesheet?.status?.passedApprovals?.length === 0 ? (
-              <LazyBlurImage src="icons/null.svg" width={30} height={30}/>
+              <LazyBlurImage src="icons/null.svg" width={30} height={30} bgColor={false}/>
             ) : (
               <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
                 {notesheet?.status?.pendingApprovals.map((admin, index) => (
@@ -138,6 +138,7 @@ export default function NoteSheet() {
               width={40}
               height={40}
               rounded={false}
+              bgColor={false}
             />
             <p
               className={
@@ -174,6 +175,7 @@ export default function NoteSheet() {
                 width={75}
                 height={75}
                 rounded={false}
+                bgColor={false}
               />
             </button>
             <button className="cursor-pointer">
@@ -183,6 +185,7 @@ export default function NoteSheet() {
                 width={75}
                 height={75}
                 rounded={false}
+                bgColor={false}
               />
             </button>
           </div>
