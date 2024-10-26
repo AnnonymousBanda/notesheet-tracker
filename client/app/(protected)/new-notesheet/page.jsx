@@ -25,7 +25,7 @@ const NewNotesheetForm = () => {
 		formData.append('raiser', data.raiser)
 		formData.append('amount', data.amount)
 		formData.append('requiredApprovals', data.requiredApprovals)
-		
+
 		try {
 			const response = await axios.post(
 				'http://localhost:8000/api/notesheet/create',

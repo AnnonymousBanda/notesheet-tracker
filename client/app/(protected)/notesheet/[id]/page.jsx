@@ -229,7 +229,8 @@ export default function NoteSheet() {
 					></iframe>
 					{/* </Suspense> */}
 				</div>
-				{user?.id === notesheet?.status.currentRequiredApproval ? (
+				{user?.admin ===
+				notesheet?.status?.currentRequiredApproval?.admin ? (
 					<div className='flex gap-[1rem] absolute bottom-[20px] right-[20px]'>
 						<button
 							onClick={() =>
