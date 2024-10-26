@@ -26,9 +26,7 @@ router.route('/user/me').get(isAuthenticated, getUserID, getUserByID)
 router.route('/user/:id').get(isAuthenticated, isAdmin, getUserByID)
 
 //notesheet-related fetch routes
-router
-	.route('/notesheet/:id')
-	.get(isAuthenticated, getNotesheetById)
+router.route('/notesheet/:id').get(isAuthenticated, getNotesheetById)
 router
 	.route('/notesheet/raised/user/me')
 	.get(isAuthenticated, getUserID, getRaisedNotesheetsByUserID)
@@ -48,7 +46,7 @@ router
 	.patch(isAuthenticated, isAdmin, getUserID, reuploadPDF, approveNotesheet)
 router
 	.route('/notesheet/reject')
-	.patch(isAuthenticated, isAdmin, getUserID, rejectNotesheet)
+	.delete(isAuthenticated, isAdmin, getUserID, rejectNotesheet)
 
 //image-related routes
 router.route('/get-blur-image').post(blurImage)
