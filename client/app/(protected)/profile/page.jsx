@@ -132,7 +132,7 @@ const Profile = () => {
 				onSubmit={handleSubmit(onProfileSubmit, onProfileError)}
 				className='md:w-1/2 flex flex-col gap-8'
 			>
-				<div className='flex flex-col gap-3'>
+				<div className='flex flex-col gap-3 relative'>
 					<label className='text-[2rem] font-medium text-gray-700'>
 						Name
 					</label>
@@ -145,15 +145,20 @@ const Profile = () => {
 						type='text'
 						placeholder='Name'
 					/>
-				</div>
-				<div className='w-full flex justify-center'>
 					<button
 						type='submit'
-						className='flex items-center justify-center bg-[#2f2f2f] text-white py-1 px-2 rounded-sm hover:bg-[#0e0202] text-[1.5rem]'
+						className='absolute right-0 bottom-0 translate-x-[150%]'
 					>
-						Update Name
+						<LazyBlurImage
+							src='icons/change.png'
+							width={40}
+							height={40}
+							rounded={false}
+							bgColor={false}
+						/>
 					</button>
 				</div>
+				<div className='w-full flex justify-center'></div>
 				<div className='flex flex-col gap-3'>
 					<label className='block text-[2rem] font-medium text-gray-700'>
 						Email
@@ -174,133 +179,139 @@ const Profile = () => {
 					/>
 				</div>
 			</form>
-			{user?.admin ? <form
-				onSubmit={handleSubmit(onPasswordSubmit, onPasswordError)}
-				className='md:w-1/2 flex flex-col gap-8'
-			>
-				<div className='flex flex-col gap-3 relative'>
-					<label className='block text-[2rem] font-medium text-gray-700'>
-						Old Password
-					</label>
-					<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
-						<input
-							{...register('oldPassword', {
-								minLength: {
-									value: 8,
-									message:
-										'Password should have at least 8 characters',
-								},
-							})}
-							className='w-full p-2'
-							type={showPassword ? 'text' : 'password'}
-							placeholder='Old Password'
-						/>
-						<button
-							type='button'
-							onClick={togglePasswordVisibility}
-						>
-							{showPassword ? (
-								<img
-									className='w-9'
-									src='/images/eye.svg'
-									alt=''
-								/>
-							) : (
-								<img
-									className='w-9'
-									src='/images/eyeslash.svg'
-									alt=''
-								/>
-							)}
-						</button>
+			{user?.admin ? (
+				<form
+					onSubmit={handleSubmit(onPasswordSubmit, onPasswordError)}
+					className='md:w-1/2 flex flex-col gap-8 relative'
+				>
+					<div className='flex flex-col gap-3 relative'>
+						<label className='block text-[2rem] font-medium text-gray-700'>
+							Old Password
+						</label>
+						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+							<input
+								{...register('oldPassword', {
+									minLength: {
+										value: 8,
+										message:
+											'Password should have at least 8 characters',
+									},
+								})}
+								className='w-full p-2'
+								type={showPassword ? 'text' : 'password'}
+								placeholder='Old Password'
+							/>
+							<button
+								type='button'
+								onClick={togglePasswordVisibility}
+							>
+								{showPassword ? (
+									<img
+										className='w-9'
+										src='/images/eye.svg'
+										alt=''
+									/>
+								) : (
+									<img
+										className='w-9'
+										src='/images/eyeslash.svg'
+										alt=''
+									/>
+								)}
+							</button>
+						</div>
 					</div>
-				</div>
 
-				<div className='flex flex-col gap-3 relative'>
-					<label className='block text-[2rem] font-medium text-gray-700'>
-						New Password
-					</label>
-					<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
-						<input
-							{...register('newPassword', {
-								minLength: {
-									value: 8,
-									message:
-										'Password should have at least 8 characters',
-								},
-							})}
-							className='w-full p-2'
-							type={shownewPassword ? 'text' : 'password'}
-							placeholder='New Password'
-						/>
-						<button
-							type='button'
-							onClick={toggleNewPasswordVisibility}
-						>
-							{shownewPassword ? (
-								<img
-									className='w-9'
-									src='/images/eye.svg'
-									alt=''
-								/>
-							) : (
-								<img
-									className='w-9'
-									src='/images/eyeslash.svg'
-									alt=''
-								/>
-							)}
-						</button>
+					<div className='flex flex-col gap-3 relative'>
+						<label className='block text-[2rem] font-medium text-gray-700'>
+							New Password
+						</label>
+						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+							<input
+								{...register('newPassword', {
+									minLength: {
+										value: 8,
+										message:
+											'Password should have at least 8 characters',
+									},
+								})}
+								className='w-full p-2'
+								type={shownewPassword ? 'text' : 'password'}
+								placeholder='New Password'
+							/>
+							<button
+								type='button'
+								onClick={toggleNewPasswordVisibility}
+							>
+								{shownewPassword ? (
+									<img
+										className='w-9'
+										src='/images/eye.svg'
+										alt=''
+									/>
+								) : (
+									<img
+										className='w-9'
+										src='/images/eyeslash.svg'
+										alt=''
+									/>
+								)}
+							</button>
+						</div>
 					</div>
-				</div>
 
-				<div className='flex flex-col gap-3 relative'>
-					<label className='block text-[2rem] font-medium text-gray-700'>
-						Confirm New Password
-					</label>
-					<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
-						<input
-							{...register('confirmPassword', {
-								minLength: {
-									value: 8,
-									message:
-										'Password should have at least 8 characters',
-								},
-							})}
-							className='w-full p-2'
-							type={showconfirmPassword ? 'text' : 'password'}
-							placeholder='Confirm new Password'
-						/>
-						<button
-							type='button'
-							onClick={toggleConfirmPasswordVisibility}
-						>
-							{showconfirmPassword ? (
-								<img
-									className='w-9'
-									src='/images/eye.svg'
-									alt=''
-								/>
-							) : (
-								<img
-									className='w-9'
-									src='/images/eyeslash.svg'
-									alt=''
-								/>
-							)}
-						</button>
+					<div className='flex flex-col gap-3 relative'>
+						<label className='block text-[2rem] font-medium text-gray-700'>
+							Confirm New Password
+						</label>
+						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+							<input
+								{...register('confirmPassword', {
+									minLength: {
+										value: 8,
+										message:
+											'Password should have at least 8 characters',
+									},
+								})}
+								className='w-full p-2'
+								type={showconfirmPassword ? 'text' : 'password'}
+								placeholder='Confirm new Password'
+							/>
+							<button
+								type='button'
+								onClick={toggleConfirmPasswordVisibility}
+							>
+								{showconfirmPassword ? (
+									<img
+										className='w-9'
+										src='/images/eye.svg'
+										alt=''
+									/>
+								) : (
+									<img
+										className='w-9'
+										src='/images/eyeslash.svg'
+										alt=''
+									/>
+								)}
+							</button>
+						</div>
 					</div>
-				</div>
 
-				<div className='w-full flex justify-center'>
 					<button
 						type='submit'
-						className='flex items-center justify-center bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.7rem]'
+						className='absolute right-0 bottom-0 translate-x-[150%]'
 					>
-						<p>Change Password</p>
+						<LazyBlurImage
+							src='icons/change.png'
+							width={40}
+							height={40}
+							rounded={false}
+							bgColor={false}
+						/>
 					</button>
-				</div>
-			</form> : null}
+				</form>
+			) : null}
 		</div>
 	)
 }
