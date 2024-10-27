@@ -64,9 +64,12 @@ const rejectExpiredNotesheet = catchAsync(async () => {
 		notesheets.forEach(async (notesheet) => {
 			notesheet.status.rejectedBy.admin =
 				notesheet.currentRequiredApproval
-			notesheet.status.rejectedBy.comment = 'Expired'
+			notesheet.status.rejectedBy.comment =
+				'Notesheet expired! Please raise a new notesheet.'
 
 			await notesheet.save()
+
+			removePDF(notesheet.pdf.slice(notesheet.pdf.lastIndexOf('/') + 1))
 
 			sendMail(
 				(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
@@ -78,14 +81,13 @@ const rejectExpiredNotesheet = catchAsync(async () => {
 const accessAsync = promisify(fs.access)
 const unlinkAsync = promisify(fs.unlink)
 const removePDF = async (filename) => {
-	//remove try catch block
 	try {
 		const filePath = path.join(__dirname, 'public/uploads', filename)
 		await accessAsync(filePath, fs.constants.F_OK)
 		await unlinkAsync(filePath)
-		return 'PDF file deleted successfully!'
+		console.log(`PDF file deleted successfully! ${filename}`)
 	} catch (error) {
-		throw new AppError('PDF file not found', 404)
+		console.log(`Error deleting PDF file: ${filename}`)
 	}
 }
 
