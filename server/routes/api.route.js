@@ -25,7 +25,7 @@ const {
 //user-related fetch routes
 router.route('/user/me').get(isAuthenticated, getUserID, getUserByID)
 router.route('/user/:id').get(isAuthenticated, isAdmin, getUserByID)
-router.route('/download/notesheet/:pdf').get(isAuthenticated, downloadPDF)
+router.route('/download/notesheet/:pdf').get(downloadPDF)
 
 //notesheet-related fetch routes
 router.route('/notesheet/:id').get(isAuthenticated, getNotesheetById)

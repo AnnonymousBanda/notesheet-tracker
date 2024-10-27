@@ -51,7 +51,7 @@ export default function Notesheetsbyme({ notesheets }) {
             </a>
             <a
               onClick={(e) => e.stopPropagation()}
-              href={notesheet?.pdf}
+              href={`http://localhost:8000/api/download/notesheet/${notesheet?.pdf.split("/").pop()}`}
               download
             >
               <Image
