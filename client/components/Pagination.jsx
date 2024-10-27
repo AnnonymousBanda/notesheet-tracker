@@ -8,7 +8,7 @@ export default function Pagination() {
   const pathname = usePathname();
   const { replace } = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10; 
+  const totalPages = 10;
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
@@ -33,7 +33,8 @@ export default function Pagination() {
   };
 
   return (
-      <div className="flex gap-[1rem] bg-white w-fit rounded-full p-2 fixed bottom-8 left-8">
+    <div className="w-full flex justify-center fixed bottom-8">
+      <div className="flex gap-[1rem] bg-white w-fit rounded-full p-2">
         <button className="py-1 px-4 hover:bg-gray-300 cursor-pointer transition-colors duration-200 rounded-full">
           {"<<"}
         </button>
@@ -42,5 +43,6 @@ export default function Pagination() {
           {">>"}
         </button>
       </div>
+    </div>
   );
 }
