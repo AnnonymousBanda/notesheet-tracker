@@ -4,12 +4,13 @@ import eye from "@/public/images/eye.svg";
 import download from "@/public/images/download.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/utils/utils";
 
 export default function Notesheetsbyme({ notesheets }) {
   const router = useRouter();
   return (
     <div className="flex flex-col gap-3">
-      {notesheets.map((notesheet, index) => (
+      {notesheets?.map((notesheet, index) => (
         <div
           onClick={() => {
             window.open(`/notesheet/${notesheet?._id}`, "_blank");
@@ -20,9 +21,7 @@ export default function Notesheetsbyme({ notesheets }) {
           <p className="w-1/12 p-3 rounded-xl">{index + 1}</p>
           <p className="w-4/12 p-3 rounded-xl">{notesheet?.subject}</p>
           <p className="w-1/12 p-3 rounded-xl">
-            {new Date(notesheet?.raisedAt).getDate()}-
-            {new Date(notesheet?.raisedAt).getMonth()}-
-            {new Date(notesheet?.raisedAt).getFullYear()}
+          {formatDate(notesheet?.raisedAt)}
           </p>
           <p className="w-2/12 p-3 rounded-xl">₹{notesheet?.amount}</p>
           <p className="w-[6rem] p-3 rounded-xl flex justify-center">
