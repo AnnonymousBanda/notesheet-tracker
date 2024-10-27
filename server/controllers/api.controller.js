@@ -42,7 +42,7 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const status = req.query.status
 
 	const notesheets = await notesheetModel
-		.find({ raisedBy: id, status: status })
+		.find({ raisedBy: id, 'status.state': status })
 		.populate(populateOptions)
 
 	// if (!notesheets) throw new AppError('Notesheets not found', 404)
