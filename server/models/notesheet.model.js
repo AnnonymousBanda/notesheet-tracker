@@ -70,14 +70,6 @@ const notesheetSchema = new Schema({
 			enum: ['pending', 'approved', 'rejected'],
 			default: 'pending',
 		},
-		// progress: {
-		// 	type: Number,
-		// 	default: function () {
-		// 		return this.requiredApprovals.length > 0
-		// 			? this.passedApprovals.length
-		// 			: 0
-		// 	},
-		// },
 		passedApprovals: {
 			type: [Schema.Types.ObjectId],
 			ref: 'User',

@@ -30,7 +30,7 @@ const getNotesheetById = catchAsync(async (req, res) => {
 		.populate(populateOptions)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
-	
+
 	return res.status(200).json({
 		status: '200',
 		notesheet,
@@ -87,8 +87,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 	const { subject, amount, raiser } = req.body
 	const requiredApprovals = req.body.requiredApprovals.split(',')
 
-	if(!req.file) 
-		throw new AppError('Please upload a pdf file', 400)
+	if (!req.file) throw new AppError('Please upload a pdf file', 400)
 
 	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
@@ -205,6 +204,8 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 	sendMail(
 		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
 	)
+
+	removePDF(notesheet.pdf.slice(notesheet.pdf.lastIndexOf('/') + 1))
 
 	return res.status(200).json({
 		status: '200',
