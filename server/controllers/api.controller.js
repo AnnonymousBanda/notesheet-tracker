@@ -3,7 +3,12 @@ const fs = require('fs').promises
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const { saveImage, populateOptions, sendMail } = require('../utils/api.util')
+const {
+	saveImage,
+	populateOptions,
+	sendMail,
+	removePDF,
+} = require('../utils/api.util')
 const { AppError } = require('../controllers/error.controller')
 
 const getUserByID = catchAsync(async (req, res) => {
@@ -21,6 +26,14 @@ const getUserByID = catchAsync(async (req, res) => {
 		status: '200',
 		user,
 	})
+})
+
+const downloadPDF = catchAsync(async (req, res) => {
+	const pdf = req.params.pdf
+
+	const pdfPath = path.join(process.cwd(), '..', 'server', 'public', 'uploads', pdf)
+
+	res.download(pdfPath)
 })
 
 const getNotesheetById = catchAsync(async (req, res) => {
@@ -42,7 +55,9 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const status = req.query.status
 
 	const notesheets = await notesheetModel
-		.find({ raisedBy: id, 'status.state': status })
+		.find(
+			status ? { raisedBy: id, 'status.state': status } : { raisedBy: id }
+		)
 		.populate(populateOptions)
 
 	// if (!notesheets) throw new AppError('Notesheets not found', 404)
@@ -291,6 +306,7 @@ const dynamicBlurImage = catchAsync(async (req, res) => {
 
 module.exports = {
 	getUserByID,
+	downloadPDF,
 	getNotesheetById,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,

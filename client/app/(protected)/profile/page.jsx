@@ -130,17 +130,17 @@ const Profile = () => {
 			</div>
 			<form
 				onSubmit={handleSubmit(onProfileSubmit, onProfileError)}
-				className='md:w-1/2 flex flex-col gap-8'
+				className='md:w-1/2 flex flex-col gap-[1rem]'
 			>
 				<div className='flex flex-col gap-3 relative'>
-					<label className='text-[2rem] font-medium text-gray-700'>
+					<label className='text-[2rem] font-medium text-gray-700 px-[1.5rem]'>
 						Name
 					</label>
 					<input
 						{...register('name', {
 							required: 'Please provide the new name to update',
 						})}
-						className='text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2'
+						className='text-[2rem] w-full rounded-full px-[1.5rem] py-[0.5rem]'
 						defaultValue={user?.name}
 						type='text'
 						placeholder='Name'
@@ -151,8 +151,8 @@ const Profile = () => {
 					>
 						<LazyBlurImage
 							src='icons/change.png'
-							width={40}
-							height={40}
+							width={30}
+							height={30}
 							rounded={false}
 							bgColor={false}
 						/>
@@ -160,7 +160,7 @@ const Profile = () => {
 				</div>
 				<div className='w-full flex justify-center'></div>
 				<div className='flex flex-col gap-3'>
-					<label className='block text-[2rem] font-medium text-gray-700'>
+					<label className='block text-[2rem] font-medium text-gray-700 px-[1.5rem]'>
 						Email
 					</label>
 					<input
@@ -173,7 +173,7 @@ const Profile = () => {
 						})}
 						disabled
 						value={user?.email}
-						className='text-[2rem] border-gray-400 focus:border-blue-400 border-solid w-full p-2 cursor-not-allowed'
+						className='text-[2rem] w-full rounded-full px-[1.5rem] py-[0.5rem] bg-white cursor-not-allowed opacity-50'
 						type='email'
 						placeholder='Email'
 					/>
@@ -182,13 +182,13 @@ const Profile = () => {
 			{user?.admin ? (
 				<form
 					onSubmit={handleSubmit(onPasswordSubmit, onPasswordError)}
-					className='md:w-1/2 flex flex-col gap-8 relative'
+					className='md:w-1/2 flex flex-col gap-[1rem] relative'
 				>
 					<div className='flex flex-col gap-3 relative'>
-						<label className='block text-[2rem] font-medium text-gray-700'>
+						<label className='block text-[2rem] font-medium text-gray-700 px-[1.5rem]'>
 							Old Password
 						</label>
-						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+						<div className='flex justify-between items-center gap-6 text-[2rem] bg-gray-300 rounded-full pr-[1rem]'>
 							<input
 								{...register('oldPassword', {
 									minLength: {
@@ -197,7 +197,7 @@ const Profile = () => {
 											'Password should have at least 8 characters',
 									},
 								})}
-								className='w-full p-2'
+								className='w-full p-2 rounded-l-full px-[1.5rem] py-[0.5rem]'
 								type={showPassword ? 'text' : 'password'}
 								placeholder='Old Password'
 							/>
@@ -223,10 +223,10 @@ const Profile = () => {
 					</div>
 
 					<div className='flex flex-col gap-3 relative'>
-						<label className='block text-[2rem] font-medium text-gray-700'>
+						<label className='block text-[2rem] font-medium text-gray-700 px-[1.5rem]'>
 							New Password
 						</label>
-						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+						<div className='flex justify-between items-center gap-6 text-[2rem] bg-gray-300 rounded-full pr-[1rem]'>
 							<input
 								{...register('newPassword', {
 									minLength: {
@@ -235,7 +235,7 @@ const Profile = () => {
 											'Password should have at least 8 characters',
 									},
 								})}
-								className='w-full p-2'
+								className='w-full rounded-l-full px-[1.5rem] py-[0.5rem]'
 								type={shownewPassword ? 'text' : 'password'}
 								placeholder='New Password'
 							/>
@@ -261,10 +261,10 @@ const Profile = () => {
 					</div>
 
 					<div className='flex flex-col gap-3 relative'>
-						<label className='block text-[2rem] font-medium text-gray-700'>
+						<label className='block text-[2rem] font-medium text-gray-700 px-[1.5rem]'>
 							Confirm New Password
 						</label>
-						<div className='flex justify-between items-center gap-6 text-[2rem] border-gray-400 focus:border-blue-400 border-solid p-2'>
+						<div className='flex justify-between items-center gap-6 text-[2rem] bg-gray-300 rounded-full pr-[1rem]'>
 							<input
 								{...register('confirmPassword', {
 									minLength: {
@@ -273,7 +273,7 @@ const Profile = () => {
 											'Password should have at least 8 characters',
 									},
 								})}
-								className='w-full p-2'
+								className='w-full rounded-l-full px-[1.5rem] py-[0.5rem]'
 								type={showconfirmPassword ? 'text' : 'password'}
 								placeholder='Confirm new Password'
 							/>
@@ -304,8 +304,8 @@ const Profile = () => {
 					>
 						<LazyBlurImage
 							src='icons/change.png'
-							width={40}
-							height={40}
+							width={30}
+							height={30}
 							rounded={false}
 							bgColor={false}
 						/>
