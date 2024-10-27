@@ -29,7 +29,7 @@ const getNotesheetById = catchAsync(async (req, res) => {
 		.findById(notesheetID)
 		.populate(populateOptions)
 
-	if (!notesheet) throw new AppError('Notesheet not found', 404)
+	// if (!notesheet) throw new AppError('Notesheet not found', 404)
 
 	return res.status(200).json({
 		status: '200',
@@ -39,12 +39,13 @@ const getNotesheetById = catchAsync(async (req, res) => {
 
 const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
+	const status = req.query.status
 
 	const notesheets = await notesheetModel
-		.find({ raisedBy: id })
+		.find({ raisedBy: id, 'status.state': status })
 		.populate(populateOptions)
 
-	if (!notesheets) throw new AppError('Notesheets not found', 404)
+	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
@@ -59,7 +60,7 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 		.find({ currentRequiredApproval: id })
 		.populate(populateOptions)
 
-	if (!notesheets) throw new AppError('Notesheets not found', 404)
+	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
@@ -74,7 +75,7 @@ const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 		.find({ passedApprovals: { $in: [id] } })
 		.populate(populateOptions)
 
-	if (!notesheets) throw new AppError('Notesheets not found', 404)
+	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
