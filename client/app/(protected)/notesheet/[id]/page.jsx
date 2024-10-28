@@ -63,7 +63,7 @@ export default function NoteSheet() {
 
 			rejectButtonRef.current.style.opacity = '1'
 			setRejectModal(false)
-			router.push('/notesheets/' + notesheetID)
+			router.push('/notesheet/' + notesheetID)
 			openDialog(response.data.message)
 		} catch (error) {
 			rejectButtonRef.current.style.opacity = '1'

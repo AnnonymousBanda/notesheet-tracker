@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const cors = require('cors')
 const morgan = require('morgan')
 const passport = require('passport')
@@ -29,7 +30,11 @@ const helmetConfig = helmet.contentSecurityPolicy({
 		defaultSrc: ["'self'"],
 		scriptSrc: ["'self'"],
 		objectSrc: ["'none'"],
-		frameAncestors: ["'self'", "http://localhost:3000", "http://localhost:8000"],
+		frameAncestors: [
+			"'self'",
+			'http://localhost:3000',
+			'http://localhost:8000',
+		],
 		upgradeInsecureRequests: [],
 	},
 })
@@ -59,6 +64,12 @@ app.use(express.static('public'))
 app.use('/auth', authRouter)
 app.use('/oauth', oauthRouter)
 app.use('/api', apiRouter)
+
+app.use((req, res, next) => {
+	const custom404File = path.join(__dirname, 'public', '404.html')
+
+	return res.status(404).sendFile(custom404File)
+})
 
 app.route('*').all(notFound)
 app.use(globalErrorController)
