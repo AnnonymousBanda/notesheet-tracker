@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { formatDate } from '@/utils/utils'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
-export default function Notesheetsbyme({ notesheets }) {
+export default function NotesheetsTable({ notesheets }) {
 	const pathname = usePathname()
 	const searchparams = useSearchParams()
 	const params = new URLSearchParams(searchparams)
@@ -26,7 +26,7 @@ export default function Notesheetsbyme({ notesheets }) {
 					<p className='w-5/12 p-3 rounded-xl'>
 						{notesheet?.subject}
 					</p>
-					<p className='w-1/12 p-3 rounded-xl'>
+					<p className='w-2/12 p-3 rounded-xl text-center'>
 						{formatDate(notesheet?.raisedAt)}
 					</p>
 					<p className='w-1/12 p-3 rounded-xl'>
@@ -35,10 +35,10 @@ export default function Notesheetsbyme({ notesheets }) {
 					{(params.get('type') === 'to-approve' ||
 					params.get('type') === 'approved') ? (
 						<p className='w-2/12 p-3 rounded-xl text-center'>
-							₹{notesheet?.raiser}
+							{notesheet?.raiser}
 						</p>
 					) : null}
-					<p className='w-[6rem] p-3 rounded-xl flex justify-center'>
+					<p className='w-[8rem] p-3 rounded-xl flex justify-center'>
 						<LazyBlurImage
 							src={`icons/${notesheet?.status?.state}.png`}
 							width={25}
