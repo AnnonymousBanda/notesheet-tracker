@@ -1,6 +1,5 @@
 const fs = require('fs').promises
 const path = require('path')
-const fsSync = require('fs')
 
 const { catchAsync } = require('./error.util')
 
@@ -69,7 +68,7 @@ const rejectExpiredNotesheet = catchAsync(async () => {
 
 			await notesheet.save()
 
-			removePDF(notesheet.pdf.slice(notesheet.pdf.lastIndexOf('/') + 1))
+			await removePDF(notesheet.pdf.split('/').pop())
 
 			sendMail(
 				(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
@@ -78,18 +77,21 @@ const rejectExpiredNotesheet = catchAsync(async () => {
 	}
 })
 
-const removePDF = (filename) => {
+const removePDF = async (filename) => {
 	const filePath = path.join(__dirname, '..', 'public', 'uploads', filename)
 	console.log(filePath)
 
-	if (!fsSync.existsSync(filePath)) {
-		console.error(`File not found: ${filename}`)
-		console.log(`File ${filename} does not exist.`)
-	} else {
-		fsSync.unlink(filePath, (err) => {
-			if (err) console.error(`Error deleting file: ${err.message}`)
-			else console.log(`File ${filename} deleted successfully.`)
-		})
+	try {
+		await fs.access(filePath)
+		await fs.unlink(filePath)
+		console.log(`File ${filename} deleted successfully.`)
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			console.error(`File not found: ${filename}`)
+			console.log(`File ${filename} does not exist.`)
+		} else {
+			console.error(`Error deleting file: ${err.message}`)
+		}
 	}
 }
 
