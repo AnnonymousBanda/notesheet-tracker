@@ -1,6 +1,6 @@
 'use client'
 import Loader from '@/components/Loader'
-import ResetPasswordForm from '@/components/resetpasswordform'
+import ResetPasswordForm from '@/components/Resetpasswordform'
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 

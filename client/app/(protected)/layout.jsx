@@ -1,5 +1,5 @@
 'use client'
-import Navbar from '@/components/navbar'
+import Navbar from '@/components/Navbar'
 import Protected from '@/hoc/Protected'
 
 const layout = ({ children }) => {

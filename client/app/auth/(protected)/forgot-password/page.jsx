@@ -1,5 +1,5 @@
 'use client'
-import Forgotpasswordform from '@/components/forgotpasswordform'
+import Forgotpasswordform from '@/components/Forgotpasswordform'
 import React from 'react'
 
 export default function ForgotPassword() {

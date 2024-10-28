@@ -1,5 +1,5 @@
 import React from 'react'
-import Loginform from '@/components/loginform'
+import Loginform from '@/components/Loginform'
 
 export default function Login() {
 	return (
