@@ -56,8 +56,6 @@ const getNotesheetById = catchAsync(async (req, res) => {
 		.findById(notesheetID)
 		.populate(populateOptions)
 
-	// if (!notesheet) throw new AppError('Notesheet not found', 404)
-
 	return res.status(200).json({
 		status: '200',
 		notesheet,
@@ -68,16 +66,26 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const status = req.query.status
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
+	const query = status
+		? { raisedBy: id, 'status.state': status }
+		: { raisedBy: id }
 	const notesheets = await notesheetModel
-		.find(
-			status ? { raisedBy: id, 'status.state': status } : { raisedBy: id }
-		)
+		.find(query)
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
+	const total = await notesheetModel.countDocuments(query)
 
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
@@ -85,14 +93,25 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
 	const notesheets = await notesheetModel
 		.find({ currentRequiredApproval: id })
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
+	const total = await notesheetModel.countDocuments({
+		currentRequiredApproval: id,
+	})
 
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
@@ -100,14 +119,25 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
 	const notesheets = await notesheetModel
 		.find({ passedApprovals: { $in: [id] } })
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
+	const total = await notesheetModel.countDocuments({
+		passedApprovals: { $in: [id] },
+	})
 
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
@@ -235,7 +265,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
 	)
 
-	removePDF(notesheet.pdf.slice(notesheet.pdf.lastIndexOf('/') + 1))
+	// removePDF(notesheet.pdf.split('/').pop())
 
 	return res.status(200).json({
 		status: '200',

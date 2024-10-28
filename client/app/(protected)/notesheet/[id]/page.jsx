@@ -63,12 +63,12 @@ export default function NoteSheet() {
 
 			rejectButtonRef.current.style.opacity = '1'
 			setRejectModal(false)
-			router.push('/notesheet/' + notesheetID)
+			window.location.reload()
 			openDialog(response.data.message)
 		} catch (error) {
 			rejectButtonRef.current.style.opacity = '1'
 			setRejectModal(false)
-			openDialog(error.response.data.message)
+			openDialog(error.response?.data.message || error.message)
 		}
 	}
 
