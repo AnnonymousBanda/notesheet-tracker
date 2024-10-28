@@ -9,6 +9,7 @@ import axios from "axios";
 import NotesheetDetailsSkeleton from "@/components/NotesheetDetailsSkeleton";
 import Image from "next/image";
 import PdfSkeleton from "@/components/PdfSkeleton";
+import { formatDate } from "@/utils/utils";
 
 export default function NoteSheet() {
   const [notesheet, setNotesheet] = useState({});
@@ -37,7 +38,7 @@ export default function NoteSheet() {
 
       if (!data.notesheet || data.notesheet?.length === 0)
         return router.push("/not-found");
-      else setLoading(false)
+      else setLoading(false);
 
       setNotesheet(data.notesheet);
     } catch (error) {
@@ -91,6 +92,12 @@ export default function NoteSheet() {
               Subject :{" "}
               <span className="text-gray-700">{notesheet?.subject}</span>
             </p>
+            <div className="flex gap-[1rem] items-center">
+              <p className="text-gray-500 font-bold text-[2rem]">Raised At :</p>
+              <p className="text-gray-700 font-bold">
+                {formatDate(notesheet?.raisedAt)}
+              </p>
+            </div>
             <p className="text-gray-500 font-bold text-[2rem]">
               Raised By :{" "}
               <span className="text-gray-700">{notesheet?.raiser}</span>
@@ -100,92 +107,100 @@ export default function NoteSheet() {
               <span className="text-gray-700">₹{notesheet?.amount}</span>
             </p>
 
-            <div className="flex gap-[1rem]">
-              <p className="text-gray-500 font-bold text-[2rem]">
-                Current Required Approval :{" "}
-              </p>
-              {notesheet?.status?.currentRequiredApproval == null ? (
-                <Image
-                  src="/images/icons/null.svg"
-                  alt="null icon"
-                  width={30}
-                  height={30}
-                />
-              ) : (
-                <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
-                  <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
-                    <LazyBlurImage
-                      src="user.png"
-                      alt={notesheet?.status?.currentRequiredApproval.name}
-                      width={20}
-                      height={20}
-                      rounded={true}
+            {!(notesheet?.status?.state === "rejected") && (
+              <>
+                <div className="flex gap-[1rem]">
+                  <p className="text-gray-500 font-bold text-[2rem]">
+                    Current Required Approval :{" "}
+                  </p>
+                  {notesheet?.status?.currentRequiredApproval == null ? (
+                    <Image
+                      src="/images/icons/null.svg"
+                      alt="null icon"
+                      width={30}
+                      height={30}
                     />
-                    <p>
-                      {notesheet?.status?.currentRequiredApproval.name.toUpperCase()}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex gap-[1rem]">
-              <p className="text-gray-500 font-bold text-[2rem]">
-                Pending Approvals :{" "}
-              </p>
-              {notesheet?.status?.pendingApprovals.length === 0 ? (
-                <Image
-                  src="/images/icons/null.svg"
-                  alt="null icon"
-                  width={30}
-                  height={30}
-                />
-              ) : (
-                <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
-                  {notesheet?.status?.pendingApprovals.map((admin, index) => (
-                    <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
-                      <LazyBlurImage
-                        src="user.png"
-                        alt={admin.name}
-                        width={20}
-                        height={20}
-                        rounded={true}
-                      />
-                      <p>{admin.name.toUpperCase()}</p>
+                  ) : (
+                    <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
+                      <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
+                        <LazyBlurImage
+                          src="user.png"
+                          alt={notesheet?.status?.currentRequiredApproval.name}
+                          width={20}
+                          height={20}
+                          rounded={true}
+                        />
+                        <p>
+                          {notesheet?.status?.currentRequiredApproval.name.toUpperCase()}
+                        </p>
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </div>
 
-            <div className="flex gap-[1rem]">
-              <p className="text-gray-500 font-bold text-[2rem]">
-                Past Approvals :{" "}
-              </p>
-              {notesheet?.status?.passedApprovals?.length === 0 ? (
-                <Image
-                  src="/images/icons/null.svg"
-                  alt="null icon"
-                  width={30}
-                  height={30}
-                />
-              ) : (
-                <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
-                  {notesheet?.status?.pendingApprovals.map((admin, index) => (
-                    <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
-                      <LazyBlurImage
-                        src="user.png"
-                        alt={admin.name}
-                        width={40}
-                        height={40}
-                        rounded={true}
-                      />
-                      <p>{admin.name.toUpperCase()}</p>
+                <div className="flex gap-[1rem]">
+                  <p className="text-gray-500 font-bold text-[2rem]">
+                    Pending Approvals :{" "}
+                  </p>
+                  {notesheet?.status?.pendingApprovals.length === 0 ? (
+                    <Image
+                      src="/images/icons/null.svg"
+                      alt="null icon"
+                      width={30}
+                      height={30}
+                    />
+                  ) : (
+                    <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
+                      {notesheet?.status?.pendingApprovals.map(
+                        (admin, index) => (
+                          <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
+                            <LazyBlurImage
+                              src="user.png"
+                              alt={admin.name}
+                              width={20}
+                              height={20}
+                              rounded={true}
+                            />
+                            <p>{admin.name.toUpperCase()}</p>
+                          </div>
+                        )
+                      )}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </div>
+
+                <div className="flex gap-[1rem]">
+                  <p className="text-gray-500 font-bold text-[2rem]">
+                    Past Approvals :{" "}
+                  </p>
+                  {notesheet?.status?.passedApprovals?.length === 0 ? (
+                    <Image
+                      src="/images/icons/null.svg"
+                      alt="null icon"
+                      width={30}
+                      height={30}
+                    />
+                  ) : (
+                    <div className="text-gray-700 font-bold text-[2rem] flex gap-3">
+                      {notesheet?.status?.pendingApprovals.map(
+                        (admin, index) => (
+                          <div className="flex items-center gap-2 bg-gray-200 px-4 rounded-lg">
+                            <LazyBlurImage
+                              src="user.png"
+                              alt={admin.name}
+                              width={40}
+                              height={40}
+                              rounded={true}
+                            />
+                            <p>{admin.name.toUpperCase()}</p>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
             <div className="flex gap-[1rem] items-center">
               <p className="text-gray-500 font-bold text-[2rem]">Status :</p>
@@ -209,12 +224,44 @@ export default function NoteSheet() {
                 {notesheet?.status?.state.toUpperCase()}
               </p>
             </div>
+
+            {notesheet?.status?.state === "rejected" && (
+              <>
+                <div className="flex gap-[1rem] items-center">
+                  <p className="text-gray-500 font-bold text-[2rem]">
+                    Action Required :
+                  </p>
+                  <p className="text-gray-700 font-bold">
+                    {notesheet?.status?.rejectedBy?.comment}
+                  </p>
+                </div>
+                <div className="flex gap-[1rem] items-center">
+                  <p className="text-gray-500 font-bold text-[2rem]">
+                    Rejected At :
+                  </p>
+                  <p className="text-gray-700 font-bold">
+                    {formatDate(notesheet?.rejectedAt)}
+                  </p>
+                </div>
+              </>
+            )}
+
+            <div className="flex gap-[1rem] items-center">
+              <p className="text-gray-500 font-bold text-[2rem]">
+                {notesheet?.status?.comment === "Notesheet expired! Please raise a new notesheet." ? "Expired At :" : "Expires At :"}
+              </p>
+              <p className="text-gray-700 font-bold">
+                {formatDate(notesheet?.expiresAt)}
+              </p>
+            </div>
           </div>
         )}
+
+
         {loading ? (
           <PdfSkeleton />
         ) : (
-          <div className="p-3">
+          <div className={`p-3 ${Date.now() > (notesheet?.expiresAt ?? Infinity) ? "hidden" : "block"}`}>
             <iframe
               src={notesheet?.pdf}
               width="100%"
