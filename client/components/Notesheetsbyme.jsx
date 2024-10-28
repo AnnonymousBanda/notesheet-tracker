@@ -32,10 +32,10 @@ export default function Notesheetsbyme({ notesheets }) {
 					<p className='w-1/12 p-3 rounded-xl'>
 						₹{notesheet?.amount}
 					</p>
-					{params.get('type') === 'to-approve' ||
-					params.get('type') === 'approved-by-me' ? (
+					{(params.get('type') === 'to-approve' ||
+					params.get('type') === 'approved') ? (
 						<p className='w-2/12 p-3 rounded-xl text-center'>
-							₹{notesheet?.amount}
+							₹{notesheet?.raiser}
 						</p>
 					) : null}
 					<p className='w-[6rem] p-3 rounded-xl flex justify-center'>
