@@ -1,11 +1,9 @@
 "use client";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Notesheetsbyme from "./Notesheetsbyme";
 import { useDialog } from "@/contexts/DialogBoxContext";
 import Loader from "./Loader";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import Pagination from "./Pagination";
 
 export default function UserDashboard() {
   const { openDialog } = useDialog();
@@ -105,14 +103,6 @@ export default function UserDashboard() {
           <Notesheetsbyme notesheets={notesheets} />
         </div>
       </div>
-
-      <Link
-        href="/new-notesheet"
-        className="fixed bottom-12 right-12 flex justify-center items-center bg-black hover:bg-[#3a3a3a] p-4 rounded-xl"
-      >
-        <img src="/images/plus.svg" alt="" className="w-12" />
-      </Link>
-      <Pagination />
     </div>
   );
 }
