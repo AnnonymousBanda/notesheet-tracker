@@ -41,9 +41,8 @@ const NewNotesheetForm = () => {
 			openDialog('Notesheet submitted successfully')
 			setTimeout(() => {
 				onClose()
-				console.log(response.data.notesheet)
 				router.push(`/notesheet/${response.data.notesheet._id}`)
-			}, 2500)
+			}, 1000)
 		} catch (error) {
 			openDialog(error.response.data.message)
 		} finally {
