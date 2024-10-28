@@ -1,7 +1,6 @@
 "use client";
 
 import AdminDashboard from "@/components/AdminDashboard";
-import Pagination from "@/components/Pagination";
 import UserDashboard from "@/components/UserDashboard";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
@@ -34,7 +33,6 @@ const Dashboard = () => {
       >
         <img src="/images/plus.svg" alt="" className="w-12 " />
       </Link>
-      <Pagination />
     </>
   );
 };
