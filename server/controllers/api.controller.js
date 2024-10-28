@@ -71,17 +71,21 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const sortBy = req.query.sortBy || 'raisedAt'
 	const order = req.query.order === 'desc' ? -1 : 1
 
+	const query = status
+		? { raisedBy: id, 'status.state': status }
+		: { raisedBy: id }
 	const notesheets = await notesheetModel
-		.find(
-			status ? { raisedBy: id, 'status.state': status } : { raisedBy: id }
-		)
+		.find(query)
 		.sort({ [sortBy]: order })
 		.limit(limit)
 		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
+	const total = await notesheetModel.countDocuments(query)
+
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
@@ -101,8 +105,13 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
+	const total = await notesheetModel.countDocuments({
+		currentRequiredApproval: id,
+	})
+
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
@@ -122,8 +131,13 @@ const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 		.skip((page - 1) * limit)
 		.populate(populateOptions)
 
+	const total = await notesheetModel.countDocuments({
+		passedApprovals: { $in: [id] },
+	})
+
 	return res.status(200).json({
 		status: '200',
+		total,
 		notesheets,
 	})
 })
