@@ -1,6 +1,6 @@
-const { promisify } = require('util')
 const fs = require('fs').promises
 const path = require('path')
+const fsSync = require('fs')
 
 const { catchAsync } = require('./error.util')
 
@@ -78,16 +78,18 @@ const rejectExpiredNotesheet = catchAsync(async () => {
 	}
 })
 
-const accessAsync = promisify(fs.access)
-const unlinkAsync = promisify(fs.unlink)
-const removePDF = async (filename) => {
-	try {
-		const filePath = path.join(__dirname, 'public/uploads', filename)
-		await accessAsync(filePath, fs.constants.F_OK)
-		await unlinkAsync(filePath)
-		console.log(`PDF file deleted successfully! ${filename}`)
-	} catch (error) {
-		console.log(`Error deleting PDF file: ${filename}`)
+const removePDF = (filename) => {
+	const filePath = path.join(__dirname, '..', 'public', 'uploads', filename)
+	console.log(filePath)
+
+	if (!fsSync.existsSync(filePath)) {
+		console.error(`File not found: ${filename}`)
+		console.log(`File ${filename} does not exist.`)
+	} else {
+		fsSync.unlink(filePath, (err) => {
+			if (err) console.error(`Error deleting file: ${err.message}`)
+			else console.log(`File ${filename} deleted successfully.`)
+		})
 	}
 }
 

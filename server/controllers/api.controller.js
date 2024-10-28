@@ -265,7 +265,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
 	)
 
-	removePDF(notesheet.pdf.slice(notesheet.pdf.lastIndexOf('/') + 1))
+	// removePDF(notesheet.pdf.split('/').pop())
 
 	return res.status(200).json({
 		status: '200',
