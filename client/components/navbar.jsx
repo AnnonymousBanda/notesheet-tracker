@@ -32,7 +32,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
     <div
       className={`${
         isOpen ? "block" : "hidden"
-      } absolute z-10 bg-white w-72 right-10 top-32 p-2 rounded-md transition-all duration-1000`}
+      } absolute z-10 bg-white w-72 right-10 top-32 p-2 rounded-md transition-transform duration-1000 shadow-xl`}
     >
       <div className="flex flex-col">
         <Link
