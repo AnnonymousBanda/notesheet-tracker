@@ -56,8 +56,6 @@ const getNotesheetById = catchAsync(async (req, res) => {
 		.findById(notesheetID)
 		.populate(populateOptions)
 
-	// if (!notesheet) throw new AppError('Notesheet not found', 404)
-
 	return res.status(200).json({
 		status: '200',
 		notesheet,
@@ -68,13 +66,19 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const status = req.query.status
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
 	const notesheets = await notesheetModel
 		.find(
 			status ? { raisedBy: id, 'status.state': status } : { raisedBy: id }
 		)
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
-
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
@@ -85,11 +89,17 @@ const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
 const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
 	const notesheets = await notesheetModel
 		.find({ currentRequiredApproval: id })
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
-
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
@@ -100,11 +110,17 @@ const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
 const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
 
+	const page = parseInt(req.query.page) || 1
+	const limit = 10
+	const sortBy = req.query.sortBy || 'raisedAt'
+	const order = req.query.order === 'desc' ? -1 : 1
+
 	const notesheets = await notesheetModel
 		.find({ passedApprovals: { $in: [id] } })
+		.sort({ [sortBy]: order })
+		.limit(limit)
+		.skip((page - 1) * limit)
 		.populate(populateOptions)
-
-	// if (!notesheets) throw new AppError('Notesheets not found', 404)
 
 	return res.status(200).json({
 		status: '200',
