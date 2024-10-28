@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs').promises
+const fsSync = require('fs')
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
@@ -31,9 +32,22 @@ const getUserByID = catchAsync(async (req, res) => {
 const downloadPDF = catchAsync(async (req, res) => {
 	const pdf = req.params.pdf
 
-	const pdfPath = path.join(process.cwd(), '..', 'server', 'public', 'uploads', pdf)
+	const pdfPath = path.join(
+		process.cwd(),
+		'..',
+		'server',
+		'public',
+		'uploads',
+		pdf
+	)
 
-	res.download(pdfPath)
+	if (!fsSync.existsSync(pdfPath)) {
+		const custom404File = path.join(__dirname, '..', 'public', '404.html')
+
+		return res.status(404).sendFile(custom404File)
+	}
+
+	return res.download(pdfPath)
 })
 
 const getNotesheetById = catchAsync(async (req, res) => {
