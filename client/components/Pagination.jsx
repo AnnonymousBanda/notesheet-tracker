@@ -1,8 +1,8 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-export default function Pagination() {
+export default function Pagination({total}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -10,7 +10,7 @@ export default function Pagination() {
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page")) || 1
   );
-  const totalPages = 10;
+  const totalPages = Math.ceil(total);
 
   const updatePage = (page) => {
     const params = new URLSearchParams(searchParams);
@@ -41,7 +41,7 @@ export default function Pagination() {
     ));
 
   return (
-    <div className="w-full flex justify-center fixed bottom-8">
+    <div className={`w-full ${totalPages === 0 ? "hidden" : "flex"} justify-center fixed bottom-8`}>
       <div className="flex gap-[1rem] bg-white w-fit rounded-full p-2">
         <button
           onClick={prevPage}
