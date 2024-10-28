@@ -187,7 +187,8 @@ const createNotesheet = catchAsync(async (req, res) => {
 
 	return res.status(201).json({
 		status: '201',
-		message: 'Notesheet created successfully',
+		message:
+			'Notesheet created successfully! PDF uploaded will be available for download for 3 weeks',
 		notesheet,
 	})
 })
@@ -264,8 +265,6 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 	sendMail(
 		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
 	)
-
-	// removePDF(notesheet.pdf.split('/').pop())
 
 	return res.status(200).json({
 		status: '200',
