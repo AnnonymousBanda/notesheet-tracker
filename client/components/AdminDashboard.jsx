@@ -50,9 +50,7 @@ export default function AdminDashboard() {
             params.set("page", "1");
             replace(`${pathname}?${params.toString()}`);
           }}
-          className={
-            "p-3 text-gray-700 bg-gray-300 cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl"
-          }
+          className={`p-3 text-gray-700 ${params.get('status') === "pending" ? "bg-gray-400" : "bg-gray-300"}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
         >
           <p className="font-semibold  text-[2rem]">PENDING</p>
         </div>
@@ -63,7 +61,7 @@ export default function AdminDashboard() {
             params.set("page", "1");
             replace(`${pathname}?${params.toString()}`);
           }}
-          className="p-3 text-gray-700 bg-gray-300 cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl"
+          className={`p-3 text-gray-700 ${params.get('status') === "approved" ? "bg-gray-400" : "bg-gray-300"}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
         >
           <p className="font-semibold  text-[2rem]">APPROVED</p>
         </div>
@@ -74,7 +72,7 @@ export default function AdminDashboard() {
             params.set("page", "1");
             replace(`${pathname}?${params.toString()}`);
           }}
-          className="p-3 text-gray-700 bg-gray-300 cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl"
+          className={`p-3 text-gray-700 ${params.get('status') === "rejected" ? "bg-gray-400" : "bg-gray-300"}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
         >
           <p className="font-semibold  text-[2rem]">REJECTED</p>
         </div>
@@ -85,18 +83,18 @@ export default function AdminDashboard() {
             params.set("page", "1");
             replace(`${pathname}?${params.toString()}`);
           }}
-          className="p-3 text-gray-700 bg-gray-300 cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl"
+          className={`p-3 text-gray-700 ${params.get('type') === "to-approve" ? "bg-gray-400" : "bg-gray-300"} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
         >
           <p className="font-semibold  text-[2rem]">TO APPROVE</p>
         </div>
         <div
           onClick={() => {
             params.delete("status");
-            params.set("type", "approved-by-me");
+            params.set("type", "approved");
             params.set("page", "1");
             replace(`${pathname}?${params.toString()}`);
           }}
-          className="p-3 text-gray-700 bg-gray-300 cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl"
+          className={`p-3 text-gray-700 ${params.get('type') === "approved" ? "bg-gray-400" : "bg-gray-300"} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
         >
           <p className="font-semibold  text-[2rem]">APPROVED BY ME</p>
         </div>
