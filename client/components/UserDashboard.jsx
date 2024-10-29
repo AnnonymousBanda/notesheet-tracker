@@ -36,7 +36,7 @@ export default function UserDashboard() {
         // return openDialog("No notesheets found");
       }
       setNotesheets(data.notesheets);
-      setTotalPages((data.total)/10);
+      setTotalPages(data.total / 10);
       setLoading(false);
     } catch (error) {
       openDialog(error.message);
@@ -44,7 +44,7 @@ export default function UserDashboard() {
   };
 
   useEffect(() => {
-    getNotesheets();
+    if (params.toString()) getNotesheets();
   }, [params.toString()]);
 
   return (
@@ -111,17 +111,20 @@ export default function UserDashboard() {
             {params.get("status") === "rejected" && (
               <p className="w-2/12 p-3 rounded-xl">Action Required</p>
             )}
-            <p className="w-[8rem] max-w-[16.66666%] p-3 rounded-xl text-center">Status</p>
+            <p className="w-[8rem] max-w-[16.66666%] p-3 rounded-xl text-center">
+              Status
+            </p>
             <p className="w-[14rem] p-3 rounded-xl">View/Download</p>
           </div>
           <div>
             <NotesheetsTable notesheets={notesheets} />
           </div>
-        </div>) : (
-          <NoNotesheets />
+        </div>
+      ) : (
+        <NoNotesheets />
       )}
-      <Pagination total={totalPages}/>
-      <div className='min-h-[4rem] w-full'></div>
+      <Pagination total={totalPages} />
+      <div className="min-h-[4rem] w-full"></div>
     </div>
   );
 }

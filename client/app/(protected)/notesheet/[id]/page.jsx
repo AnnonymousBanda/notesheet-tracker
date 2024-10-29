@@ -49,6 +49,36 @@ export default function NoteSheet() {
     getNotesheet();
   }, []);
 
+  const handleApproval = async () => {
+    if (user.admin === "adean") {
+      try {
+        const pdfurl = notesheet.pdf;
+        const pdfresponse = await axios.get(pdfurl, { responseType: "blob" });
+        const pdfblob = pdfresponse.data;
+
+        const formdata = new FormData();
+        formdata.append("notesheetID", notesheetID);
+        formdata.append("pdfFile", pdfblob, notesheet.subject);
+        const response = await axios.patch(
+          "http://localhost:8000/api/notesheet/approve",
+          formdata,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            },
+          }
+        );
+
+        console.log("success log", response.data);
+      } catch (error) {
+        openDialog(error.message);
+      }
+    } else {
+      router.push(`/approve-notesheet/${notesheetID}`);
+    }
+  };
+
   const handleReject = async (notesheetID) => {
     console.log(notesheetID);
     try {
@@ -89,13 +119,11 @@ export default function NoteSheet() {
         ) : (
           <div className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xl">
             <div className="flex gap-[1rem] items-center max-w-full flex-wrap">
-                  <p className="text-gray-500 font-bold text-[2rem] min-w-fit">
-                    Subject :
-                  </p>
-                  <p className="text-gray-700 font-bold">
-                    {notesheet?.subject}
-                  </p>
-                </div>
+              <p className="text-gray-500 font-bold text-[2rem] min-w-fit">
+                Subject :
+              </p>
+              <p className="text-gray-700 font-bold">{notesheet?.subject}</p>
+            </div>
             <div className="flex gap-[1rem] items-center">
               <p className="text-gray-500 font-bold text-[2rem]">Raised At :</p>
               <p className="text-gray-700 font-bold">
@@ -252,7 +280,10 @@ export default function NoteSheet() {
 
             <div className="flex gap-[1rem] items-center">
               <p className="text-gray-500 font-bold text-[2rem]">
-                {notesheet?.status?.comment === "Notesheet expired! Please raise a new notesheet." ? "Expired At :" : "Expires At :"}
+                {notesheet?.status?.comment ===
+                "Notesheet expired! Please raise a new notesheet."
+                  ? "Expired At :"
+                  : "Expires At :"}
               </p>
               <p className="text-gray-700 font-bold">
                 {formatDate(notesheet?.expiresAt)}
@@ -261,11 +292,16 @@ export default function NoteSheet() {
           </div>
         )}
 
-
         {loading ? (
           <PdfSkeleton />
         ) : (
-          <div className={`p-3 ${Date.now() > (notesheet?.expiresAt ?? Infinity) ? "hidden" : "block"}`}>
+          <div
+            className={`p-3 ${
+              Date.now() > (notesheet?.expiresAt ?? Infinity)
+                ? "hidden"
+                : "block"
+            }`}
+          >
             <iframe
               src={notesheet?.pdf}
               width="100%"
@@ -277,7 +313,7 @@ export default function NoteSheet() {
         {user?.admin === notesheet?.status?.currentRequiredApproval?.admin ? (
           <div className="flex gap-[1rem] absolute bottom-[20px] right-[20px]">
             <button
-              onClick={() => router.push(`/approve-notesheet/${notesheetID}`)}
+              onClick={() => handleApproval(notesheetID)}
               className="cursor-pointer"
             >
               <LazyBlurImage

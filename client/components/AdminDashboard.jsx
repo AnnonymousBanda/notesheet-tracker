@@ -5,9 +5,11 @@ import NotesheetsTable from "./NotesheetsTable";
 import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import Pagination from "./Pagination";
 import NoNotesheets from "./NoNotesheets";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminDashboard() {
   const { openDialog } = useDialog();
+  const { user } = useAuth();
   const [notesheets, setNotesheets] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:8000/api/notesheet/${params.get("type")}/user/me`,
+        `http://localhost:8000/api/notesheet/${params.get("type")}/user/me?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -76,50 +78,60 @@ export default function AdminDashboard() {
     console.log(notesheets);
   }, [params.toString()]);
 
+  console.log(user)
+  console.log(user?.admin)
+  console.log(user?.admin === "adean");
+
   return (
     <div className="flex h-full flex-col gap-[3rem] min-w-[900px]">
       <div className="flex gap-10 w-full justify-center flex-wrap">
-        <div
-          onClick={() => {
-            params.set("type", "raised");
-            params.delete("status");
-            params.set("page", "1");
-            replace(`${pathname}?${params.toString()}`);
-          }}
-          className={`p-3 text-gray-700 ${
-            params.get("status") === null && params.get("type") === "raised"
-              ? "bg-gray-400"
-              : "bg-gray-300"
-          }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
-        >
-          <p className="font-semibold  text-[2rem]">ALL</p>
-        </div>
-        <div
-          onClick={() => {
-            params.set("type", "raised");
-            params.set("status", "pending");
-            params.set("page", "1");
-            replace(`${pathname}?${params.toString()}`);
-          }}
-          className={`p-3 text-gray-700 ${
-            params.get("status") === "pending" ? "bg-gray-400" : "bg-gray-300"
-          }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
-        >
-          <p className="font-semibold  text-[2rem]">PENDING</p>
-        </div>
-        <div
-          onClick={() => {
-            params.set("type", "raised");
-            params.set("status", "approved");
-            params.set("page", "1");
-            replace(`${pathname}?${params.toString()}`);
-          }}
-          className={`p-3 text-gray-700 ${
-            params.get("status") === "approved" ? "bg-gray-400" : "bg-gray-300"
-          }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
-        >
-          <p className="font-semibold  text-[2rem]">APPROVED</p>
-        </div>
+        {user?.admin === "adean" ? null :  (
+          <>
+            <div
+              onClick={() => {
+                params.set("type", "raised");
+                params.delete("status");
+                params.set("page", "1");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className={`p-3 text-gray-700 ${
+                params.get("status") === null && params.get("type") === "raised"
+                  ? "bg-gray-400"
+                  : "bg-gray-300"
+              }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+            >
+              <p className="font-semibold  text-[2rem]">ALL</p>
+            </div>
+            <div
+              onClick={() => {
+                params.set("type", "raised");
+                params.set("status", "pending");
+                params.set("page", "1");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className={`p-3 text-gray-700 ${
+                params.get("status") === "pending"
+                  ? "bg-gray-400"
+                  : "bg-gray-300"
+              }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+            >
+              <p className="font-semibold  text-[2rem]">PENDING</p>
+            </div>
+            <div
+              onClick={() => {
+                params.set("type", "raised");
+                params.set("status", "approved");
+                params.set("page", "1");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className={`p-3 text-gray-700 ${
+                params.get("status") === "approved"
+                  ? "bg-gray-400"
+                  : "bg-gray-300"
+              }  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+            >
+              <p className="font-semibold  text-[2rem]">APPROVED</p>
+            </div>
         <div
           onClick={() => {
             params.set("type", "raised");
@@ -133,6 +145,8 @@ export default function AdminDashboard() {
         >
           <p className="font-semibold  text-[2rem]">REJECTED</p>
         </div>
+          </>)
+        }
         <div
           onClick={() => {
             params.delete("status");
@@ -174,7 +188,9 @@ export default function AdminDashboard() {
               <p className="w-2/12 p-3 rounded-xl text-center">Raised By</p>
             ) : null}
             {params.get("status") === "rejected" && (
-              <p className="w-2/12 max-w-[16.66666%] p-3 rounded-xl">Action Required</p>
+              <p className="w-2/12 max-w-[16.66666%] p-3 rounded-xl">
+                Action Required
+              </p>
             )}
             <p className="w-[8rem] p-3 rounded-xl text-center">Status</p>
             <p className="w-[14rem] p-3 rounded-xl text-center">
@@ -190,7 +206,7 @@ export default function AdminDashboard() {
         <NoNotesheets />
       )}
       <Pagination total={totalPages} />
-      <div className='min-h-[4rem] w-full'></div>
+      <div className="min-h-[4rem] w-full"></div>
     </div>
   );
 }
