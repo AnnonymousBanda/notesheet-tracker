@@ -4,6 +4,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import NotesheetsTable from "./NotesheetsTable";
 import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import Pagination from "./Pagination";
+import NoNotesheets from "./NoNotesheets";
 
 export default function AdminDashboard() {
   const { openDialog } = useDialog();
@@ -34,7 +35,7 @@ export default function AdminDashboard() {
       }
 
       setNotesheets(data.notesheets);
-      setTotalPages((data.total)/10);
+      setTotalPages(data.total / 10);
       setLoading(false);
     } catch (error) {
       openDialog(error.message);
@@ -57,6 +58,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       console.log(data);
       setNotesheets(data.notesheets);
+      setTotalPages(data.total / 10);
       setLoading(false);
     } catch (error) {
       openDialog(error.message);
@@ -71,10 +73,11 @@ export default function AdminDashboard() {
         getNotesheetToApprove();
       }
     }
+    console.log(notesheets);
   }, [params.toString()]);
 
   return (
-    <div className="flex flex-col gap-[3rem]">
+    <div className="flex h-full flex-col gap-[3rem]">
       <div className="flex gap-10 w-full justify-center flex-wrap">
         <div
           onClick={() => {
@@ -159,8 +162,8 @@ export default function AdminDashboard() {
       </div>
       {loading ? (
         <TableLoadingSkeleton params={params} />
-      ) : (
-        <div className="h-full bg-white rounded-xl w-full flex flex-col gap-12">
+      ) : notesheets?.length ? (
+        <div className="bg-white rounded-xl w-full flex flex-col gap-12">
           <div className="flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold">
             <p className="w-1/12 p-3 rounded-xl">No.</p>
             <p className="w-5/12 p-3 rounded-xl">Subject</p>
@@ -170,6 +173,9 @@ export default function AdminDashboard() {
             params.get("type") === "approved" ? (
               <p className="w-2/12 p-3 rounded-xl text-center">Raised By</p>
             ) : null}
+            {params.get("status") === "rejected" && (
+              <p className="w-2/12 p-3 rounded-xl">Action Required</p>
+            )}
             <p className="w-[8rem] p-3 rounded-xl text-center">Status</p>
             <p className="w-[14rem] p-3 rounded-xl text-center">
               View/Download
@@ -180,8 +186,10 @@ export default function AdminDashboard() {
             <NotesheetsTable notesheets={notesheets} />
           </div>
         </div>
+      ) : (
+        <NoNotesheets />
       )}
-      <Pagination total = {totalPages} />
+      <Pagination total={totalPages} />
     </div>
   );
 }

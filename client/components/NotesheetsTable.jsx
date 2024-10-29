@@ -38,6 +38,11 @@ export default function NotesheetsTable({ notesheets }) {
 							{notesheet?.raiser}
 						</p>
 					) : null}
+					{params.get("status") === "rejected" && (
+              			<p className="w-2/12 p-3 rounded-xl">
+							{notesheet?.status?.rejectedBy?.comment}
+						</p>
+            		)}
 					<p className='w-[8rem] p-3 rounded-xl flex justify-center'>
 						<LazyBlurImage
 							src={`icons/${notesheet?.status?.state}.png`}

@@ -21,7 +21,7 @@ function TableSkeleton({params}) {
 
 export default function TableLoadingSkeleton({ params }) {
   return (
-    <div className="h-full bg-white rounded-xl w-full flex flex-col gap-12 pb-[1rem]">
+    <div className="bg-white rounded-xl w-full flex flex-col gap-12 pb-[1rem]">
       <div className="flex justify-around rounded-t-xl  bg-gray-300 font-semibold h-[4rem] py-2">
         <p className="w-1/12 p-3 rounded-lg h-full animate-skeleton bg-gradient-to-r"></p>
         <p className="w-5/12 p-3 rounded-lg h-full animate-skeleton bg-gradient-to-r"></p>
