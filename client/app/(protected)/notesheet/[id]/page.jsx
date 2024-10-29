@@ -88,10 +88,14 @@ export default function NoteSheet() {
           <NotesheetDetailsSkeleton />
         ) : (
           <div className="flex flex-col gap-4 bg-gray-100 p-6 rounded-xl">
-            <p className="text-gray-500 font-bold text-[2rem]">
-              Subject :{" "}
-              <span className="text-gray-700">{notesheet?.subject}</span>
-            </p>
+            <div className="flex gap-[1rem] items-center max-w-full flex-wrap">
+                  <p className="text-gray-500 font-bold text-[2rem] min-w-fit">
+                    Subject :
+                  </p>
+                  <p className="text-gray-700 font-bold">
+                    {notesheet?.subject}
+                  </p>
+                </div>
             <div className="flex gap-[1rem] items-center">
               <p className="text-gray-500 font-bold text-[2rem]">Raised At :</p>
               <p className="text-gray-700 font-bold">
@@ -227,8 +231,8 @@ export default function NoteSheet() {
 
             {notesheet?.status?.state === "rejected" && (
               <>
-                <div className="flex gap-[1rem] items-center">
-                  <p className="text-gray-500 font-bold text-[2rem]">
+                <div className="flex gap-[1rem] items-center max-w-full flex-wrap">
+                  <p className="text-gray-500 font-bold text-[2rem] min-w-fit">
                     Action Required :
                   </p>
                   <p className="text-gray-700 font-bold">

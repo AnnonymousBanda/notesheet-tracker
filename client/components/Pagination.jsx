@@ -1,9 +1,10 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"; 
 
 export default function Pagination({total}) {
   const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const pathname = usePathname();
   const { replace } = useRouter();
 
@@ -26,6 +27,11 @@ export default function Pagination({total}) {
   const prevPage = () => {
     if (currentPage > 1) updatePage(currentPage - 1);
   };
+
+  useEffect(() => {
+    setCurrentPage(parseInt(searchParams.get("page")) || 1);
+    }
+  , [params.toString()]);
 
   const renderPageNumbers = () =>
     Array.from({ length: totalPages }, (_, i) => (
