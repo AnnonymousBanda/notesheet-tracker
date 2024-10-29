@@ -13,7 +13,7 @@ export default function NotesheetsTable({ notesheets }) {
 	const { replace, router } = useRouter()
 
 	return (
-		<div className='flex flex-col gap-3 items'>
+		<div className='flex flex-col gap-3'>
 			{notesheets?.map((notesheet, index) => (
 				<div
 					onClick={() => {
@@ -23,7 +23,7 @@ export default function NotesheetsTable({ notesheets }) {
 					className={`flex items-center ${index === notesheets.length - 1 ? 'rounded-b-xl' : ''} justify-around text-gray-700 font-semibold cursor-pointer hover:bg-blue-200 transition-colors duration-300`}
 				>
 					<p className='w-1/12 p-3 rounded-xl'>{index + 1}</p>
-					<p className='w-5/12 p-3 rounded-xl'>
+					<p className='w-5/12 max-w-[41.6667%] p-3 rounded-xl'>
 						{notesheet?.subject}
 					</p>
 					<p className='w-2/12 p-3 rounded-xl text-center'>
@@ -39,7 +39,7 @@ export default function NotesheetsTable({ notesheets }) {
 						</p>
 					) : null}
 					{params.get("status") === "rejected" && (
-              			<p className="w-2/12 min-w-[16.66666%] p-3 rounded-xl">
+              			<p className="w-2/12 max-w-[16.66666%] p-3 rounded-xl">
 							{notesheet?.status?.rejectedBy?.comment}
 						</p>
             		)}

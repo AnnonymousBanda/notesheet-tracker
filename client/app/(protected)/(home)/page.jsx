@@ -29,7 +29,7 @@ const Dashboard = () => {
       {admin ? <AdminDashboard /> : <UserDashboard />}
       <Link
         href="/new-notesheet"
-        className="fixed z-10 bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl"
+        className="absolute z-10 bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl"
       >
         <img src="/images/plus.svg" alt="" className="w-12 " />
       </Link>

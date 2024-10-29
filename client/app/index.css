@@ -67,7 +67,7 @@ input[type="number"] {
   }
 
   ::-webkit-scrollbar-track {
-    background: #f0f0f0; 
+    background: transparent; 
     border-radius: 8px;
   }
 

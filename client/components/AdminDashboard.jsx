@@ -77,7 +77,7 @@ export default function AdminDashboard() {
   }, [params.toString()]);
 
   return (
-    <div className="flex h-full flex-col gap-[3rem]">
+    <div className="flex h-full flex-col gap-[3rem] min-w-[900px]">
       <div className="flex gap-10 w-full justify-center flex-wrap">
         <div
           onClick={() => {
@@ -163,10 +163,10 @@ export default function AdminDashboard() {
       {loading ? (
         <TableLoadingSkeleton params={params} />
       ) : notesheets?.length ? (
-        <div className="bg-white rounded-xl w-full flex flex-col gap-12">
-          <div className="flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold">
+        <div className="bg-white rounded-xl w-full flex flex-col gap-12 ">
+          <div className="flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center">
             <p className="w-1/12 p-3 rounded-xl">No.</p>
-            <p className="w-5/12 p-3 rounded-xl">Subject</p>
+            <p className="w-5/12 max-w-[41.6667%] p-3 rounded-xl">Subject</p>
             <p className="w-2/12 p-3 rounded-xl text-center">Date</p>
             <p className="w-1/12 p-3 rounded-xl">Amount</p>
             {params.get("type") === "to-approve" ||
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
               <p className="w-2/12 p-3 rounded-xl text-center">Raised By</p>
             ) : null}
             {params.get("status") === "rejected" && (
-              <p className="w-2/12 p-3 rounded-xl">Action Required</p>
+              <p className="w-2/12 max-w-[16.66666%] p-3 rounded-xl">Action Required</p>
             )}
             <p className="w-[8rem] p-3 rounded-xl text-center">Status</p>
             <p className="w-[14rem] p-3 rounded-xl text-center">
@@ -190,6 +190,7 @@ export default function AdminDashboard() {
         <NoNotesheets />
       )}
       <Pagination total={totalPages} />
+      <div className='min-h-[4rem] w-full'></div>
     </div>
   );
 }

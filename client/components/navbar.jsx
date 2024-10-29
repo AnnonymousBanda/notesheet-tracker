@@ -32,7 +32,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
     <div
       className={`${
         isOpen ? "block" : "hidden"
-      } absolute z-10 bg-white w-72 right-10 top-32 p-2 rounded-md transition-transform duration-1000 shadow-xl`}
+      } absolute z-10 bg-white w-72 right-[2.5rem] top-[8rem] p-2 rounded-md transition-transform duration-1000 shadow-xl`}
     >
       <div className="flex flex-col">
         <Link
@@ -78,7 +78,7 @@ export default function Navbar() {
   const { user } = useAuth();
 
   return (
-    <div className="w-full bg-gray-200 h-[8vh] px-8 py-4 flex justify-between items-center rounded-lg">
+    <div className="w-full bg-gray-200 min-h-[7rem] h-[8rem] px-8 py-4 flex justify-between items-center rounded-lg">
       <h4 className="text-gray-500 font-bold">{route.toUpperCase() == "" ? "DASHBOARD" : route.toUpperCase()}</h4>
       <div
         onClick={toggleMenu}

@@ -5,6 +5,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import NotesheetsTable from "./NotesheetsTable";
 import TableLoadingSkeleton from "./TableLoadingSkeleton";
 import Pagination from "./Pagination";
+import NoNotesheets from "./NoNotesheets";
 
 export default function UserDashboard() {
   const { openDialog } = useDialog();
@@ -47,7 +48,7 @@ export default function UserDashboard() {
   }, [params.toString()]);
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col h-full gap-12">
       <div className="flex gap-10 w-full justify-center">
         <div
           onClick={() => {
@@ -100,22 +101,27 @@ export default function UserDashboard() {
       </div>
       {loading ? (
         <TableLoadingSkeleton params={params} />
-      ) : (
-        <div className="h-full bg-white rounded-xl w-full flex flex-col gap-12">
+      ) : notesheets?.length ? (
+        <div className="bg-white rounded-xl w-full flex flex-col gap-12">
           <div className="flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold">
             <p className="w-1/12 p-3 rounded-xl">S.no</p>
-            <p className="w-5/12 p-3 rounded-xl">Subject</p>
-            <p className="w-1/12 p-3 rounded-xl">Date</p>
+            <p className="w-5/12 max-w-[41.6667%] p-3 rounded-xl">Subject</p>
+            <p className="w-2/12 p-3 rounded-xl text-center">Date</p>
             <p className="w-1/12 p-3 rounded-xl">Amount</p>
-            <p className="w-[6rem] p-3 rounded-xl">Status</p>
+            {params.get("status") === "rejected" && (
+              <p className="w-2/12 p-3 rounded-xl">Action Required</p>
+            )}
+            <p className="w-[8rem] max-w-[16.66666%] p-3 rounded-xl text-center">Status</p>
             <p className="w-[14rem] p-3 rounded-xl">View/Download</p>
           </div>
           <div>
             <NotesheetsTable notesheets={notesheets} />
           </div>
-        </div>
+        </div>) : (
+          <NoNotesheets />
       )}
       <Pagination total={totalPages}/>
+      <div className='min-h-[4rem] w-full'></div>
     </div>
   );
 }

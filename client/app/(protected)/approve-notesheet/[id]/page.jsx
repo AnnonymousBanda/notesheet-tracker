@@ -37,11 +37,11 @@ export default function ApproveNotesheet() {
 	return loading ? (
 		<Loader />
 	) : (
-		<div className='w-screen-md mx-auto'>
+		<div className='w-screen-md h-full mx-auto'>
 			<iframe
-				src={`${notesheet?.pdf}#zoom=75`}
+				src={notesheet?.pdf}
 				width='100%'
-				height={794}
+				height="100%"
 				className='rounded-xl'
 			></iframe>
 		</div>
