@@ -125,7 +125,7 @@ const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
 	const order = req.query.order === 'desc' ? -1 : 1
 
 	const notesheets = await notesheetModel
-		.find({ passedApprovals: { $in: [id] } })
+		.find({ 'status.passedApprovals': { $in: [id] } })
 		.sort({ [sortBy]: order })
 		.limit(limit)
 		.skip((page - 1) * limit)
