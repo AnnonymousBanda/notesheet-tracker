@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "axios": "^1.7.7",
     "gsap": "^3.12.5",
     "jwt-decode": "^4.0.0",

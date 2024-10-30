@@ -110,9 +110,9 @@ const Profile = () => {
 	return (
 		<div className='flex flex-col justify-center items-center gap-8 lg:w-screen-md  mx-auto'>
 			<div className='cursor-pointer h-full flex justify-center items-center'>
-				{user?.photoURL ? (
+				{user?.picture ? (
 					<DynamicLazyBlurImage
-						src={user?.photoURL}
+						src={user?.picture}
 						alt='profile picture'
 						width={35}
 						height={35}
