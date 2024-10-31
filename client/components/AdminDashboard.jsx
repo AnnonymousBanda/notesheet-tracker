@@ -48,6 +48,29 @@ export default function AdminDashboard() {
 		if (params.toString()) getNotesheets()
 	}, [params.toString()])
 
+	const handleSort = (e) => {
+		console.log(e.target.innerText)
+
+		const params = new URLSearchParams(searchparams)
+		const mapping = {
+			Subject: 'subject',
+			Date: 'raisedAt',
+			// 'Raised By': 'raisedBy.name',
+			Amount: 'amount',
+			Status: 'status',
+		}
+
+		if (params.get('sortBy') === mapping[e.target.innerText]) {
+			params.set('order', params.get('order') === 'asc' ? 'desc' : 'asc')
+		} else {
+			params.set('sortBy', mapping[e.target.innerText])
+			params.set('order', 'asc')
+		}
+
+		params.set('page', '1')
+		replace(`${pathname}?${params.toString()}`)
+	}
+
 	return (
 		<div className='flex h-full flex-col gap-[3rem] min-w-[900px]'>
 			<div className='flex gap-10 w-full justify-center flex-wrap'>
@@ -159,27 +182,54 @@ export default function AdminDashboard() {
 				<div className='bg-white rounded-xl w-full flex flex-col gap-12 '>
 					<div className='flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center'>
 						<p className='w-1/12 p-3 rounded-xl'>No.</p>
-						<p className='w-5/12 max-w-[41.6667%] p-3 rounded-xl'>
-							Subject
-						</p>
-						<p className='w-2/12 p-3 rounded-xl text-center'>
-							Date
-						</p>
-						<p className='w-1/12 p-3 rounded-xl'>Amount</p>
+						<div className='w-5/12 max-w-[41.6667%] p-3 rounded-xl'>
+							<p
+								className='w-fit cursor-pointer'
+								onClick={handleSort}
+							>
+								Subject
+							</p>
+						</div>
+						<div className='w-2/12 p-3 rounded-xl flex justify-center'>
+							<p
+								className='w-fit cursor-pointer'
+								onClick={handleSort}
+							>
+								Date
+							</p>
+						</div>
+						<div className='w-1/12 p-3 rounded-xl'>
+							<p
+								className='w-fit cursor-pointer'
+								onClick={handleSort}
+							>
+								Amount
+							</p>
+						</div>
 						{params.get('type') === 'to-approve' ||
 						params.get('type') === 'approved' ? (
-							<p className='w-2/12 p-3 rounded-xl text-center'>
-								Raised By
-							</p>
+							<div className='w-2/12 p-3 rounded-xl flex justify-center'>
+								<p
+								// className='w-fit cursor-pointer'
+								// onClick={handleSort}
+								>
+									Raised By
+								</p>
+							</div>
 						) : null}
 						{params.get('status') === 'rejected' && (
 							<p className='w-2/12 max-w-[16.66666%] p-3 rounded-xl'>
 								Action Required
 							</p>
 						)}
-						<p className='w-[8rem] p-3 rounded-xl text-center'>
-							Status
-						</p>
+						<div className='w-[8rem] p-3 rounded-xl flex justify-center'>
+							<p
+								className='w-fit cursor-pointer'
+								onClick={handleSort}
+							>
+								Status
+							</p>
+						</div>
 						<p className='w-[14rem] p-3 rounded-xl text-center'>
 							View/Download
 						</p>

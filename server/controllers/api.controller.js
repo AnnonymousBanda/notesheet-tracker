@@ -164,10 +164,10 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 					? { raisedBy: id, 'status.state': status }
 					: { raisedBy: id }
 			)
+			.populate(populateOptions)
 			.sort({ [sortBy]: order })
 			.limit(limit)
 			.skip((page - 1) * limit)
-			.populate(populateOptions)
 
 		total = await notesheetModel.countDocuments({ raisedBy: id })
 	} else if (type === 'to-approve') {
@@ -179,10 +179,10 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 
 		notesheets = await notesheetModel
 			.find({ currentRequiredApproval: id })
+			.populate(populateOptions)
 			.sort({ [sortBy]: order })
 			.limit(limit)
 			.skip((page - 1) * limit)
-			.populate(populateOptions)
 
 		total = await notesheetModel.countDocuments({
 			currentRequiredApproval: id,
@@ -196,10 +196,10 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 
 		notesheets = await notesheetModel
 			.find({ 'status.passedApprovals': { $in: [id] } })
+			.populate(populateOptions)
 			.sort({ [sortBy]: order })
 			.limit(limit)
 			.skip((page - 1) * limit)
-			.populate(populateOptions)
 
 		total = await notesheetModel.countDocuments({
 			passedApprovals: { $in: [id] },

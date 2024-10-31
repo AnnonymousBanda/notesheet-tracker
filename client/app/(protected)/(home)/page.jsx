@@ -24,12 +24,14 @@ const Dashboard = () => {
 			: user?.admin === 'adean'
 				? 'to-approve'
 				: 'raised'
+		const status = params.get('status')
 		const sortBy = params.get('sortBy') || 'raisedAt'
 		const order = params.get('order') || 'asc'
 		const page = params.get('page') || 1
 
 		const updatedParams = new URLSearchParams()
 		updatedParams.set('type', type)
+		if (status) updatedParams.set('status', status)
 		updatedParams.set('sortBy', sortBy)
 		updatedParams.set('order', order)
 		updatedParams.set('page', page)

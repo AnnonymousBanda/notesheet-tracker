@@ -108,7 +108,7 @@ const Profile = () => {
 		}
 	}
 	return (
-		<div className='flex flex-col justify-center items-center gap-8 lg:w-screen-md  mx-auto'>
+		<div className='flex flex-col justify-center items-center gap-8 lg:w-screen-md  mx-auto py-[5rem]'>
 			<div className='cursor-pointer h-full flex justify-center items-center'>
 				{user?.picture ? (
 					<DynamicLazyBlurImage
