@@ -153,7 +153,7 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 	const order = req.query.order === 'desc' ? -1 : 1
 
 	const type = req.query.type
-	if (!type) throw new AppError('Type is required', 400)
+	// if (!type) throw new AppError('Type is required', 400)
 
 	let notesheets = []
 	let total = 0
@@ -423,9 +423,9 @@ module.exports = {
 	downloadPDF,
 	getNotesheetById,
 	getNotesheetsByUserID,
-	getRaisedNotesheetsByUserID,
-	getNotesheetsToApproveByUserID,
-	getNotesheetsApprovedByUserID,
+	// getRaisedNotesheetsByUserID,
+	// getNotesheetsToApproveByUserID,
+	// getNotesheetsApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,

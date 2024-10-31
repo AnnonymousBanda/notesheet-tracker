@@ -15,9 +15,9 @@ const {
 	dynamicBlurImage,
 	getNotesheetById,
 	getNotesheetsByUserID,
-	getRaisedNotesheetsByUserID,
-	getNotesheetsToApproveByUserID,
-	getNotesheetsApprovedByUserID,
+	// getRaisedNotesheetsByUserID,
+	// getNotesheetsToApproveByUserID,
+	// getNotesheetsApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,
@@ -31,7 +31,7 @@ router.route('/download/notesheet/:pdf').get(downloadPDF)
 //notesheet-related fetch routes
 router.route('/notesheet/:id').get(isAuthenticated, getNotesheetById)
 router
-	.route('/notesheet')
+	.route('/notesheets/user/me')
 	.get(isAuthenticated, getUserID, getNotesheetsByUserID)
 
 // router
