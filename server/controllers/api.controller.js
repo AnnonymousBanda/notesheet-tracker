@@ -62,78 +62,149 @@ const getNotesheetById = catchAsync(async (req, res) => {
 	})
 })
 
-const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
+// const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
+// 	const id = req.params.id
+// 	const status = req.query.status
+
+// 	const page = parseInt(req.query.page) || 1
+// 	const limit = 10
+// 	const sortBy = req.query.sortBy || 'raisedAt'
+// 	const order = req.query.order === 'desc' ? -1 : 1
+
+// 	const query = status
+// 		? { raisedBy: id, 'status.state': status }
+// 		: { raisedBy: id }
+// 	const notesheets = await notesheetModel
+// 		.find(query)
+// 		.sort({ [sortBy]: order })
+// 		.limit(limit)
+// 		.skip((page - 1) * limit)
+// 		.populate(populateOptions)
+
+// 	const total = await notesheetModel.countDocuments(query)
+
+// 	return res.status(200).json({
+// 		status: '200',
+// 		total,
+// 		notesheets,
+// 	})
+// })
+
+// const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
+// 	const id = req.params.id
+
+// 	const page = parseInt(req.query.page) || 1
+// 	const limit = 10
+// 	const sortBy = req.query.sortBy || 'raisedAt'
+// 	const order = req.query.order === 'desc' ? -1 : 1
+
+// 	const notesheets = await notesheetModel
+// 		.find({ currentRequiredApproval: id })
+// 		.sort({ [sortBy]: order })
+// 		.limit(limit)
+// 		.skip((page - 1) * limit)
+// 		.populate(populateOptions)
+
+// 	const total = await notesheetModel.countDocuments({
+// 		currentRequiredApproval: id,
+// 	})
+
+// 	return res.status(200).json({
+// 		status: '200',
+// 		total,
+// 		notesheets,
+// 	})
+// })
+
+// const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
+// 	const id = req.params.id
+
+// 	const page = parseInt(req.query.page) || 1
+// 	const limit = 10
+// 	const sortBy = req.query.sortBy || 'raisedAt'
+// 	const order = req.query.order === 'desc' ? -1 : 1
+
+// 	const notesheets = await notesheetModel
+// 		.find({ 'status.passedApprovals': { $in: [id] } })
+// 		.sort({ [sortBy]: order })
+// 		.limit(limit)
+// 		.skip((page - 1) * limit)
+// 		.populate(populateOptions)
+
+// 	const total = await notesheetModel.countDocuments({
+// 		passedApprovals: { $in: [id] },
+// 	})
+
+// 	return res.status(200).json({
+// 		status: '200',
+// 		total,
+// 		notesheets,
+// 	})
+// })
+
+const getNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
+	const user = req.user
+
 	const status = req.query.status
-
 	const page = parseInt(req.query.page) || 1
 	const limit = 10
 	const sortBy = req.query.sortBy || 'raisedAt'
 	const order = req.query.order === 'desc' ? -1 : 1
 
-	const query = status
-		? { raisedBy: id, 'status.state': status }
-		: { raisedBy: id }
-	const notesheets = await notesheetModel
-		.find(query)
-		.sort({ [sortBy]: order })
-		.limit(limit)
-		.skip((page - 1) * limit)
-		.populate(populateOptions)
+	const type = req.query.type
+	if (!type) throw new AppError('Type is required', 400)
 
-	const total = await notesheetModel.countDocuments(query)
+	let notesheets = []
+	let total = 0
+	if (type === 'raised') {
+		notesheets = await notesheetModel
+			.find(
+				status
+					? { raisedBy: id, 'status.state': status }
+					: { raisedBy: id }
+			)
+			.sort({ [sortBy]: order })
+			.limit(limit)
+			.skip((page - 1) * limit)
+			.populate(populateOptions)
 
-	return res.status(200).json({
-		status: '200',
-		total,
-		notesheets,
-	})
-})
+		total = await notesheetModel.countDocuments({ raisedBy: id })
+	} else if (type === 'to-approve') {
+		if (user.role !== 'admin')
+			throw new AppError(
+				'You are not authorized to access this route',
+				403
+			)
 
-const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
-	const id = req.params.id
+		notesheets = await notesheetModel
+			.find({ currentRequiredApproval: id })
+			.sort({ [sortBy]: order })
+			.limit(limit)
+			.skip((page - 1) * limit)
+			.populate(populateOptions)
 
-	const page = parseInt(req.query.page) || 1
-	const limit = 10
-	const sortBy = req.query.sortBy || 'raisedAt'
-	const order = req.query.order === 'desc' ? -1 : 1
+		total = await notesheetModel.countDocuments({
+			currentRequiredApproval: id,
+		})
+	} else if (type === 'approved') {
+		if (user.role !== 'admin')
+			throw new AppError(
+				'You are not authorized to access this route',
+				403
+			)
 
-	const notesheets = await notesheetModel
-		.find({ currentRequiredApproval: id })
-		.sort({ [sortBy]: order })
-		.limit(limit)
-		.skip((page - 1) * limit)
-		.populate(populateOptions)
+		notesheets = await notesheetModel
+			.find({ 'status.passedApprovals': { $in: [id] } })
+			.sort({ [sortBy]: order })
+			.limit(limit)
+			.skip((page - 1) * limit)
+			.populate(populateOptions)
 
-	const total = await notesheetModel.countDocuments({
-		currentRequiredApproval: id,
-	})
-
-	return res.status(200).json({
-		status: '200',
-		total,
-		notesheets,
-	})
-})
-
-const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
-	const id = req.params.id
-
-	const page = parseInt(req.query.page) || 1
-	const limit = 10
-	const sortBy = req.query.sortBy || 'raisedAt'
-	const order = req.query.order === 'desc' ? -1 : 1
-
-	const notesheets = await notesheetModel
-		.find({ 'status.passedApprovals': { $in: [id] } })
-		.sort({ [sortBy]: order })
-		.limit(limit)
-		.skip((page - 1) * limit)
-		.populate(populateOptions)
-
-	const total = await notesheetModel.countDocuments({
-		passedApprovals: { $in: [id] },
-	})
+		total = await notesheetModel.countDocuments({
+			passedApprovals: { $in: [id] },
+		})
+	}
 
 	return res.status(200).json({
 		status: '200',
@@ -351,6 +422,7 @@ module.exports = {
 	getUserByID,
 	downloadPDF,
 	getNotesheetById,
+	getNotesheetsByUserID,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
 	getNotesheetsApprovedByUserID,

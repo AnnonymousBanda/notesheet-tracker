@@ -14,6 +14,7 @@ const {
 	blurImage,
 	dynamicBlurImage,
 	getNotesheetById,
+	getNotesheetsByUserID,
 	getRaisedNotesheetsByUserID,
 	getNotesheetsToApproveByUserID,
 	getNotesheetsApprovedByUserID,
@@ -30,14 +31,18 @@ router.route('/download/notesheet/:pdf').get(downloadPDF)
 //notesheet-related fetch routes
 router.route('/notesheet/:id').get(isAuthenticated, getNotesheetById)
 router
-	.route('/notesheet/raised/user/me')
-	.get(isAuthenticated, getUserID, getRaisedNotesheetsByUserID)
-router
-	.route('/notesheet/to-approve/user/me')
-	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsToApproveByUserID)
-router
-	.route('/notesheet/approved/user/me')
-	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsApprovedByUserID)
+	.route('/notesheet')
+	.get(isAuthenticated, getUserID, getNotesheetsByUserID)
+
+// router
+// 	.route('/notesheet/raised/user/me')
+// 	.get(isAuthenticated, getUserID, getRaisedNotesheetsByUserID)
+// router
+// 	.route('/notesheet/to-approve/user/me')
+// 	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsToApproveByUserID)
+// router
+// 	.route('/notesheet/approved/user/me')
+// 	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsApprovedByUserID)
 
 //notesheet-related CUD routes
 router
