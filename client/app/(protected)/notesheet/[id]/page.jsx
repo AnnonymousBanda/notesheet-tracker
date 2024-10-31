@@ -167,10 +167,20 @@ export default function NoteSheet() {
 									) : (
 										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
 											<div className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'>
-												{admin.picture ? (
+												{notesheet.status
+													.currentRequiredApproval
+													.picture ? (
 													<DynamicLazyBlurImage
-														src={admin.picture}
-														alt={admin.name}
+														src={
+															notesheet.status
+																.currentRequiredApproval
+																.picture
+														}
+														alt={
+															notesheet.status
+																.currentRequiredApproval
+																.name
+														}
 														width={20}
 														height={20}
 														rounded={true}
@@ -178,7 +188,11 @@ export default function NoteSheet() {
 												) : (
 													<LazyBlurImage
 														src='user.png'
-														alt={admin.name}
+														alt={
+															notesheet.status
+																.currentRequiredApproval
+																.name
+														}
 														width={20}
 														height={20}
 														rounded={true}
@@ -255,7 +269,7 @@ export default function NoteSheet() {
 											{notesheet?.status.passedApprovals.map(
 												(admin, index) => (
 													<div className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'>
-														{admin.picture ? (
+														{admin?.picture ? (
 															<DynamicLazyBlurImage
 																src={
 																	admin.picture
