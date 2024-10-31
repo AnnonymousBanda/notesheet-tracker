@@ -13,7 +13,7 @@ export default function NotesheetsTable({ notesheets }) {
 	const { replace, router } = useRouter()
 
 	return (
-		<div className='flex flex-col gap-3'>
+		<div className='flex flex-col gap-3 min-w-[900px]'>
 			{notesheets?.map((notesheet, index) => (
 				<div
 					onClick={() => {

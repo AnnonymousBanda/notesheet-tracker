@@ -21,6 +21,7 @@ export default function UserDashboard() {
 	const { replace } = useRouter()
 
 	const getNotesheets = async () => {
+		setLoading(true)
 		try {
 			const response = await axios.get(
 				`http://localhost:8000/api/notesheets/user/me?${params.toString()}`,
@@ -70,7 +71,7 @@ export default function UserDashboard() {
 	}
 
 	return (
-		<div className='flex flex-col h-full gap-12'>
+		<div className='flex flex-col h-full gap-12 overflow-hidden'>
 			<div className='flex gap-10 w-full justify-center'>
 				<div
 					onClick={() => {
@@ -132,8 +133,8 @@ export default function UserDashboard() {
 			{loading ? (
 				<TableLoadingSkeleton params={params} />
 			) : notesheets?.length ? (
-				<div className='bg-white rounded-xl w-full flex flex-col gap-12'>
-					<div className='flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold'>
+				<div className='bg-white rounded-xl w-full h-[90%] overflow-auto flex flex-col gap-12'>
+					<div className='flex justify-around rounded-t-xl w-full min-w-[900px] text-gray-700 bg-gray-300 font-semibold'>
 						<p className='w-1/12 p-3 rounded-xl'>No.</p>
 						<div className='w-5/12 max-w-[41.6667%] p-3 rounded-xl'>
 							<p

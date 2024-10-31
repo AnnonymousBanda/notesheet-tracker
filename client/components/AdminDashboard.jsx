@@ -72,7 +72,7 @@ export default function AdminDashboard() {
 	}
 
 	return (
-		<div className='flex h-full flex-col gap-[3rem] min-w-[900px]'>
+		<div className='flex h-full flex-col gap-[3rem] overflow-hidden'>
 			<div className='flex gap-10 w-full justify-center flex-wrap'>
 				{user?.admin === 'adean' ? null : (
 					<>
@@ -179,8 +179,8 @@ export default function AdminDashboard() {
 			{loading ? (
 				<TableLoadingSkeleton params={params} />
 			) : notesheets?.length ? (
-				<div className='bg-white rounded-xl w-full flex flex-col gap-12 '>
-					<div className='flex justify-around rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center'>
+				<div className='bg-white rounded-xl w-full h-[90%] overflow-auto flex flex-col gap-12 '>
+					<div className='flex justify-around min-w-[900px] rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center'>
 						<p className='w-1/12 p-3 rounded-xl'>No.</p>
 						<div className='w-5/12 max-w-[41.6667%] p-3 rounded-xl'>
 							<p

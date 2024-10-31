@@ -171,35 +171,25 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 
 		total = await notesheetModel.countDocuments({ raisedBy: id })
 	} else if (type === 'to-approve') {
-		if (user.role !== 'admin')
-			throw new AppError(
-				'You are not authorized to access this route',
-				403
-			)
-
-		notesheets = await notesheetModel
-			.find({ currentRequiredApproval: id })
-			.populate(populateOptions)
-			.sort({ [sortBy]: order })
-			.limit(limit)
-			.skip((page - 1) * limit)
+		if (user.role === 'admin')
+			notesheets = await notesheetModel
+				.find({ currentRequiredApproval: id })
+				.populate(populateOptions)
+				.sort({ [sortBy]: order })
+				.limit(limit)
+				.skip((page - 1) * limit)
 
 		total = await notesheetModel.countDocuments({
 			currentRequiredApproval: id,
 		})
 	} else if (type === 'approved') {
-		if (user.role !== 'admin')
-			throw new AppError(
-				'You are not authorized to access this route',
-				403
-			)
-
-		notesheets = await notesheetModel
-			.find({ 'status.passedApprovals': { $in: [id] } })
-			.populate(populateOptions)
-			.sort({ [sortBy]: order })
-			.limit(limit)
-			.skip((page - 1) * limit)
+		if (user.role === 'admin')
+			notesheets = await notesheetModel
+				.find({ 'status.passedApprovals': { $in: [id] } })
+				.populate(populateOptions)
+				.sort({ [sortBy]: order })
+				.limit(limit)
+				.skip((page - 1) * limit)
 
 		total = await notesheetModel.countDocuments({
 			passedApprovals: { $in: [id] },
