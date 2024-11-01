@@ -1,12 +1,12 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import { useDialog } from '@/contexts/DialogBoxContext'
-import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import NotesheetsTable from './NotesheetsTable'
 import TableLoadingSkeleton from './TableLoadingSkeleton'
 import Pagination from './Pagination'
 import NoNotesheets from './NoNotesheets'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useDialog } from '@/contexts/DialogBoxContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function UserDashboard() {
 	const { openDialog } = useDialog()
@@ -14,13 +14,14 @@ export default function UserDashboard() {
 	const [loading, setLoading] = useState(true)
 	const [notesheets, setNotesheets] = useState([])
 	const [totalPages, setTotalPages] = useState(0)
+	const { user } = useAuth()
 
 	const pathname = usePathname()
 	const searchparams = useSearchParams()
 	const params = new URLSearchParams(searchparams)
 	const { replace } = useRouter()
 
-	const getNotesheets = async () => {
+	const getNotesheets = async (params) => {
 		setLoading(true)
 		try {
 			const response = await axios.get(
@@ -45,8 +46,47 @@ export default function UserDashboard() {
 	}
 
 	useEffect(() => {
-		if (params.toString()) getNotesheets()
-	}, [params.toString()])
+		if (!user) return
+
+		const params = new URLSearchParams(searchparams)
+		let type
+		if (user.admin === 'adean') {
+			const types = ['approved', 'to-approve']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'to-approve'
+			}
+		} else if (user.role === 'admin') {
+			const types = ['approved', 'to-approve', 'raised']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'raised'
+			}
+		} else {
+			type = 'raised'
+		}
+		params.set('type', type)
+
+		const status = params.get('status')
+		const sortBy = params.get('sortBy') || 'raisedAt'
+		const order = params.get('order') || 'asc'
+		const page = params.get('page') || 1
+
+		const updatedParams = new URLSearchParams()
+		updatedParams.set('type', type)
+		if (status) updatedParams.set('status', status)
+		updatedParams.set('sortBy', sortBy)
+		updatedParams.set('order', order)
+		updatedParams.set('page', page)
+
+		replace(`${pathname}?${updatedParams.toString()}`)
+
+		console.log(params.toString())
+
+		getNotesheets(params)
+	}, [user, params.toString()])
 
 	const handleSort = (e) => {
 		console.log(e.target.innerText)

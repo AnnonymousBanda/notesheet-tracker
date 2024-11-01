@@ -20,7 +20,7 @@ export default function AdminDashboard() {
 	const params = new URLSearchParams(searchparams)
 	const { replace } = useRouter()
 
-	const getNotesheets = async () => {
+	const getNotesheets = async (params) => {
 		setLoading(true)
 		try {
 			const response = await axios.get(
@@ -45,8 +45,47 @@ export default function AdminDashboard() {
 	}
 
 	useEffect(() => {
-		if (params.toString()) getNotesheets()
-	}, [params.toString()])
+		if (!user) return
+
+		const params = new URLSearchParams(searchparams)
+		let type
+		if (user.admin === 'adean') {
+			const types = ['approved', 'to-approve']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'to-approve'
+			}
+		} else if (user.role === 'admin') {
+			const types = ['approved', 'to-approve', 'raised']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'raised'
+			}
+		} else {
+			type = 'raised'
+		}
+		params.set('type', type)
+
+		const status = params.get('status')
+		const sortBy = params.get('sortBy') || 'raisedAt'
+		const order = params.get('order') || 'asc'
+		const page = params.get('page') || 1
+
+		const updatedParams = new URLSearchParams()
+		updatedParams.set('type', type)
+		if (status) updatedParams.set('status', status)
+		updatedParams.set('sortBy', sortBy)
+		updatedParams.set('order', order)
+		updatedParams.set('page', page)
+
+		replace(`${pathname}?${updatedParams.toString()}`)
+
+		console.log(params.toString())
+
+		getNotesheets(params)
+	}, [user, params.toString()])
 
 	const handleSort = (e) => {
 		console.log(e.target.innerText)
@@ -100,7 +139,8 @@ export default function AdminDashboard() {
 								replace(`${pathname}?${params.toString()}`)
 							}}
 							className={`p-3 text-gray-700 ${
-								params.get('status') === 'pending'
+								params.get('status') === 'pending' &&
+								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
 							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
@@ -117,7 +157,8 @@ export default function AdminDashboard() {
 								replace(`${pathname}?${params.toString()}`)
 							}}
 							className={`p-3 text-gray-700 ${
-								params.get('status') === 'approved'
+								params.get('status') === 'approved' &&
+								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
 							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
@@ -134,7 +175,8 @@ export default function AdminDashboard() {
 								replace(`${pathname}?${params.toString()}`)
 							}}
 							className={`p-3 text-gray-700 ${
-								params.get('status') === 'rejected'
+								params.get('status') === 'rejected' &&
+								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
 							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
