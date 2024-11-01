@@ -151,6 +151,7 @@ const Profile = () => {
 					>
 						<LazyBlurImage
 							src='icons/change.png'
+							alt={'change name'}
 							width={30}
 							height={30}
 							rounded={false}
@@ -209,13 +210,13 @@ const Profile = () => {
 									<img
 										className='w-9'
 										src='/images/eye.svg'
-										alt=''
+										alt='show password'
 									/>
 								) : (
 									<img
 										className='w-9'
 										src='/images/eyeslash.svg'
-										alt=''
+										alt='show password'
 									/>
 								)}
 							</button>
@@ -247,13 +248,13 @@ const Profile = () => {
 									<img
 										className='w-9'
 										src='/images/eye.svg'
-										alt=''
+										alt='show password'
 									/>
 								) : (
 									<img
 										className='w-9'
 										src='/images/eyeslash.svg'
-										alt=''
+										alt='show password'
 									/>
 								)}
 							</button>
@@ -285,13 +286,13 @@ const Profile = () => {
 									<img
 										className='w-9'
 										src='/images/eye.svg'
-										alt=''
+										alt='show password'
 									/>
 								) : (
 									<img
 										className='w-9'
 										src='/images/eyeslash.svg'
-										alt=''
+										alt='show password'
 									/>
 								)}
 							</button>
@@ -304,6 +305,7 @@ const Profile = () => {
 					>
 						<LazyBlurImage
 							src='icons/change.png'
+							alt={'change password'}
 							width={30}
 							height={30}
 							rounded={false}
