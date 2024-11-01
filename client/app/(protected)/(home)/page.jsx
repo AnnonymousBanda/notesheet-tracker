@@ -19,11 +19,25 @@ const Dashboard = () => {
 		if (!user) return
 
 		const params = new URLSearchParams(searchparams)
-		const type = params.get('type')
-			? params.get('type')
-			: user?.admin === 'adean'
-				? 'to-approve'
-				: 'raised'
+		let type
+		if (user.admin === 'adean') {
+			const types = ['approved', 'to-approve']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'to-approve'
+			}
+		} else if (user.admin === 'admin') {
+			const types = ['approved', 'to-approve', 'raised']
+			if (types.includes(params.get('type'))) {
+				type = params.get('type')
+			} else {
+				type = 'raised'
+			}
+		} else {
+			type = 'raised'
+		}
+
 		const status = params.get('status')
 		const sortBy = params.get('sortBy') || 'raisedAt'
 		const order = params.get('order') || 'asc'
