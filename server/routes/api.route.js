@@ -15,9 +15,6 @@ const {
 	dynamicBlurImage,
 	getNotesheetById,
 	getNotesheetsByUserID,
-	// getRaisedNotesheetsByUserID,
-	// getNotesheetsToApproveByUserID,
-	// getNotesheetsApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,
@@ -34,23 +31,13 @@ router
 	.route('/notesheets/user/me')
 	.get(isAuthenticated, getUserID, getNotesheetsByUserID)
 
-// router
-// 	.route('/notesheet/raised/user/me')
-// 	.get(isAuthenticated, getUserID, getRaisedNotesheetsByUserID)
-// router
-// 	.route('/notesheet/to-approve/user/me')
-// 	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsToApproveByUserID)
-// router
-// 	.route('/notesheet/approved/user/me')
-// 	.get(isAuthenticated, isAdmin, getUserID, getNotesheetsApprovedByUserID)
-
 //notesheet-related CUD routes
 router
 	.route('/notesheet/create')
 	.post(isAuthenticated, getUserID, uploadPDF, createNotesheet)
 router
 	.route('/notesheet/approve')
-	.patch(isAuthenticated, isAdmin, getUserID, reuploadPDF, approveNotesheet)
+	.patch(isAuthenticated, isAdmin, getUserID, approveNotesheet)
 router
 	.route('/notesheet/reject')
 	.delete(isAuthenticated, isAdmin, getUserID, rejectNotesheet)

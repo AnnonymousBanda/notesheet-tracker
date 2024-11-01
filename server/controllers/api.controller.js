@@ -257,7 +257,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
-	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
+	// const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
 	const notesheet = await notesheetModel.findById(notesheetID)
 
@@ -279,7 +279,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
 
-	notesheet.pdf = pdf
+	// notesheet.pdf = pdf
 
 	await notesheet.save()
 
