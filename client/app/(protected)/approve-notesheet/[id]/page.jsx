@@ -41,7 +41,7 @@ export default function ApproveNotesheet() {
 			<iframe
 				src={notesheet?.pdf}
 				width='100%'
-				height="100%"
+				height='100%'
 				className='rounded-xl'
 			></iframe>
 		</div>
