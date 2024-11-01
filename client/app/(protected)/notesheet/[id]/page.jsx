@@ -50,32 +50,24 @@ export default function NoteSheet() {
 		getNotesheet()
 	}, [])
 
-	const handleApproval = async () => {
+	const handleApproval = async (notesheetID) => {
 		if (user.admin === 'adean') {
 			try {
-				const pdfurl = notesheet.pdf
-				const pdfresponse = await axios.get(pdfurl, {
-					responseType: 'blob',
-				})
-				const pdfblob = pdfresponse.data
-
-				const formdata = new FormData()
-				formdata.append('notesheetID', notesheetID)
-				formdata.append('pdfFile', pdfblob, notesheet.subject)
 				const response = await axios.patch(
 					'http://localhost:8000/api/notesheet/approve',
-					formdata,
+					{ notesheetID },
 					{
 						headers: {
-							'Content-Type': 'multipart/form-data',
+							'Content-Type': 'application/json',
 							authorization: `Bearer ${localStorage.getItem('jwt')}`,
 						},
 					}
 				)
 
-				console.log('success log', response.data)
+				openDialog(response.data.message)
+				setTimeout(() => window.location.reload(), 500)
 			} catch (error) {
-				openDialog(error.message)
+				openDialog(error.response?.data.message || error.message)
 			}
 		} else {
 			router.push(`/approve-notesheet/${notesheetID}`)
