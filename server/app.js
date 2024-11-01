@@ -9,7 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 // const xss = require('xss-clean')
 
 const configPassport = require('./config/oauth.config')
-const { apiRouter, authRouter, oauthRouter } = require('./routes')
+const { apiRouter, authRouter, oauthRouter, pdfRouter } = require('./routes')
 const {
 	globalErrorController,
 	notFound,
@@ -64,6 +64,7 @@ app.use(express.static('public'))
 app.use('/auth', authRouter)
 app.use('/oauth', oauthRouter)
 app.use('/api', apiRouter)
+app.use('/pdf', pdfRouter)
 
 app.use((req, res, next) => {
 	const custom404File = path.join(__dirname, 'public', '404.html')

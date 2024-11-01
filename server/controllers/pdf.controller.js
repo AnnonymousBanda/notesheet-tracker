@@ -16,7 +16,7 @@ const createPdfAsync = (html, filePath) => {
 	})
 }
 
-const createSign = catchAsync(async () => {
+const createSign = catchAsync(async (req, res) => {
 	const html = req.body.html
 	const filename = req.body.filename
 
@@ -25,19 +25,20 @@ const createSign = catchAsync(async () => {
 		'..',
 		'public',
 		'uploads',
-		`${filename}-sign.pdf`
+		`${filename.replace('.pdf', '-sign.pdf')}`
 	)
 
 	const result = await createPdfAsync(html, filePath)
-	console.log(result)
+
+	res.status(200).json({ message: 'PDF created successfully', result })
 })
 
-const mergeSign = catchAsync(async () => {
-	const file = req.body.file
+const mergeSign = catchAsync(async (req, res) => {
+	const filename = req.body.filename
 
-	const fileSign = file.replace('.pdf', '-sign.pdf')
-	const pdfPaths = [file, fileSign].map((pdfPath) =>
-		path.join(__dirname, '..', '..', 'client', 'public', 'uploads', pdfPath)
+	const filenameSign = filename.replace('.pdf', '-sign.pdf')
+	const pdfPaths = [filename, filenameSign].map((pdfPath) =>
+		path.join(__dirname, '..', 'public', 'uploads', pdfPath)
 	)
 
 	const mergedPdf = await PDFDocument.create()
@@ -52,14 +53,14 @@ const mergeSign = catchAsync(async () => {
 	}
 	const mergedPdfBytes = await mergedPdf.save()
 
-	removePDF(fileSign)
+	removePDF(filenameSign)
 
 	fs.writeFileSync(
-		path.join(__dirname, '..', 'public', 'uploads', file),
+		path.join(__dirname, '..', 'public', 'uploads', filename),
 		mergedPdfBytes
 	)
 
-	console.log(`PDFs merged to ${file}`)
+	res.status(200).json({ message: 'PDFs merged successfully', filename })
 })
 
 module.exports = { createSign, mergeSign }
