@@ -20,7 +20,7 @@ const createSign = catchAsync(async (req, res) => {
 	const html = req.body.html
 	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
 
-	console.log('Here')
+	console.log('Here ' + html)
 
 	const filePath = path.join(
 		__dirname,

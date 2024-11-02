@@ -1,6 +1,3 @@
-// import fs from 'fs'
-// import path from 'path'
-
 const formatDate = (date) => {
 	const newDate = new Date(date)
 	const options = {
@@ -24,28 +21,22 @@ const formatAmount = (amount) => {
 	return formatter.format(amount)
 }
 
-const html = (notesheet) =>
-	`
+const html = (currentRequiredApproval, passedApprovals) => {
+	console.log('Inside utils.js')
+	const HTML = `
 		${
-			notesheet.status.passedApprovals?.length
-				? notesheet.status.passedApprovals
+			passedApprovals?.length
+				? passedApprovals
 						.map(
 							(approval) => `<h2>Signed By: ${approval.name}</h2>`
 						)
 						.join('')
 				: ''
 		}
-		${
-			notesheet.status.currentApproval?.name
-				? `<h2>Signed By: ${notesheet.status.currentApproval.name}</h2>`
-				: ''
-		}
+		${currentRequiredApproval?.name ? `<h2>Signed By: ${currentRequiredApproval.name}</h2>` : ''}
 	`
 
-// const pdfExists = (filename) => {
-// 	const filePath = path.resolve('server', 'public', 'uploads', filename)
-
-// 	return fs.existsSync(filePath) && filePath.endsWith('.pdf')
-// }
+	return HTML
+}
 
 export { formatDate, formatAmount, html }

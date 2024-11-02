@@ -128,7 +128,10 @@ const createNotesheet = catchAsync(async (req, res) => {
 
 	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
-	await copyPdfFile(pdf, pdf.replace('.pdf', '-sign.pdf'))
+	await copyPdfFile(
+		req.file.filename,
+		req.file.filename.replace('.pdf', '-sign.pdf')
+	)
 
 	const user = await userModel.findById(raisedBy)
 

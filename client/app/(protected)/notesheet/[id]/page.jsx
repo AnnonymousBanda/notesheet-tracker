@@ -374,16 +374,6 @@ export default function NoteSheet() {
 						}`}
 					>
 						<iframe
-							// src={
-							// 	pdfExists(
-							// 		notesheet?.pdf.replace('.pdf', '-sign.pdf')
-							// 	)
-							// 		? notesheet?.pdf.replace(
-							// 				'.pdf',
-							// 				'-sign.pdf'
-							// 			)
-							// 		: notesheet?.pdf
-							// }
 							src={notesheet?.pdf.replace('.pdf', '-sign.pdf')}
 							width='100%'
 							height={500}
