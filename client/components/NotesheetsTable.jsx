@@ -3,7 +3,7 @@ import { LazyBlurImage } from './LazyBlurImage'
 import eye from '@/public/images/eye.svg'
 import download from '@/public/images/download.svg'
 import Image from 'next/image'
-import { formatDate } from '@/utils/utils'
+import { formatAmount, formatDate } from '@/utils/utils.js'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 
 export default function NotesheetsTable({ notesheets }) {
@@ -30,7 +30,7 @@ export default function NotesheetsTable({ notesheets }) {
 						{formatDate(notesheet?.raisedAt)}
 					</p>
 					<p className='w-1/12 p-3 rounded-xl'>
-						₹{notesheet?.amount}
+						{formatAmount(notesheet?.amount)}
 					</p>
 					{params.get('type') === 'to-approve' ||
 					params.get('type') === 'approved' ? (

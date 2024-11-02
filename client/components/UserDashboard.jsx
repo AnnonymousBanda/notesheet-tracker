@@ -71,7 +71,7 @@ export default function UserDashboard() {
 
 		const status = params.get('status')
 		const sortBy = params.get('sortBy') || 'raisedAt'
-		const order = params.get('order') || 'asc'
+		const order = params.get('order') || 'desc'
 		const page = params.get('page') || 1
 
 		const updatedParams = new URLSearchParams()

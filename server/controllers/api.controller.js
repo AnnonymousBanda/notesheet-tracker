@@ -4,12 +4,8 @@ const fsSync = require('fs')
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const {
-	saveImage,
-	populateOptions,
-	sendMail,
-	removePDF,
-} = require('../utils/api.util')
+const { saveImage, populateOptions, sendMail } = require('../utils/api.util')
+const { copyPdfFile } = require('../utils/pdf.util')
 const { AppError } = require('../controllers/error.controller')
 
 const getUserByID = catchAsync(async (req, res) => {
@@ -61,86 +57,6 @@ const getNotesheetById = catchAsync(async (req, res) => {
 		notesheet,
 	})
 })
-
-// const getRaisedNotesheetsByUserID = catchAsync(async (req, res) => {
-// 	const id = req.params.id
-// 	const status = req.query.status
-
-// 	const page = parseInt(req.query.page) || 1
-// 	const limit = 10
-// 	const sortBy = req.query.sortBy || 'raisedAt'
-// 	const order = req.query.order === 'desc' ? -1 : 1
-
-// 	const query = status
-// 		? { raisedBy: id, 'status.state': status }
-// 		: { raisedBy: id }
-// 	const notesheets = await notesheetModel
-// 		.find(query)
-// 		.sort({ [sortBy]: order })
-// 		.limit(limit)
-// 		.skip((page - 1) * limit)
-// 		.populate(populateOptions)
-
-// 	const total = await notesheetModel.countDocuments(query)
-
-// 	return res.status(200).json({
-// 		status: '200',
-// 		total,
-// 		notesheets,
-// 	})
-// })
-
-// const getNotesheetsToApproveByUserID = catchAsync(async (req, res) => {
-// 	const id = req.params.id
-
-// 	const page = parseInt(req.query.page) || 1
-// 	const limit = 10
-// 	const sortBy = req.query.sortBy || 'raisedAt'
-// 	const order = req.query.order === 'desc' ? -1 : 1
-
-// 	const notesheets = await notesheetModel
-// 		.find({ currentRequiredApproval: id })
-// 		.sort({ [sortBy]: order })
-// 		.limit(limit)
-// 		.skip((page - 1) * limit)
-// 		.populate(populateOptions)
-
-// 	const total = await notesheetModel.countDocuments({
-// 		currentRequiredApproval: id,
-// 	})
-
-// 	return res.status(200).json({
-// 		status: '200',
-// 		total,
-// 		notesheets,
-// 	})
-// })
-
-// const getNotesheetsApprovedByUserID = catchAsync(async (req, res) => {
-// 	const id = req.params.id
-
-// 	const page = parseInt(req.query.page) || 1
-// 	const limit = 10
-// 	const sortBy = req.query.sortBy || 'raisedAt'
-// 	const order = req.query.order === 'desc' ? -1 : 1
-
-// 	const notesheets = await notesheetModel
-// 		.find({ 'status.passedApprovals': { $in: [id] } })
-// 		.sort({ [sortBy]: order })
-// 		.limit(limit)
-// 		.skip((page - 1) * limit)
-// 		.populate(populateOptions)
-
-// 	const total = await notesheetModel.countDocuments({
-// 		passedApprovals: { $in: [id] },
-// 	})
-
-// 	return res.status(200).json({
-// 		status: '200',
-// 		total,
-// 		notesheets,
-// 	})
-// })
 
 const getNotesheetsByUserID = catchAsync(async (req, res) => {
 	const id = req.params.id
@@ -212,6 +128,8 @@ const createNotesheet = catchAsync(async (req, res) => {
 
 	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
+	await copyPdfFile(pdf, pdf.replace('.pdf', '-sign.pdf'))
+
 	const user = await userModel.findById(raisedBy)
 
 	if (!user)
@@ -257,7 +175,6 @@ const createNotesheet = catchAsync(async (req, res) => {
 const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
-	// const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
 
 	const notesheet = await notesheetModel.findById(notesheetID)
 
@@ -279,7 +196,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
 
-	// notesheet.pdf = pdf
+	notesheet.pdf = notesheet.pdf.replace('.pdf', '-sign.pdf')
 
 	await notesheet.save()
 
@@ -413,9 +330,6 @@ module.exports = {
 	downloadPDF,
 	getNotesheetById,
 	getNotesheetsByUserID,
-	// getRaisedNotesheetsByUserID,
-	// getNotesheetsToApproveByUserID,
-	// getNotesheetsApprovedByUserID,
 	createNotesheet,
 	approveNotesheet,
 	rejectNotesheet,

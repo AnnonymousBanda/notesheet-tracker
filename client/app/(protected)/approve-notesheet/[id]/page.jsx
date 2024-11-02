@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useDialog } from '@/contexts/DialogBoxContext'
 import axios from 'axios'
-import Loader from '@/components/Loader'
 import { useAuth } from '@/contexts/AuthContext'
+import { html } from '@/utils/utils.js'
+import PdfSkeleton from '@/components/PdfSkeleton'
+import { LazyBlurImage } from '@/components/LazyBlurImage'
 
 export default function ApproveNotesheet() {
 	const [notesheet, setNotesheet] = useState({})
@@ -45,7 +47,7 @@ export default function ApproveNotesheet() {
 				'http://localhost:8000/pdf/create-sign',
 				{
 					filename: notesheet.pdf.split('/').pop(),
-					html: `<div>Sign By ${user.name}</div>`,
+					html: html(notesheet),
 				},
 				{
 					headers: {
@@ -90,7 +92,13 @@ export default function ApproveNotesheet() {
 			)
 
 			openDialog(response.data.message)
-			setTimeout(() => window.location.reload(), 500)
+			setTimeout(
+				() =>
+					router.push(
+						`http://localhost:3000/notesheet/${notesheetID}`
+					),
+				1000
+			)
 		} catch (error) {
 			openDialog(error.response?.data.message || error.message)
 		}
@@ -104,21 +112,35 @@ export default function ApproveNotesheet() {
 		if (notesheet.pdf) {
 			console.log('Starting PDF signing and merging...')
 			signAndMergePdf()
-
-			approveNotesheet()
 		}
 	}, [notesheet.pdf])
 
-	return loading ? (
-		<Loader />
-	) : (
-		<div className='w-screen-md h-full mx-auto'>
-			<iframe
-				src={notesheet?.pdf}
-				width='100%'
-				height='100%'
-				className='rounded-xl'
-			></iframe>
+	return (
+		<div className='w-screen-md h-full mx-auto relative'>
+			{loading ? (
+				<PdfSkeleton />
+			) : (
+				<iframe
+					src={notesheet?.pdf?.replace('.pdf', '-sign.pdf')}
+					width='100%'
+					height='100%'
+					className='rounded-xl'
+				></iframe>
+			)}
+			{notesheet?.currentRequiredApproval?.id === user.id && (
+				<div
+					className='absolute bottom-0 right-[-50px]'
+					onClick={approveNotesheet}
+				>
+					<LazyBlurImage
+						src='icons/continue.png'
+						alt='Continue'
+						width={50}
+						height={50}
+						className='cursor-pointer bg-blue-400 p-[1rem]'
+					/>
+				</div>
+			)}
 		</div>
 	)
 }

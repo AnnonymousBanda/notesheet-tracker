@@ -18,7 +18,9 @@ const createPdfAsync = (html, filePath) => {
 
 const createSign = catchAsync(async (req, res) => {
 	const html = req.body.html
-	const filename = req.body.filename
+	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
+
+	console.log('Here')
 
 	const filePath = path.join(
 		__dirname,
@@ -34,7 +36,7 @@ const createSign = catchAsync(async (req, res) => {
 })
 
 const mergeSign = catchAsync(async (req, res) => {
-	const filename = req.body.filename
+	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
 
 	const filenameSign = filename.replace('.pdf', '-sign.pdf')
 	const pdfPaths = [filename, filenameSign].map((pdfPath) =>
@@ -53,10 +55,16 @@ const mergeSign = catchAsync(async (req, res) => {
 	}
 	const mergedPdfBytes = await mergedPdf.save()
 
-	removePDF(filenameSign)
+	// removePDF(filenameSign)
 
 	fs.writeFileSync(
-		path.join(__dirname, '..', 'public', 'uploads', filename),
+		path.join(
+			__dirname,
+			'..',
+			'public',
+			'uploads',
+			filename.replace('.pdf', '-sign.pdf')
+		),
 		mergedPdfBytes
 	)
 

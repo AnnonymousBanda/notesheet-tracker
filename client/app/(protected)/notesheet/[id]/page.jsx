@@ -9,7 +9,7 @@ import axios from 'axios'
 import NotesheetDetailsSkeleton from '@/components/NotesheetDetailsSkeleton'
 import Image from 'next/image'
 import PdfSkeleton from '@/components/PdfSkeleton'
-import { formatDate } from '@/utils/utils'
+import { formatAmount, formatDate, pdfExists } from '@/utils/utils.js'
 
 export default function NoteSheet() {
 	const [notesheet, setNotesheet] = useState({})
@@ -41,7 +41,6 @@ export default function NoteSheet() {
 			else setLoading(false)
 
 			setNotesheet(data.notesheet)
-			console.log(data.notesheet.status.passedApprovals)
 		} catch (error) {
 			openDialog(error.response.data.message)
 		}
@@ -75,7 +74,6 @@ export default function NoteSheet() {
 	}
 
 	const handleReject = async (notesheetID) => {
-		console.log(notesheetID)
 		try {
 			rejectButtonRef.current.style.opacity = '0.5'
 			const response = await axios.delete(
@@ -138,7 +136,7 @@ export default function NoteSheet() {
 						<p className='text-gray-500 font-bold text-[2rem]'>
 							Amount raised :{' '}
 							<span className='text-gray-700'>
-								₹{notesheet?.amount}
+								{formatAmount(notesheet?.amount)}
 							</span>
 						</p>
 
@@ -214,7 +212,13 @@ export default function NoteSheet() {
 										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
 											{notesheet?.status?.pendingApprovals.map(
 												(admin, index) => (
-													<div className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'>
+													<div
+														className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'
+														key={
+															notesheet._id +
+															index
+														}
+													>
 														{admin.picture ? (
 															<DynamicLazyBlurImage
 																src={
@@ -260,7 +264,13 @@ export default function NoteSheet() {
 										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
 											{notesheet?.status.passedApprovals.map(
 												(admin, index) => (
-													<div className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'>
+													<div
+														className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'
+														key={
+															notesheet._id +
+															index
+														}
+													>
 														{admin?.picture ? (
 															<DynamicLazyBlurImage
 																src={
@@ -352,7 +362,9 @@ export default function NoteSheet() {
 				)}
 
 				{loading ? (
-					<PdfSkeleton />
+					<div className='w-full h-[70rem]'>
+						<PdfSkeleton />
+					</div>
 				) : (
 					<div
 						className={`p-3 ${
@@ -362,7 +374,17 @@ export default function NoteSheet() {
 						}`}
 					>
 						<iframe
-							src={notesheet?.pdf}
+							// src={
+							// 	pdfExists(
+							// 		notesheet?.pdf.replace('.pdf', '-sign.pdf')
+							// 	)
+							// 		? notesheet?.pdf.replace(
+							// 				'.pdf',
+							// 				'-sign.pdf'
+							// 			)
+							// 		: notesheet?.pdf
+							// }
+							src={notesheet?.pdf.replace('.pdf', '-sign.pdf')}
 							width='100%'
 							height={500}
 							className='rounded-xl'
