@@ -1,4 +1,4 @@
-const signImages = require('./signature')
+const { signImages, iitplogo, stclogo } = require('./signature')
 
 const formatDate = (date) => {
 	const newDate = new Date(date)
