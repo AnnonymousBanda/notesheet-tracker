@@ -44,14 +44,18 @@ export default function ApproveNotesheet() {
 	const signAndMergePdf = async () => {
 		console.log(notesheet.status.currentRequiredApproval)
 		try {
+			const approvals = [
+				...notesheet.status.passedApprovals,
+				notesheet.status.currentRequiredApproval,
+			]
+
+			const pendingApprovals = notesheet.status.pendingApprovals
+
 			await axios.post(
 				'http://localhost:8000/pdf/create-sign',
 				{
 					filename: notesheet.pdf.split('/').pop(),
-					html: html(
-						notesheet.status.currentRequiredApproval,
-						...notesheet.status.passedApprovals.reverse()
-					),
+					html: html(approvals, pendingApprovals),
 				},
 				{
 					headers: {

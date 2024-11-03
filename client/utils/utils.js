@@ -23,8 +23,8 @@ const formatAmount = (amount) => {
 	return formatter.format(amount)
 }
 
-const html = (...authorities) => {
-	console.log('The authorities are\n\n\n\n', authorities)
+const html = (approvals, pendingApproval) => {
+	console.log(approvals, '\n', pendingApproval)
 
 	const HTML = `
     <!DOCTYPE html>
@@ -35,44 +35,63 @@ const html = (...authorities) => {
         <title>Document</title>
         <style>
             body {
-                margin: 0;
-                padding: 100px 0;
-                box-sizing: border-box;
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-            }
-            main {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 100px;
-            }
-            div {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-        
-            img {
-                width: 100px;
-                height: 100px;
-            }
-            p {
-                text-align: center;
-                font-size: 1.8rem;
-            }
+				margin: 0;
+				padding: 100px 100px;
+				box-sizing: border-box;
+				font-family: 'Gill Sans', 'Gill Sans MT', Calibri,
+					'Trebuchet MS', sans-serif;
+
+				width: 100vw;
+				height: 100vh;
+			}
+			main {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				align-items: flex-start;
+				gap: 80px;
+
+				width: 100%;
+			}
+			.container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0px;
+			}
+			img {
+				width: 100px;
+				height: 100px;
+				object-fit: contain;
+			}
+			.signature {
+				width: 100px;
+				height: 100px;
+			}
+			p {
+				text-align: center;
+				font-size: 1.4rem;
+				font-weight: 400;
+				padding: 0;
+				margin: 0;
+			}
         </style>
     </head>
     <body>
         <main>
-        ${authorities.map(
+        ${approvals.map(
 			(authority) =>
-				`<div>
-                <img src="${signImages[authority.admin]}" alt="Signature">
-                <p>${authority.name}, ${authority.admin}</p>
+				`<div class="container">
+            <img src="${signImages[authority.admin]}" alt="Signature">
+            <p>${authority.name}, ${authority.admin}</p>
+            </div>`
+		)}
+        
+        ${pendingApproval.map(
+			(authority) =>
+				`<div class="container">
+                    <div class="signature"></div>
+                    <p>${authority.name}, ${authority.admin}</p>
             </div>`
 		)}
         </main>
