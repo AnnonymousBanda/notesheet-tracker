@@ -56,7 +56,7 @@ export default function NotesheetsTable({ notesheets }) {
 					<p className='w-[14rem] p-3 rounded-xl flex justify-center gap-[2rem]'>
 						<a
 							onClick={(e) => e.stopPropagation()}
-							href={notesheet?.pdf.replace('.pdf', '-sign.pdf')}
+							href={notesheet?.pdf}
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -69,7 +69,7 @@ export default function NotesheetsTable({ notesheets }) {
 						</a>
 						<a
 							onClick={(e) => e.stopPropagation()}
-							href={`http://localhost:8000/api/download/notesheet/${notesheet?.pdf.split('/').pop().replace('.pdf', '-sign.pdf')}`}
+							href={`http://localhost:8000/api/download/notesheet/${notesheet?.pdf.split('/').pop()}`}
 							target='_blank'
 							download
 						>

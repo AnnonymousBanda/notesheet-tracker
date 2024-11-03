@@ -6,14 +6,14 @@ const { catchAsync } = require('../utils/error.util')
 
 const createSign = catchAsync(async (req, res) => {
 	const html = req.body.html
-	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
+	const filename = req.body.filename
 
 	const filePath = path.join(
 		__dirname,
 		'..',
 		'public',
 		'uploads',
-		`${filename.replace('.pdf', '-sign.pdf')}`
+		`${filename.replace('.pdf', '-sign-test.pdf')}`
 	)
 
 	const browser = await puppeteer.launch()
@@ -31,9 +31,9 @@ const createSign = catchAsync(async (req, res) => {
 })
 
 const mergeSign = catchAsync(async (req, res) => {
-	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
+	const filename = req.body.filename.replace('.pdf', '-sign.pdf')
 
-	const filenameSign = filename.replace('.pdf', '-sign.pdf')
+	const filenameSign = req.body.filename.replace('.pdf', '-sign-test.pdf')
 	const pdfPaths = [filename, filenameSign].map((pdfPath) =>
 		path.join(__dirname, '..', 'public', 'uploads', pdfPath)
 	)
@@ -53,13 +53,7 @@ const mergeSign = catchAsync(async (req, res) => {
 	// removePDF(filenameSign)
 
 	fs.writeFileSync(
-		path.join(
-			__dirname,
-			'..',
-			'public',
-			'uploads',
-			filename.replace('.pdf', '-sign.pdf')
-		),
+		path.join(__dirname, '..', 'public', 'uploads', filenameSign),
 		mergedPdfBytes
 	)
 

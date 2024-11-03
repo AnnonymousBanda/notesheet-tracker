@@ -95,6 +95,18 @@ const removePDF = async (filename) => {
 	}
 }
 
+const renamePDF = async (oldFilename, newFilename) => {
+	const oldPath = path.join(__dirname, '..', 'public', 'uploads', oldFilename)
+	const newPath = path.join(__dirname, '..', 'public', 'uploads', newFilename)
+
+	try {
+		await fs.rename(oldPath, newPath)
+		console.log('File renamed successfully')
+	} catch (err) {
+		console.error('Error renaming file:', err)
+	}
+}
+
 module.exports = {
 	saveImage,
 	populateOptions,
@@ -102,4 +114,5 @@ module.exports = {
 	hierarchyMantained,
 	rejectExpiredNotesheet,
 	removePDF,
+	renamePDF,
 }

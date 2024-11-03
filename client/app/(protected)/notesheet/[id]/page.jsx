@@ -63,7 +63,7 @@ export default function NoteSheet() {
 				)
 
 				openDialog(response.data.message)
-				setTimeout(() => window.location.reload(), 500)
+				setTimeout(() => window.location.reload(), 250)
 			} catch (error) {
 				openDialog(error.response?.data.message || error.message)
 			}
@@ -373,7 +373,7 @@ export default function NoteSheet() {
 						}`}
 					>
 						<iframe
-							src={notesheet?.pdf.replace('.pdf', '-sign.pdf')}
+							src={notesheet?.pdf}
 							width='100%'
 							height={500}
 							className='rounded-xl'

@@ -4,7 +4,13 @@ const fsSync = require('fs')
 
 const { userModel, notesheetModel } = require('../models')
 const { catchAsync } = require('../utils/error.util')
-const { saveImage, populateOptions, sendMail } = require('../utils/api.util')
+const {
+	saveImage,
+	populateOptions,
+	sendMail,
+	removePDF,
+	renamePDF,
+} = require('../utils/api.util')
 const { copyPdfFile } = require('../utils/pdf.util')
 const { AppError } = require('../controllers/error.controller')
 
@@ -199,7 +205,18 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
 
-	notesheet.pdf = notesheet.pdf.replace('.pdf', '-sign.pdf')
+	if (user.admin === 'adean') {
+		await removePDF(
+			notesheet.pdf.split('/').pop().replace('.pdf', '-sign.pdf')
+		)
+	} else {
+		await removePDF(notesheet.pdf.split('/').pop())
+
+		await renamePDF(
+			notesheet.pdf.split('/').pop().replace('.pdf', '-sign-test.pdf'),
+			notesheet.pdf.split('/').pop()
+		)
+	}
 
 	await notesheet.save()
 

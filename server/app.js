@@ -56,8 +56,8 @@ app.use(limiter)
 app.use(passport.initialize())
 configPassport(passport)
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json({ limit: '1mb' }))
+app.use(express.urlencoded({ extended: true, limit: '1mb' }))
 
 app.use(express.static('public'))
 

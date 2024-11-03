@@ -101,7 +101,7 @@ export default function ApproveNotesheet() {
 					router.push(
 						`http://localhost:3000/notesheet/${notesheetID}`
 					),
-				1000
+				250
 			)
 		} catch (error) {
 			openDialog(error.response?.data.message || error.message)
@@ -125,7 +125,7 @@ export default function ApproveNotesheet() {
 				<PdfSkeleton />
 			) : (
 				<iframe
-					src={notesheet?.pdf?.replace('.pdf', '-sign.pdf')}
+					src={notesheet?.pdf?.replace('.pdf', '-sign-test.pdf')}
 					width='100%'
 					height='100%'
 					className='rounded-xl'
