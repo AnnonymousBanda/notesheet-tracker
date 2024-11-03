@@ -51,7 +51,7 @@ app.use(helmetConfig)
 app.use(mongoSanitize())
 app.use(limiter)
 
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 
 app.use(passport.initialize())
 configPassport(passport)

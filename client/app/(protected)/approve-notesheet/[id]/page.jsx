@@ -50,7 +50,7 @@ export default function ApproveNotesheet() {
 					filename: notesheet.pdf.split('/').pop(),
 					html: html(
 						notesheet.status.currentRequiredApproval,
-						notesheet.status.passedApprovals
+						...notesheet.status.passedApprovals.reverse()
 					),
 				},
 				{

@@ -4,13 +4,16 @@ const { PDFDocument } = require('pdf-lib')
 const path = require('path')
 const { catchAsync } = require('../utils/error.util')
 
-const createSign = catchAsync(async (html, filename) => {
+const createSign = catchAsync(async (req, res) => {
+	const html = req.body.html
+	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
+
 	const filePath = path.join(
 		__dirname,
 		'..',
 		'public',
 		'uploads',
-		`${filename}-sign.pdf`
+		`${filename.replace('.pdf', '-sign.pdf')}`
 	)
 
 	const browser = await puppeteer.launch()
@@ -24,6 +27,7 @@ const createSign = catchAsync(async (html, filename) => {
 
 	await browser.close()
 	console.log(`PDF created at ${filePath}`)
+	res.status(200).json({ message: 'PDF signed successfully', filename })
 })
 
 const mergeSign = catchAsync(async (req, res) => {

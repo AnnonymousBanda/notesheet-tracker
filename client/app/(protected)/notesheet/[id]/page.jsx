@@ -1,15 +1,14 @@
 'use client'
 import { DynamicLazyBlurImage, LazyBlurImage } from '@/components/LazyBlurImage'
-import Loader from '@/components/Loader'
 import { useAuth } from '@/contexts/AuthContext'
 import { useDialog } from '@/contexts/DialogBoxContext'
 import { useParams, useRouter } from 'next/navigation'
-import { Suspense, useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import NotesheetDetailsSkeleton from '@/components/NotesheetDetailsSkeleton'
 import Image from 'next/image'
 import PdfSkeleton from '@/components/PdfSkeleton'
-import { formatAmount, formatDate, pdfExists } from '@/utils/utils.js'
+import { formatAmount, formatDate } from '@/utils/utils.js'
 
 export default function NoteSheet() {
 	const [notesheet, setNotesheet] = useState({})
