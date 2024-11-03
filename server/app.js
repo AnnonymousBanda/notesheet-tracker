@@ -4,7 +4,6 @@ const cors = require('cors')
 const morgan = require('morgan')
 const passport = require('passport')
 const helmet = require('helmet')
-const rateLimit = require('express-rate-limit')
 const mongoSanitize = require('express-mongo-sanitize')
 // const xss = require('xss-clean')
 
@@ -39,17 +38,10 @@ const helmetConfig = helmet.contentSecurityPolicy({
 	},
 })
 
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	max: 1000,
-	message: 'Too many requests from this IP, please try again later.',
-})
-
 app.use(cors(corsOptions))
 app.use(helmet())
 app.use(helmetConfig)
 app.use(mongoSanitize())
-app.use(limiter)
 
 // app.use(morgan('dev'))
 
