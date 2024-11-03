@@ -34,9 +34,9 @@ const html = (approvals, pendingApproval) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <style>
-            body {
+			body {
 				margin: 0;
-				padding: 100px 100px;
+				padding: 20px;
 				box-sizing: border-box;
 				font-family: 'Gill Sans', 'Gill Sans MT', Calibri,
 					'Trebuchet MS', sans-serif;
@@ -44,7 +44,31 @@ const html = (approvals, pendingApproval) => {
 				width: 100vw;
 				height: 100vh;
 			}
+			.header-container {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 10px 20px;
+				border-bottom: 3px solid black;
+			}
+			.header-container img {
+				height: 80px;
+			}
+			.center-text {
+				text-align: center;
+				font-size: 14px;
+				font-weight: 400;
+			}
+			.center-text p {
+				margin: 5px 0;
+			}
+			.contact-info {
+				text-align: right;
+				font-size: 14px;
+				font-weight: normal;
+			}
 			main {
+				padding: 80px 0px;
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
@@ -59,7 +83,7 @@ const html = (approvals, pendingApproval) => {
 				align-items: center;
 				gap: 0px;
 			}
-			img {
+			.container img {
 				width: 100px;
 				height: 100px;
 				object-fit: contain;
@@ -68,37 +92,47 @@ const html = (approvals, pendingApproval) => {
 				width: 100px;
 				height: 100px;
 			}
-			p {
+			.container p {
 				text-align: center;
 				font-size: 1.4rem;
 				font-weight: 400;
 				padding: 0;
 				margin: 0;
 			}
-        </style>
+		</style>
     </head>
     <body>
+		<header class="header-container">
+			<img src="${iitplogo}" alt="Left Logo" />
+			<div class="center-text">
+				<p>INDIAN INSTITUTE OF TECHNOLOGY PATNA</p>
+				<p>Students’ Technical Council</p>
+				<p>Patna, India – 801 103</p>
+			</div>
+			<div class="contact-info">
+				<p>Tel. (+91) 6115 233785</p>
+			</div>
+			<img src="${stclogo}" alt="Right Logo" />
+		</header>
         <main>
         ${approvals.map(
 			(authority) =>
 				`<div class="container">
-            <img src="${signImages[authority.admin]}" alt="Signature">
-            <p>${authority.name}, ${authority.admin}</p>
+                    <img src="${signImages[authority.admin]}" alt="Signature">
+                    <p>${authority.name}, ${authority.admin}</p>
             </div>`
 		)}
-        
+
         ${pendingApproval.map(
 			(authority) =>
 				`<div class="container">
                     <div class="signature"></div>
                     <p>${authority.name}, ${authority.admin}</p>
-            </div>`
+			</div>`
 		)}
         </main>
     </body>
     </html>`
-
-	console.log('The HTML is\n\n\n\n', HTML)
 
 	return HTML
 }
