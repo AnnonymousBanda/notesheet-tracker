@@ -1,38 +1,29 @@
 const fs = require('fs')
+const puppeteer = require('puppeteer')
 const { PDFDocument } = require('pdf-lib')
-const pdf = require('html-pdf')
 const path = require('path')
-const { removePDF } = require('./../utils/api.util')
 const { catchAsync } = require('../utils/error.util')
 
-const createPdfAsync = (html, filePath) => {
-	return new Promise((resolve, reject) => {
-		pdf.create(html).toFile(filePath, (err, res) => {
-			if (err) {
-				return reject(err)
-			}
-			resolve(res)
-		})
-	})
-}
-
-const createSign = catchAsync(async (req, res) => {
-	const html = req.body.html
-	const filename = req.body.filename.replace('-sign.pdf', '.pdf')
-
-	console.log('Here ' + html)
-
+const createSign = catchAsync(async (html, filename) => {
 	const filePath = path.join(
 		__dirname,
 		'..',
 		'public',
 		'uploads',
-		`${filename.replace('.pdf', '-sign.pdf')}`
+		`${filename}-sign.pdf`
 	)
 
-	const result = await createPdfAsync(html, filePath)
+	const browser = await puppeteer.launch()
+	const page = await browser.newPage()
+	await page.setContent(html, { waitUntil: 'networkidle0' })
+	await page.pdf({
+		path: filePath,
+		format: 'A4',
+		printBackground: true,
+	})
 
-	res.status(200).json({ message: 'PDF created successfully', result })
+	await browser.close()
+	console.log(`PDF created at ${filePath}`)
 })
 
 const mergeSign = catchAsync(async (req, res) => {
