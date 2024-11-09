@@ -114,7 +114,7 @@ export default function NoteSheet() {
 							<p className='text-gray-500 font-bold text-[2rem] min-w-fit'>
 								Subject :
 							</p>
-							<p className='text-gray-700 font-bold'>
+							<p className='text-gray-700 text-[2rem] font-bold'>
 								{notesheet?.subject}
 							</p>
 						</div>
@@ -122,7 +122,7 @@ export default function NoteSheet() {
 							<p className='text-gray-500 font-bold text-[2rem]'>
 								Raised At :
 							</p>
-							<p className='text-gray-700 font-bold'>
+							<p className='text-gray-700 text-[2rem] font-bold'>
 								{formatDate(notesheet?.raisedAt)}
 							</p>
 						</div>
@@ -141,7 +141,7 @@ export default function NoteSheet() {
 
 						{!(notesheet?.status?.state === 'rejected') && (
 							<>
-								<div className='flex gap-[1rem]'>
+								<div className='flex gap-[1rem] flex-wrap'>
 									<p className='text-gray-500 font-bold text-[2rem]'>
 										Current Required Approval :{' '}
 									</p>
@@ -155,7 +155,7 @@ export default function NoteSheet() {
 										/>
 									) : (
 										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
-											<div className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'>
+											<div className='flex items-center gap-2 text-[2rem] bg-gray-200 px-4 rounded-lg'>
 												{notesheet.status
 													.currentRequiredApproval
 													.picture ? (
@@ -188,7 +188,7 @@ export default function NoteSheet() {
 													/>
 												)}
 												<p>
-													{notesheet?.status?.currentRequiredApproval.name.toUpperCase()}
+													{notesheet?.status?.currentRequiredApproval.name}
 												</p>
 											</div>
 										</div>
@@ -208,11 +208,11 @@ export default function NoteSheet() {
 											height={30}
 										/>
 									) : (
-										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
+										<div className='text-gray-700 font-bold text-[2rem] flex flex-wrap gap-3'>
 											{notesheet?.status?.pendingApprovals.map(
 												(admin, index) => (
 													<div
-														className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'
+														className='flex items-center gap-2 text-[2rem] bg-gray-200 px-4 rounded-lg'
 														key={
 															notesheet._id +
 															index
@@ -238,7 +238,7 @@ export default function NoteSheet() {
 															/>
 														)}
 														<p>
-															{admin.name.toUpperCase()}
+															{admin.name}
 														</p>
 													</div>
 												)
@@ -247,7 +247,7 @@ export default function NoteSheet() {
 									)}
 								</div>
 
-								<div className='flex gap-[1rem]'>
+								<div className='flex gap-[1rem] flex-wrap'>
 									<p className='text-gray-500 font-bold text-[2rem]'>
 										Past Approvals :{' '}
 									</p>
@@ -260,11 +260,11 @@ export default function NoteSheet() {
 											height={30}
 										/>
 									) : (
-										<div className='text-gray-700 font-bold text-[2rem] flex gap-3'>
+										<div className='text-gray-700 font-bold text-[2rem] flex flex-wrap gap-3'>
 											{notesheet?.status.passedApprovals.map(
 												(admin, index) => (
 													<div
-														className='flex items-center gap-2 bg-gray-200 px-4 rounded-lg'
+														className='flex justify-center items-center text-[2rem] gap-2 bg-gray-200 px-4 rounded-lg h-[3rem]'
 														key={
 															notesheet._id +
 															index
@@ -299,10 +299,11 @@ export default function NoteSheet() {
 							</>
 						)}
 
-						<div className='flex gap-[1rem] items-center'>
+						<div className='flex gap-[1rem] items-center flex-wrap'>
 							<p className='text-gray-500 font-bold text-[2rem]'>
 								Status :
 							</p>
+							<divc className="flex justify-center gap-[0.5rem] items-center">
 							<LazyBlurImage
 								src={`icons/${notesheet?.status?.state}.png`}
 								alt={`${notesheet?.status?.state} icon`}
@@ -322,16 +323,24 @@ export default function NoteSheet() {
 								}
 							>
 								{notesheet?.status?.state.toUpperCase()}
-							</p>
+							</p></divc>
 						</div>
 
 						{notesheet?.status?.state === 'rejected' && (
 							<>
 								<div className='flex gap-[1rem] items-center max-w-full flex-wrap'>
 									<p className='text-gray-500 font-bold text-[2rem] min-w-fit'>
+										Rejected by :
+									</p>
+									<p className='text-gray-700 text-[2rem] font-bold'>
+										{notesheet?.status?.rejectedBy?.admin?.name}
+									</p>
+								</div>
+								<div className='flex gap-[1rem] items-center max-w-full flex-wrap'>
+									<p className='text-gray-500 font-bold text-[2rem] min-w-fit'>
 										Action Required :
 									</p>
-									<p className='text-gray-700 font-bold'>
+									<p className='text-gray-700 text-[2rem] font-bold'>
 										{notesheet?.status?.rejectedBy?.comment}
 									</p>
 								</div>
@@ -339,7 +348,7 @@ export default function NoteSheet() {
 									<p className='text-gray-500 font-bold text-[2rem]'>
 										Rejected At :
 									</p>
-									<p className='text-gray-700 font-bold'>
+									<p className='text-gray-700 text-[2rem] font-bold'>
 										{formatDate(notesheet?.rejectedAt)}
 									</p>
 								</div>
@@ -353,7 +362,7 @@ export default function NoteSheet() {
 									? 'Expired At :'
 									: 'Expires At :'}
 							</p>
-							<p className='text-gray-700 font-bold'>
+							<p className='text-gray-700 text-[2rem] font-bold'>
 								{formatDate(notesheet?.expiresAt)}
 							</p>
 						</div>
