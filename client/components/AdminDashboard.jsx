@@ -82,8 +82,6 @@ export default function AdminDashboard() {
 
 		replace(`${pathname}?${updatedParams.toString()}`)
 
-		console.log(params.toString())
-
 		getNotesheets(params)
 	}, [user, params.toString()])
 
@@ -112,7 +110,7 @@ export default function AdminDashboard() {
 
 	return (
 		<div className='flex h-full flex-col gap-[3rem] overflow-hidden'>
-			<div className='flex gap-10 w-full justify-center flex-wrap'>
+			<div className='flex gap-[1rem] md:gap-10 w-full justify-center items-center flex-wrap'>
 				{user?.admin === 'adean' ? null : (
 					<>
 						<div
@@ -127,9 +125,9 @@ export default function AdminDashboard() {
 								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
-							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 						>
-							<p className='font-semibold  text-[2rem]'>ALL</p>
+							<p className='font-semibold text-[1.2rem] md:text-[2rem]'>ALL</p>
 						</div>
 						<div
 							onClick={() => {
@@ -143,9 +141,9 @@ export default function AdminDashboard() {
 								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
-							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 						>
-							<p className='font-semibold  text-[2rem]'>
+							<p className='font-semibold text-[1.2rem] md:text-[2rem]'>
 								PENDING
 							</p>
 						</div>
@@ -161,9 +159,9 @@ export default function AdminDashboard() {
 								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
-							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 						>
-							<p className='font-semibold  text-[2rem]'>
+							<p className='font-semibold text-[1.2rem] md:text-[2rem]'>
 								APPROVED
 							</p>
 						</div>
@@ -179,9 +177,9 @@ export default function AdminDashboard() {
 								params.get('type') === 'raised'
 									? 'bg-gray-400'
 									: 'bg-gray-300'
-							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+							}  cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 						>
-							<p className='font-semibold  text-[2rem]'>
+							<p className='font-semibold text-[1.2rem] md:text-[2rem]'>
 								REJECTED
 							</p>
 						</div>
@@ -198,9 +196,9 @@ export default function AdminDashboard() {
 						params.get('type') === 'to-approve'
 							? 'bg-gray-400'
 							: 'bg-gray-300'
-					} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+					} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 				>
-					<p className='font-semibold  text-[2rem]'>TO APPROVE</p>
+					<p className='font-semibold text-[1.2rem] md:text-[2rem]'>TO APPROVE</p>
 				</div>
 				<div
 					onClick={() => {
@@ -213,9 +211,9 @@ export default function AdminDashboard() {
 						params.get('type') === 'approved'
 							? 'bg-gray-400'
 							: 'bg-gray-300'
-					} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[18rem] text-center rounded-xl`}
+					} cursor-pointer hover:bg-gray-400 transition-all duration-500 w-[12rem] md:w-[18rem] text-center rounded-xl`}
 				>
-					<p className='font-semibold  text-[2rem]'>APPROVED BY ME</p>
+					<p className='font-semibold text-[1.2rem] md:text-[2rem]'>APPROVED BY ME</p>
 				</div>
 			</div>
 			{loading ? (
