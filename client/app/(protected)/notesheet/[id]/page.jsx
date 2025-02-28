@@ -355,16 +355,16 @@ export default function NoteSheet() {
 							</>
 						)}
 
-						<div className='flex gap-[1rem] items-center'>
+						{notesheet?.status?.state === 'rejected' || notesheet?.status?.state === 'approved' ? null : <div className='flex gap-[1rem] items-center'>
 							<p className='text-gray-500 font-bold text-[2rem]'>
-								{Date.now() > new Date(notesheet?.rejectedAt)
+								{Date.now() > new Date(notesheet?.expiresAt)
 									? 'Expired on :'
 									: 'Expires on :'}
 							</p>
 							<p className='text-gray-700 text-[2rem] font-bold'>
 								{formatDate(notesheet?.expiresAt)}
 							</p>
-						</div>
+						</div>}
 					</div>
 				)}
 
