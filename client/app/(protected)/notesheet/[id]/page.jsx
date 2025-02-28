@@ -120,7 +120,7 @@ export default function NoteSheet() {
 						</div>
 						<div className='flex gap-[1rem] items-center'>
 							<p className='text-gray-500 font-bold text-[2rem]'>
-								Raised At :
+								Raised on :
 							</p>
 							<p className='text-gray-700 text-[2rem] font-bold'>
 								{formatDate(notesheet?.raisedAt)}
@@ -346,7 +346,7 @@ export default function NoteSheet() {
 								</div>
 								<div className='flex gap-[1rem] items-center'>
 									<p className='text-gray-500 font-bold text-[2rem]'>
-										Rejected At :
+										Rejected on :
 									</p>
 									<p className='text-gray-700 text-[2rem] font-bold'>
 										{formatDate(notesheet?.rejectedAt)}
@@ -357,10 +357,9 @@ export default function NoteSheet() {
 
 						<div className='flex gap-[1rem] items-center'>
 							<p className='text-gray-500 font-bold text-[2rem]'>
-								{notesheet?.status?.comment ===
-								'Notesheet expired! Please raise a new notesheet.'
-									? 'Expired At :'
-									: 'Expires At :'}
+								{Date.now() > new Date(notesheet?.rejectedAt)
+									? 'Expired on :'
+									: 'Expires on :'}
 							</p>
 							<p className='text-gray-700 text-[2rem] font-bold'>
 								{formatDate(notesheet?.expiresAt)}
@@ -376,7 +375,7 @@ export default function NoteSheet() {
 				) : (
 					<div
 						className={`p-3 ${
-							Date.now() > (notesheet?.expiresAt ?? Infinity)
+							Date.now() > (new Date(notesheet?.expiresAt))
 								? 'hidden'
 								: 'block'
 						}`}
