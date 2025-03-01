@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
-const { hierarchyMantained } = require('../utils/api.util')
 const { AppError } = require('../controllers/error.controller')
+const userModel = require('./user.model')
 
 const notesheetSchema = new Schema({
 	subject: {
@@ -50,12 +50,12 @@ const notesheetSchema = new Schema({
 	requiredApprovals: {
 		type: [Schema.Types.ObjectId],
 		ref: 'User',
-		validate: {
-			validator: function () {
-				return hierarchyMantained(this.requiredApprovals)
-			},
-			message: 'Hierarchy for notesheet approval is not maintained',
-		},
+		// validate: {
+		// 	validator: function (value) {
+		// 		return hierarchyMantained(value).then((result) => result)
+		// 	},
+		// 	message: 'Hierarchy for notesheet approval is not maintained',
+		// },
 	},
 	currentRequiredApproval: {
 		type: Schema.Types.ObjectId,
@@ -99,7 +99,18 @@ const notesheetSchema = new Schema({
 	},
 })
 
-notesheetSchema.pre('save', function (next) {
+notesheetSchema.pre('save', async function (next) {
+	if (!(await hierarchyMantained(this.requiredApprovals))) {
+		console.log('Hierarchy not maintained')
+
+		return next(
+			new AppError(
+				'Hierarchy for notesheet approval is not maintained',
+				400
+			)
+		)
+	}
+
 	if (this.status.rejectedBy.admin) {
 		this.currentRequiredApproval = null
 		this.status.currentRequiredApproval = null
@@ -147,4 +158,23 @@ function getNextMidnight(daysToAdd) {
 	)
 	midnight.setHours(0, 0, 0, 0)
 	return midnight
+}
+
+async function hierarchyMantained(requiredApprovals) {
+	const hierarchy = process.env.HIERARCHY?.split(',')
+
+	if (requiredApprovals.length === 0) return false
+
+	let temp = []
+	for (let i = 0; i < requiredApprovals.length; i++) {
+		temp.push((await userModel.findById(requiredApprovals[i])).email)
+	}
+
+	for (let i = 0; i < hierarchy?.length && temp.length != 0; i++) {
+		if (temp[0] === hierarchy[i]) {
+			temp.shift()
+		}
+	}
+
+	return temp.length === 0
 }

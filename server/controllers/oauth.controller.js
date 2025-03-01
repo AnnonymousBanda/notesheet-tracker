@@ -23,6 +23,12 @@ const oauthCallback = catchAsync(async (req, res) => {
 	let name = req.user.profile.displayName
 	picture = null //retrive picture
 
+	const allowedUsers = process.env.ALLOWED_USERS.split(',')
+
+	if (!allowedUsers.includes(email)) {
+		return res.redirect(`${process.env.CLIENT_URL}/auth/unauthenticated`)
+	}
+
 	let user = await userModel.findOne({ email })
 
 	if (!user) {
@@ -43,7 +49,7 @@ const oauthCallback = catchAsync(async (req, res) => {
 const failure = catchAsync(async (req, res) => {
 	return res.status(401).json({
 		status: 401,
-		message: 'Authentication failed',
+		message: `Authentication failed! Try again ${process.env.CLIENT_URL}/auth/login`,
 	})
 })
 

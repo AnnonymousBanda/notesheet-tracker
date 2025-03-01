@@ -155,6 +155,8 @@ const createNotesheet = catchAsync(async (req, res) => {
 		admin: { $in: requiredApprovals },
 	})
 
+	console.log(users)
+
 	if (!users) throw new AppError('Required approvals not found', 404)
 
 	if (users.length !== requiredApprovals.length) {

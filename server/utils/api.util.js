@@ -3,6 +3,7 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 
 const { catchAsync } = require('./error.util')
+// const { userModel } = require('../models')
 
 const saveImage = async (base64, destPath) => {
 	const base64Data = base64.replace(/^data:image\/\w+;base64,/, '')
@@ -84,11 +85,29 @@ const sendMail = catchAsync(async (to, subject, htmlMessage) => {
 	}
 })
 
-const hierarchyMantained = (requiredApprovals) => {
-	if (requiredApprovals.length === 0) return false
+// const hierarchyMantained = (requiredApprovals) => {
+// 	// const hierarchy = process.env.HIERARCHY?.split(',')
 
-	return true
-}
+// 	// console.log('Required Approvals:', requiredApprovals)
+// 	// console.log('Hierarchy:', hierarchy)
+
+// 	// if (requiredApprovals.length === 0) return false
+
+// 	// let temp = requiredApprovals //[]
+// 	// // for (let i = 0; i < requiredApprovals.length; i++) {
+// 	// // 	temp.push((await userModel.findById(requiredApprovals[i])).email)
+// 	// // }
+
+// 	// for (let i = 0; i < hierarchy?.length && temp.length != 0; i++) {
+// 	// 	if (temp[0] == hierarchy[i]) {
+// 	// 		temp.shift()
+// 	// 	}
+// 	// }
+
+// 	// return !temp.length
+// 	console.log('Hierarchy maintained')
+// 	return true
+// }
 
 const rejectExpiredNotesheet = catchAsync(async () => {
 	const notesheets = await notesheetModel
@@ -176,11 +195,29 @@ const formatDate = (date) => {
 	return `${day}-${month}-${year}`
 }
 
+// sendMail(
+// 	'vinay_2301me80@iitp.ac.in',
+// 	'Notesheet Raised Successfully',
+// 	`
+// 	<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+// 	  <h2 style="color: #004085;">Notesheet Raised Successfully</h2>
+// 	  <p>Dear Vinay,</p>
+// 	  <p>Your notesheet has been raised successfully. You can track its progress using the link below:</p>
+// 	  <p><a href="${process.env.CLIENT_URL}/notesheet/" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
+// 	  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(new Date())}</strong>. Please ensure all approvals are completed before this date.</p>
+// 	  <br/>
+// 	  <p>Thank you,</p>
+// 	  <p><strong>Team STC</strong></p>
+// 	  <p>Indian Institute of Technology Patna</p>
+// 	</div>
+// 	`
+// )
+
 module.exports = {
 	saveImage,
 	populateOptions,
 	sendMail,
-	hierarchyMantained,
+	// hierarchyMantained,
 	rejectExpiredNotesheet,
 	removePDF,
 	renamePDF,
