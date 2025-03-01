@@ -66,8 +66,6 @@ export default function AdminDashboard() {
     } else {
       type = "raised";
     }
-    params.set("type", type);
-
     const status = params.get("status");
     const sortBy = params.get("sortBy") || "raisedAt";
     const order = params.get("order") || "desc";

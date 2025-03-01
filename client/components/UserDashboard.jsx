@@ -67,8 +67,6 @@ export default function UserDashboard() {
     } else {
       type = "raised";
     }
-    params.set("type", type);
-
     const status = params.get("status");
     const sortBy = params.get("sortBy") || "raisedAt";
     const order = params.get("order") || "desc";
@@ -82,9 +80,6 @@ export default function UserDashboard() {
     updatedParams.set("page", page);
 
     replace(`${pathname}?${updatedParams.toString()}`);
-
-    console.log(params.toString());
-
     getNotesheets(params);
   }, [user, params.toString()]);
 
