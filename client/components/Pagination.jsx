@@ -47,7 +47,7 @@ export default function Pagination({total}) {
     ));
 
   return (
-    <div className={`w-full ${totalPages === 0 ? "hidden" : "flex"} justify-center absolute bottom-8`}>
+    <div className={`w-fit ${totalPages === 0 ? "hidden" : "flex"} justify-center absolute bottom-8 left-[50%] translate-x-[-50%]`}>
       <div className="flex gap-[1rem] bg-white w-fit rounded-full p-2">
         <button
           onClick={prevPage}
