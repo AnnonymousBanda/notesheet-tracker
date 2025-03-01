@@ -171,7 +171,42 @@ const createNotesheet = catchAsync(async (req, res) => {
 		requiredApprovals: newRequiredApprovals,
 	})
 
-	sendMail((text = `notesheet with id ${notesheet.id} has been raised`))
+	sendMail(
+		user.email,
+		'Notesheet Raised Successfully',
+		'Your notesheet has been raised successfully.',
+		`
+		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+		  <h2 style="color: #004085;">Notesheet Raised Successfully</h2>
+		  <p>Dear ${user.name},</p>
+		  <p>Your notesheet has been raised successfully. You can track its progress using the link below:</p>
+		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
+		  <p><strong>Note:</strong> This notesheet is valid until <strong>${notesheet.expiresAt}</strong>. Please ensure all approvals are completed before this date.</p>
+		  <br/>
+		  <p>Thank you,</p>
+		  <p><strong>Team STC</strong></p>
+		  <p>Indian Institute of Technology Patna</p>
+		</div>
+		`
+	)
+
+	sendMail(
+		notesheet.currentRequiredApproval.email,
+		'Notesheet Pending for Review',
+		`A notesheet is awaiting your review and approval.`,
+		`
+		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+		  <h2 style="color: #856404;">Notesheet Pending for Review</h2>
+		  <p>Dear ${notesheet.currentRequiredApproval.name},</p>
+		  <p>A notesheet is awaiting your review. Please review it and take the necessary action (Approve/Reject) using the link below:</p>
+		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">Review Notesheet</a></p>
+		  <br/>
+		  <p>Thank you,</p>
+		  <p><strong>Team STC</strong></p>
+		  <p>Indian Institute of Technology Patna</p>
+		</div>
+		`
+	)
 
 	return res.status(201).json({
 		status: '201',
@@ -222,8 +257,60 @@ const approveNotesheet = catchAsync(async (req, res) => {
 
 	if (notesheet.currentRequiredApproval === null)
 		sendMail(
-			(text = `Your notesheet with id ${notesheet.id} has been approved by ${user.admin === 'adean' ? 'all required approvals' : user.admin}`)
+			notesheet.raisedBy.email,
+			'Notesheet Approved',
+			`Your notesheet has been approved by ${user.name}.`,
+			`
+			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+			<h2 style="color: #155724;">Notesheet Approved</h2>
+			<p>Dear ${notesheet.raisedBy.name},</p>
+			<p>Your notesheet has been finally and fully approved by <strong>${user.name}</strong>.</p>
+			<p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
+			<br/>
+			<p>Thank you,</p>
+			<p><strong>Team STC</strong></p>
+			<p>Indian Institute of Technology Patna</p>
+			</div>
+			`
 		)
+	else {
+		sendMail(
+			notesheet.raisedBy.email,
+			'Notesheet Approved',
+			`Your notesheet has been approved by ${user.name}.`,
+			`
+			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+			  <h2 style="color: #155724;">Notesheet Approved</h2>
+			  <p>Dear ${notesheet.raisedBy.name},</p>
+			  <p>Your notesheet has been approved by <strong>${user.name}</strong>. You may check its status using the link below:</p>
+			  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
+			  <p><strong>Note:</strong> This notesheet is valid until <strong>${notesheet.expiresAt}</strong>. Please ensure all necessary steps are completed before this date.</p>
+			  <br/>
+			  <p>Thank you,</p>
+			  <p><strong>Team STC</strong></p>
+			  <p>Indian Institute of Technology Patna</p>
+			</div>
+			`
+		)
+
+		sendMail(
+			notesheet.currentRequiredApproval.email,
+			'Notesheet Pending for Review',
+			`A notesheet is awaiting your review and approval.`,
+			`
+			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+			  <h2 style="color: #856404;">Notesheet Pending for Review</h2>
+			  <p>Dear ${notesheet.currentRequiredApproval.name},</p>
+			  <p>A notesheet is awaiting your review. Please review it and take the necessary action (Approve/Reject) using the link below:</p>
+			  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">Review Notesheet</a></p>
+			  <br/>
+			  <p>Thank you,</p>
+			  <p><strong>Team STC</strong></p>
+			  <p>Indian Institute of Technology Patna</p>
+			</div>
+			`
+		)
+	}
 
 	return res.status(200).json({
 		status: '200',
@@ -261,7 +348,24 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 	await notesheet.save()
 
 	sendMail(
-		(text = `Your notesheet with id ${notesheet.id} has been rejected with comment ${comment}`)
+		notesheet.raisedBy.email,
+		'Notesheet Rejected',
+		`Your notesheet has been rejected by ${user.name}.`,
+		`
+		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+		  <h2 style="color: #721c24;">Notesheet Rejected</h2>
+		  <p>Dear ${notesheet.raisedBy.name},</p>
+		  <p>Unfortunately, your notesheet has been rejected by <strong>${user.name}</strong>. Please review the comments and make the necessary changes.</p>
+		  <p>You can view the details here:</p>
+		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
+		  <p>If you need to submit a new notesheet, please use the link below:</p>
+		  <p><a href="${process.env.CLIENT_URL}/new-notesheet" style="color: #28a745; text-decoration: none;">Raise a New Notesheet</a></p>
+		  <br/>
+		  <p>Thank you,</p>
+		  <p><strong>Team STC</strong></p>
+		  <p>Indian Institute of Technology Patna</p>
+		</div>
+		`
 	)
 
 	return res.status(200).json({
