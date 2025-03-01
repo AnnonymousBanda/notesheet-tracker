@@ -195,9 +195,9 @@ export default function NoteSheet() {
 									)}
 								</div>
 
-								<div className='flex gap-[1rem]'>
+								<div className='flex gap-[1rem] flex-wrap'>
 									<p className='text-gray-500 font-bold text-[2rem]'>
-										Pending Approvals :{' '}
+										Pending Approvals :
 									</p>
 									{notesheet?.status?.pendingApprovals
 										.length === 0 ? (
