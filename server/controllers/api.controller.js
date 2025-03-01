@@ -10,6 +10,7 @@ const {
 	sendMail,
 	removePDF,
 	renamePDF,
+	formatDate,
 } = require('../utils/api.util')
 const { copyPdfFile } = require('../utils/pdf.util')
 const { AppError } = require('../controllers/error.controller')
@@ -171,8 +172,6 @@ const createNotesheet = catchAsync(async (req, res) => {
 		requiredApprovals: newRequiredApprovals,
 	})
 
-	console.log('sent to ',user.email)
-
 	sendMail(
 		user.email,
 		'Notesheet Raised Successfully',
@@ -182,7 +181,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		  <p>Dear ${user.name},</p>
 		  <p>Your notesheet has been raised successfully. You can track its progress using the link below:</p>
 		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
-		  <p><strong>Note:</strong> This notesheet is valid until <strong>${notesheet.expiresAt}</strong>. Please ensure all approvals are completed before this date.</p>
+		  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(notesheet.expiresAt)}</strong>. Please ensure all approvals are completed before this date.</p>
 		  <br/>
 		  <p>Thank you,</p>
 		  <p><strong>Team STC</strong></p>
@@ -220,7 +219,9 @@ const approveNotesheet = catchAsync(async (req, res) => {
 	const id = req.params.id
 	const { notesheetID } = req.body
 
-	const notesheet = await notesheetModel.findById(notesheetID)
+	const notesheet = await notesheetModel
+		.findById(notesheetID)
+		.populate(populateOptions)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
 
@@ -282,7 +283,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 			  <p>Dear ${notesheet.raisedBy.name},</p>
 			  <p>Your notesheet has been approved by <strong>${user.name}</strong>. You may check its status using the link below:</p>
 			  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
-			  <p><strong>Note:</strong> This notesheet is valid until <strong>${notesheet.expiresAt}</strong>. Please ensure all necessary steps are completed before this date.</p>
+			  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(notesheet.expiresAt)}</strong>. Please ensure all necessary steps are completed before this date.</p>
 			  <br/>
 			  <p>Thank you,</p>
 			  <p><strong>Team STC</strong></p>
@@ -324,7 +325,9 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 
 	if (!comment) throw new AppError('Comment is required', 400)
 
-	const notesheet = await notesheetModel.findById(notesheetID)
+	const notesheet = await notesheetModel
+		.findById(notesheetID)
+		.populate(populateOptions)
 
 	if (!notesheet) throw new AppError('Notesheet not found', 404)
 
@@ -352,6 +355,12 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 		  <h2 style="color: #721c24;">Notesheet Rejected</h2>
 		  <p>Dear ${notesheet.raisedBy.name},</p>
 		  <p>Unfortunately, your notesheet has been rejected by <strong>${user.name}</strong>. Please review the comments and make the necessary changes.</p>
+		  
+		  <h3 style="color: #721c24;">Rejection Reason:</h3>
+		  <blockquote style="background: #f8d7da; padding: 10px; border-left: 5px solid #dc3545;">
+			${notesheet.status.rejectedBy.comment}
+		  </blockquote>
+	
 		  <p>You can view the details here:</p>
 		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
 		  <p>If you need to submit a new notesheet, please use the link below:</p>

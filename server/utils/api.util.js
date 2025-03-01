@@ -91,10 +91,12 @@ const hierarchyMantained = (requiredApprovals) => {
 }
 
 const rejectExpiredNotesheet = catchAsync(async () => {
-	const notesheets = await notesheetModel.find({
-		expiresAt: { $lt: new Date() },
-		'status.state': 'pending',
-	})
+	const notesheets = await notesheetModel
+		.find({
+			expiresAt: { $lt: new Date() },
+			'status.state': 'pending',
+		})
+		.populate(populateOptions)
 
 	if (notesheets?.length > 0) {
 		notesheets.forEach(async (notesheet) => {
@@ -159,6 +161,21 @@ const renamePDF = async (oldFilename, newFilename) => {
 	}
 }
 
+const formatDate = (date) => {
+	const newDate = new Date(date)
+	const options = {
+		timeZone: 'Asia/Kolkata',
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+	}
+	const [day, month, year] = new Intl.DateTimeFormat('en-GB', options)
+		.format(newDate)
+		.split('/')
+
+	return `${day}-${month}-${year}`
+}
+
 module.exports = {
 	saveImage,
 	populateOptions,
@@ -167,4 +184,5 @@ module.exports = {
 	rejectExpiredNotesheet,
 	removePDF,
 	renamePDF,
+	formatDate,
 }
