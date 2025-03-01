@@ -275,7 +275,7 @@ export default function AdminDashboard() {
 						</p>
 					</div>
 
-					<div>
+					<div className='overflow-y-auto h-full'>
 						<NotesheetsTable notesheets={notesheets} />
 					</div>
 				</div>
