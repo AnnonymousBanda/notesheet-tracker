@@ -171,10 +171,11 @@ const createNotesheet = catchAsync(async (req, res) => {
 		requiredApprovals: newRequiredApprovals,
 	})
 
+	console.log('sent to ',user.email)
+
 	sendMail(
 		user.email,
 		'Notesheet Raised Successfully',
-		'Your notesheet has been raised successfully.',
 		`
 		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 		  <h2 style="color: #004085;">Notesheet Raised Successfully</h2>
@@ -193,7 +194,6 @@ const createNotesheet = catchAsync(async (req, res) => {
 	sendMail(
 		notesheet.currentRequiredApproval.email,
 		'Notesheet Pending for Review',
-		`A notesheet is awaiting your review and approval.`,
 		`
 		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 		  <h2 style="color: #856404;">Notesheet Pending for Review</h2>
@@ -259,7 +259,6 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		sendMail(
 			notesheet.raisedBy.email,
 			'Notesheet Approved',
-			`Your notesheet has been approved by ${user.name}.`,
 			`
 			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 			<h2 style="color: #155724;">Notesheet Approved</h2>
@@ -277,7 +276,6 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		sendMail(
 			notesheet.raisedBy.email,
 			'Notesheet Approved',
-			`Your notesheet has been approved by ${user.name}.`,
 			`
 			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 			  <h2 style="color: #155724;">Notesheet Approved</h2>
@@ -296,7 +294,6 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		sendMail(
 			notesheet.currentRequiredApproval.email,
 			'Notesheet Pending for Review',
-			`A notesheet is awaiting your review and approval.`,
 			`
 			<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 			  <h2 style="color: #856404;">Notesheet Pending for Review</h2>
@@ -350,7 +347,6 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 	sendMail(
 		notesheet.raisedBy.email,
 		'Notesheet Rejected',
-		`Your notesheet has been rejected by ${user.name}.`,
 		`
 		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
 		  <h2 style="color: #721c24;">Notesheet Rejected</h2>

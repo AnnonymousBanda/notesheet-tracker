@@ -44,7 +44,7 @@ const populateOptions = [
 	},
 ]
 
-const sendMail = catchAsync(async (to, subject, message, htmlMessage) => {
+const sendMail = catchAsync(async (to, subject, htmlMessage) => {
 	try {
 		// For outlook
 		// const transporter = nodemailer.createTransport({
@@ -74,7 +74,6 @@ const sendMail = catchAsync(async (to, subject, message, htmlMessage) => {
 			from: process.env.EMAIL_SENDER_NAME,
 			to: to,
 			subject: subject,
-			text: message,
 			html: htmlMessage,
 		}
 
@@ -159,8 +158,6 @@ const renamePDF = async (oldFilename, newFilename) => {
 		console.error('Error renaming file:', err)
 	}
 }
-
-// sendMail('rishu_2301ee36@iitp.ac.in', 'Test', 'Test', 'Test')
 
 module.exports = {
 	saveImage,
