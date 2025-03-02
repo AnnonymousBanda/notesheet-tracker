@@ -14,7 +14,7 @@ const Dashboard = () => {
 			{user?.role.includes('user') && (
 				<Link
 					href='/new-notesheet'
-					className='absolute z-10 bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl'
+					className='absolute z-[5] bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl'
 				>
 					<Image src='/images/plus.svg' width={48} height={48} alt='' className='w-12' />
 				</Link>
