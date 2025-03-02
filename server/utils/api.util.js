@@ -119,7 +119,7 @@ const rejectExpiredNotesheet = catchAsync(async () => {
                   <p><a href="${process.env.CLIENT_URL}/new-notesheet" style="color: #007bff; text-decoration: none;">Raise New Notesheet</a></p>
                   <br/>
                   <p>Thank you,</p>
-                  <p><strong>Team STC</strong></p>
+                  <p><strong>Team Gymkhana</strong></p>
                   <p>Indian Institute of Technology Patna</p>
                 </div>
                 `
@@ -185,7 +185,7 @@ const formatDate = (date) => {
 // 	  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(new Date())}</strong>. Please ensure all approvals are completed before this date.</p>
 // 	  <br/>
 // 	  <p>Thank you,</p>
-// 	  <p><strong>Team STC</strong></p>
+// 	  <p><strong>Team Gymkhana</strong></p>
 // 	  <p>Indian Institute of Technology Patna</p>
 // 	</div>
 // 	`

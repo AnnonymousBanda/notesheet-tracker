@@ -72,7 +72,7 @@ const getResetToken = catchAsync(async (req, res) => {
 
 		await user.save()
 
-		sendResetToken(email, resetToken)
+		sendResetToken(email, user.name, resetToken)
 	}
 
 	return res.status(200).json({

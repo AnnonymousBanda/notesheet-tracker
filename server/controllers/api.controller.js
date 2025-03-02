@@ -182,7 +182,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(notesheet.expiresAt)}</strong>. Please ensure all approvals are completed before this date.</p>
 		  <br/>
 		  <p>Thank you,</p>
-		  <p><strong>Team STC</strong></p>
+		  <p><strong>Team Gymkhana</strong></p>
 		  <p>Indian Institute of Technology Patna</p>
 		</div>
 		`
@@ -199,7 +199,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">Review Notesheet</a></p>
 		  <br/>
 		  <p>Thank you,</p>
-		  <p><strong>Team STC</strong></p>
+		  <p><strong>Team Gymkhana</strong></p>
 		  <p>Indian Institute of Technology Patna</p>
 		</div>
 		`
@@ -266,7 +266,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 			<p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">View Notesheet Status</a></p>
 			<br/>
 			<p>Thank you,</p>
-			<p><strong>Team STC</strong></p>
+			<p><strong>Team Gymkhana</strong></p>
 			<p>Indian Institute of Technology Patna</p>
 			</div>
 			`
@@ -284,7 +284,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 			  <p><strong>Note:</strong> This notesheet is valid until <strong>${formatDate(notesheet.expiresAt)}</strong>. Please ensure all necessary steps are completed before this date.</p>
 			  <br/>
 			  <p>Thank you,</p>
-			  <p><strong>Team STC</strong></p>
+			  <p><strong>Team Gymkhana</strong></p>
 			  <p>Indian Institute of Technology Patna</p>
 			</div>
 			`
@@ -301,7 +301,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 			  <p><a href="${process.env.CLIENT_URL}/notesheet/${notesheet.id}" style="color: #007bff; text-decoration: none;">Review Notesheet</a></p>
 			  <br/>
 			  <p>Thank you,</p>
-			  <p><strong>Team STC</strong></p>
+			  <p><strong>Team Gymkhana</strong></p>
 			  <p>Indian Institute of Technology Patna</p>
 			</div>
 			`
@@ -365,7 +365,7 @@ const rejectNotesheet = catchAsync(async (req, res) => {
 		  <p><a href="${process.env.CLIENT_URL}/new-notesheet" style="color: #28a745; text-decoration: none;">Raise a New Notesheet</a></p>
 		  <br/>
 		  <p>Thank you,</p>
-		  <p><strong>Team STC</strong></p>
+		  <p><strong>Team Gymkhana</strong></p>
 		  <p>Indian Institute of Technology Patna</p>
 		</div>
 		`
