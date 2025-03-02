@@ -8,6 +8,7 @@ import { useDialog } from "@/contexts/DialogBoxContext";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Image from "next/image";
 
 const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -218,13 +219,17 @@ const Profile = () => {
                   />
                   <button type="button" onClick={togglePasswordVisibility}>
                     {showPassword ? (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eye.svg"
                         alt="show password"
                       />
                     ) : (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eyeslash.svg"
                         alt="show password"
@@ -252,13 +257,17 @@ const Profile = () => {
                   />
                   <button type="button" onClick={toggleNewPasswordVisibility}>
                     {shownewPassword ? (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eye.svg"
                         alt="show password"
                       />
                     ) : (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eyeslash.svg"
                         alt="show password"
@@ -289,13 +298,17 @@ const Profile = () => {
                     onClick={toggleConfirmPasswordVisibility}
                   >
                     {showconfirmPassword ? (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eye.svg"
                         alt="show password"
                       />
                     ) : (
-                      <img
+                      <Image
+                        width={36}
+                        height={36}
                         className="w-9"
                         src="/images/eyeslash.svg"
                         alt="show password"

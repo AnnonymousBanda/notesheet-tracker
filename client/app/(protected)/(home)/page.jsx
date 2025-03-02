@@ -3,6 +3,7 @@
 import AdminDashboard from '@/components/AdminDashboard'
 import UserDashboard from '@/components/UserDashboard'
 import { useAuth } from '@/contexts/AuthContext'
+import Image from 'next/image'
 import Link from 'next/link'
 const Dashboard = () => {
 	const { isAdmin, user } = useAuth()
@@ -15,7 +16,7 @@ const Dashboard = () => {
 					href='/new-notesheet'
 					className='absolute z-10 bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl'
 				>
-					<img src='/images/plus.svg' alt='' className='w-12 ' />
+					<Image src='/images/plus.svg' width={48} height={48} alt='' className='w-12' />
 				</Link>
 			)}
 		</>

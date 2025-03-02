@@ -4,8 +4,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { DynamicLazyBlurImage, LazyBlurImage } from "./LazyBlurImage";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
-const DropdownMenu = ({ isOpen, setIsOpen }) => {
+const DropdownMenu = ({ isOpen, setIsOpen, isSettingsOpen, setIsSettingsOpen }) => {
   const handlecloseMenu = () => {
     setIsOpen(false);
   };
@@ -36,7 +37,6 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
     >
       <div className="flex flex-col">
         <div
-          href="/"
           className="flex gap-3 items-start hover:bg-gray-100 p-4 transition-all duration-500"
         >
           {user?.picture ? (
@@ -71,7 +71,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
           href="/"
           className="flex items-center gap-3 hover:bg-gray-100 p-4 transition-all duration-500"
         >
-          <img src="/images/dashboard.svg" alt="Home icon" className="w-8" />
+          <Image width={32} height={32} src="/images/dashboard.svg" alt="Home icon" className="w-8" />
           <p className="text-[1.5rem] text-gray-500 font-bold">HOME</p>
         </Link>
         <Link
@@ -79,7 +79,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
           href="/"
           className="flex items-center gap-3 hover:bg-gray-100 p-4 transition-all duration-500"
         >
-          <img src="/images/settings.svg" alt="Home icon" className="w-8" />
+          <Image width={32} height={32} src="/images/settings.svg" alt="Home icon" className="w-8" />
           <p className="text-[1.5rem] text-gray-500 font-bold">SETTINGS</p>
         </Link>
 
@@ -87,7 +87,7 @@ const DropdownMenu = ({ isOpen, setIsOpen }) => {
           onClick={handleLogout}
           className="flex gap-3 items-center hover:bg-red-300  p-4 transition-all duration-500"
         >
-          <img src="/images/logout.svg" alt="Logout icon" className="w-8" />
+          <Image width={32} height={32} src="/images/logout.svg" alt="Logout icon" className="w-8" />
           <p className="text-[1.5rem] text-gray-500 font-bold">LOGOUT</p>
         </button>
       </div>
