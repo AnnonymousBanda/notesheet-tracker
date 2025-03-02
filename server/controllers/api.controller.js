@@ -139,8 +139,8 @@ const createNotesheet = catchAsync(async (req, res) => {
 	if (!user)
 		throw new AppError('Your token has expired please login again', 401)
 
-	if (user.admin === 'adean')
-		throw new AppError('Adean cannot raise notesheet', 400)
+	if (user.role !== 'user')
+		throw new AppError('You cannot raise notesheet', 400)
 
 	if (!requiredApprovals || requiredApprovals.length === 0)
 		throw new AppError('Required approvals are required', 400)
@@ -239,7 +239,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
 
-	if (user.admin === 'adean') {
+	if (user.role === 'superadmin') {
 		await removePDF(
 			notesheet.pdf.split('/').pop().replace('.pdf', '-sign.pdf')
 		)

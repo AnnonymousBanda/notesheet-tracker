@@ -28,6 +28,7 @@ const notesheetSchema = new Schema({
 		type: Date,
 		default: () => Date.now(),
 		immutable: true,
+		index: true,
 	},
 	approvedAt: {
 		type: Date,
@@ -63,6 +64,7 @@ const notesheetSchema = new Schema({
 		default: function () {
 			return this.requiredApprovals[0]
 		},
+		index: true,
 	},
 	status: {
 		state: {
@@ -98,6 +100,8 @@ const notesheetSchema = new Schema({
 		},
 	},
 })
+
+notesheetSchema.index({ 'status.passedApprovals': 1 })
 
 notesheetSchema.pre('save', async function (next) {
 	if (this.status.rejectedBy.admin) {

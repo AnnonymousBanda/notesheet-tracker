@@ -49,9 +49,9 @@ const userSchema = new Schema({
 		},
 	},
 	role: {
-		type: String,
-		enum: ['user', 'admin'],
-		default: 'user',
+		type: [String],
+		enum: ['user', 'admin','superadmin'],
+		default: ['user'],
 		immutable: true,
 	},
 	admin: {
@@ -68,8 +68,9 @@ const userSchema = new Schema({
 			'drsa',
 			'adean',
 		],
-		unqiue: true,
+		unique: true,
 		default: null,
+		index: true,
 	},
 	picture: {
 		type: String,

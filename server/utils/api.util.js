@@ -87,30 +87,6 @@ const sendMail = catchAsync(async (to, subject, htmlMessage) => {
 	}
 })
 
-// const hierarchyMantained = (requiredApprovals) => {
-// 	// const hierarchy = process.env.HIERARCHY?.split(',')
-
-// 	// console.log('Required Approvals:', requiredApprovals)
-// 	// console.log('Hierarchy:', hierarchy)
-
-// 	// if (requiredApprovals.length === 0) return false
-
-// 	// let temp = requiredApprovals //[]
-// 	// // for (let i = 0; i < requiredApprovals.length; i++) {
-// 	// // 	temp.push((await userModel.findById(requiredApprovals[i])).email)
-// 	// // }
-
-// 	// for (let i = 0; i < hierarchy?.length && temp.length != 0; i++) {
-// 	// 	if (temp[0] == hierarchy[i]) {
-// 	// 		temp.shift()
-// 	// 	}
-// 	// }
-
-// 	// return !temp.length
-// 	console.log('Hierarchy maintained')
-// 	return true
-// }
-
 const rejectExpiredNotesheet = catchAsync(async () => {
 	const notesheets = await notesheetModel
 		.find({
