@@ -3,6 +3,8 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 
 const { catchAsync } = require('./error.util')
+const { userModel } = require('../models')
+const { AppError } = require('../controllers/error.controller')
 // const { userModel } = require('../models')
 
 const saveImage = async (base64, destPath) => {
@@ -213,13 +215,44 @@ const formatDate = (date) => {
 // 	`
 // )
 
+async function hierarchyMantained(requiredApprovals) {
+	const hierarchy = process.env.HIERARCHY?.split(',')
+
+	if (requiredApprovals.length === 0) return false
+
+	let temp = [...requiredApprovals]
+
+	for (let i = 0; i < hierarchy?.length && temp.length != 0; i++) {
+		if (temp[0] === hierarchy[i]) {
+			temp.shift()
+		}
+	}
+	if (temp.length != 0) return false
+
+	const len = requiredApprovals.length
+	for (let i = 0; i < len; i++) {
+		requiredApprovals[i] = (
+			await userModel.findOne({
+				admin: requiredApprovals[i],
+			})
+		)._id
+	}
+
+	console.log('Required Approvals:', requiredApprovals)
+
+	if (requiredApprovals.length != len)
+		throw new AppError('Invalid admins for required approvals', 400)
+
+	return true
+}
+
 module.exports = {
 	saveImage,
 	populateOptions,
 	sendMail,
-	// hierarchyMantained,
 	rejectExpiredNotesheet,
 	removePDF,
 	renamePDF,
 	formatDate,
+	hierarchyMantained,
 }

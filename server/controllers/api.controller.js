@@ -11,6 +11,7 @@ const {
 	removePDF,
 	renamePDF,
 	formatDate,
+	hierarchyMantained,
 } = require('../utils/api.util')
 const { copyPdfFile } = require('../utils/pdf.util')
 const { AppError } = require('../controllers/error.controller')
@@ -133,13 +134,6 @@ const createNotesheet = catchAsync(async (req, res) => {
 
 	if (!req.file) throw new AppError('Please upload a pdf file', 400)
 
-	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
-
-	await copyPdfFile(
-		req.file.filename,
-		req.file.filename.replace('.pdf', '-sign.pdf')
-	)
-
 	const user = await userModel.findById(raisedBy)
 
 	if (!user)
@@ -151,19 +145,21 @@ const createNotesheet = catchAsync(async (req, res) => {
 	if (!requiredApprovals || requiredApprovals.length === 0)
 		throw new AppError('Required approvals are required', 400)
 
-	const users = await userModel.find({
-		admin: { $in: requiredApprovals },
-	})
+	if (!(await hierarchyMantained(requiredApprovals))) {
+		console.log('Hierarchy not maintained')
 
-	console.log(users)
-
-	if (!users) throw new AppError('Required approvals not found', 404)
-
-	if (users.length !== requiredApprovals.length) {
-		throw new AppError('There might be an error in required approvals', 400)
+		throw new AppError(
+			'Hierarchy for notesheet approval is not maintained',
+			400
+		)
 	}
 
-	let newRequiredApprovals = users.map((user) => user._id)
+	const pdf = `${process.env.API_URL}/uploads/${req.file.filename}`
+
+	copyPdfFile(
+		req.file.filename,
+		req.file.filename.replace('.pdf', '-sign.pdf')
+	)
 
 	const notesheet = await notesheetModel.create({
 		subject,
@@ -171,7 +167,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 		raisedBy,
 		raiser,
 		pdf,
-		requiredApprovals: newRequiredApprovals,
+		requiredApprovals,
 	})
 
 	sendMail(

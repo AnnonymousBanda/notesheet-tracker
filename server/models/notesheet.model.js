@@ -100,17 +100,6 @@ const notesheetSchema = new Schema({
 })
 
 notesheetSchema.pre('save', async function (next) {
-	if (!(await hierarchyMantained(this.requiredApprovals))) {
-		console.log('Hierarchy not maintained')
-
-		return next(
-			new AppError(
-				'Hierarchy for notesheet approval is not maintained',
-				400
-			)
-		)
-	}
-
 	if (this.status.rejectedBy.admin) {
 		this.currentRequiredApproval = null
 		this.status.currentRequiredApproval = null
@@ -158,23 +147,4 @@ function getNextMidnight(daysToAdd) {
 	)
 	midnight.setHours(0, 0, 0, 0)
 	return midnight
-}
-
-async function hierarchyMantained(requiredApprovals) {
-	const hierarchy = process.env.HIERARCHY?.split(',')
-
-	if (requiredApprovals.length === 0) return false
-
-	let temp = []
-	for (let i = 0; i < requiredApprovals.length; i++) {
-		temp.push((await userModel.findById(requiredApprovals[i])).email)
-	}
-
-	for (let i = 0; i < hierarchy?.length && temp.length != 0; i++) {
-		if (temp[0] === hierarchy[i]) {
-			temp.shift()
-		}
-	}
-
-	return temp.length === 0
 }
