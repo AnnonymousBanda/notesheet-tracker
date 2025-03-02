@@ -1,21 +1,20 @@
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import React from "react";
 
-export default function Page() {
+const Unauthenticated = () => {
   return (
-    <div className="flex flex-col justify-center items-center h-[100vh] w-full mx-auto rounded-xl bg-gray-100 shadow-xl p-8">
-      <ExclamationTriangleIcon className="w-28 h-28 text-gray-500 mb-4" />
-      <p className="text-[3rem] text-gray-700 font-bold mb-[2rem] text-center">
-        You are not allowed to use this platform!
-      </p>
-      <button className="w-[15rem] flex items-center justify-center bg-[#2f2f2f] text-white h-[45px] px-4 rounded-sm hover:bg-[#0e0202] text-[1.7rem]">
-        <Link href="/auth/login">
-          <p className="text-[1.5rem] text-[#ffffff] text-center uppercase font-semibold">
-            Click to Login
-          </p>
-        </Link>
-      </button>
+    <div className="flex flex-col items-center justify-center min-h-screen text-center">
+      <div className="flex items-center justify-center">
+        <ExclamationTriangleIcon width={50} height={50} className="relative top-[5px]"/>
+        <h1 className="font-bold flex items-center">403</h1>
+      </div>
+      <p className="text-[2.5rem] mt-4">Unauthenticated</p>
+      <p className="text-[2rem] mt-2">You are not an authenticated user!</p>
+      <Link href="/auth/login" className="mt-4 text-blue-500 hover:underline">
+        <p className="text-[2rem]">Try again</p>
+      </Link>
     </div>
   );
-}
+};
+
+export default Unauthenticated;
