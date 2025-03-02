@@ -9,8 +9,8 @@ const Dashboard = () => {
 
 	return (
 		<>
-			{isAdmin() ? <AdminDashboard /> : <UserDashboard />}
-			{user?.admin === 'adean' ? null : (
+			{isAdmin() || user?.role.includes('superadmin') ? <AdminDashboard /> : <UserDashboard />}
+			{user?.role.includes('user') && (
 				<Link
 					href='/new-notesheet'
 					className='absolute z-10 bottom-8 right-8 flex justify-center items-center bg-black p-4 hover:bg-[#3a3a3a] rounded-xl'

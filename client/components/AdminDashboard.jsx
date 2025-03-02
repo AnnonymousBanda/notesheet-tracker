@@ -57,14 +57,14 @@ export default function AdminDashboard() {
       return;
     }
     let type;
-    if (user.admin === "adean") {
+    if (user.role.includes("superadmin")) {
       const types = ["approved", "to-approve"];
       if (types.includes(params.get("type"))) {
         type = params.get("type");
       } else {
         type = "to-approve";
       }
-    } else if (user.role === "admin") {
+    } else if (user.role.includes('admin')) {
       const types = ["approved", "to-approve", "raised"];
       if (types.includes(params.get("type"))) {
         type = params.get("type");
@@ -87,7 +87,6 @@ export default function AdminDashboard() {
     updatedParams.set("page", page);
 
     replace(`${pathname}?${updatedParams.toString()}`);
-
     getNotesheets(params);
   }, [params.toString()]);
 
@@ -118,7 +117,7 @@ export default function AdminDashboard() {
     <div className="flex h-full flex-col gap-12 overflow-hidden">
       <div className="flex flex-col items-center h-full">
         <div className="flex w-fit justify-evenly rounded-t-xl bg-[#9ca3af8e]">
-          {user?.admin === "adean" ? null : (
+          {user?.role.includes('superadmin') ? null : (
             <>
               <div
                 onClick={() => {
