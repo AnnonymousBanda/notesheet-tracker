@@ -47,10 +47,7 @@ const oauthCallback = catchAsync(async (req, res) => {
 })
 
 const failure = catchAsync(async (req, res) => {
-	return res.status(401).json({
-		status: 401,
-		message: `Authentication failed! Try again ${process.env.CLIENT_URL}/auth/login`,
-	})
+	return res.redirect(`${process.env.CLIENT_URL}/auth/failure`)
 })
 
 module.exports = {
