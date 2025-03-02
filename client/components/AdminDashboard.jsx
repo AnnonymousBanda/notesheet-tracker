@@ -48,6 +48,14 @@ export default function AdminDashboard() {
     if (!user) return;
 
     const params = new URLSearchParams(searchparams);
+    if(!params.toString()) {
+      params.set("type", "raised");
+      params.set('sortBy', 'raisedAt');
+      params.set('order', 'desc');
+      params.set("page", "1");
+      replace(`${pathname}?${params.toString()}`);
+      return;
+    }
     let type;
     if (user.admin === "adean") {
       const types = ["approved", "to-approve"];
@@ -81,7 +89,7 @@ export default function AdminDashboard() {
     replace(`${pathname}?${updatedParams.toString()}`);
 
     getNotesheets(params);
-  }, [user, params.toString()]);
+  }, [params.toString()]);
 
   const handleSort = (e) => {
     console.log(e.target.innerText);
