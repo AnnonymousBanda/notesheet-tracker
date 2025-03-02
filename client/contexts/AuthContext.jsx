@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
 	const isAuthenticated = () => !!user
 
-	const isAdmin = () => user && user.role === 'admin'
+	const isAdmin = () => user && user.role.includes('admin')
 
 	const login = async (token) => {
 		localStorage.setItem('jwt', token)
