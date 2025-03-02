@@ -52,7 +52,8 @@ const isAdmin = catchAsync(async (req, res, next) => {
 
 	if (!user) throw new AppError('User not found', 404)
 
-	if (user.role !== 'admin')
+	console.log(user.role)
+	if (!user.role.includes('admin') && !user.role.includes('superadmin'))
 		throw new AppError('You are not authorized to access this route', 403)
 
 	if (

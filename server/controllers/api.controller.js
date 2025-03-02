@@ -95,7 +95,7 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 
 		total = await notesheetModel.countDocuments({ raisedBy: id })
 	} else if (type === 'to-approve') {
-		if (user.role === 'admin')
+		if (user.role.includes('admin') || user.role.includes('superadmin'))
 			notesheets = await notesheetModel
 				.find({ currentRequiredApproval: id })
 				.populate(populateOptions)
@@ -107,7 +107,7 @@ const getNotesheetsByUserID = catchAsync(async (req, res) => {
 			currentRequiredApproval: id,
 		})
 	} else if (type === 'approved') {
-		if (user.role === 'admin')
+		if (user.role.includes('admin') || user.role.includes('superadmin'))
 			notesheets = await notesheetModel
 				.find({ 'status.passedApprovals': { $in: [id] } })
 				.populate(populateOptions)
@@ -139,7 +139,7 @@ const createNotesheet = catchAsync(async (req, res) => {
 	if (!user)
 		throw new AppError('Your token has expired please login again', 401)
 
-	if (user.role !== 'user')
+	if (!user.role.includes('user'))
 		throw new AppError('You cannot raise notesheet', 400)
 
 	if (!requiredApprovals || requiredApprovals.length === 0)
@@ -230,8 +230,8 @@ const approveNotesheet = catchAsync(async (req, res) => {
 	if (!notesheet.currentRequiredApproval?.equals(user.id))
 		throw new AppError('You are not the required approver', 401)
 
-	const index = notesheet.requiredApprovals.indexOf(
-		notesheet.currentRequiredApproval
+	const index = notesheet.requiredApprovals.findIndex(
+		(e) => e.email === notesheet.currentRequiredApproval.email
 	)
 	if (index === notesheet.requiredApprovals.length - 1)
 		notesheet.currentRequiredApproval = null
@@ -239,7 +239,7 @@ const approveNotesheet = catchAsync(async (req, res) => {
 		notesheet.currentRequiredApproval =
 			notesheet.requiredApprovals[index + 1]
 
-	if (user.role === 'superadmin') {
+	if (user.role.includes('superadmin')) {
 		await removePDF(
 			notesheet.pdf.split('/').pop().replace('.pdf', '-sign.pdf')
 		)
