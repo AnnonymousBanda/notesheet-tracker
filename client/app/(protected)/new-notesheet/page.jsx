@@ -40,15 +40,15 @@ const NewNotesheetForm = () => {
 
       openDialog("Notesheet submitted successfully");
       setTimeout(() => {
-        onClose();
-        router.push(`/notesheet/${response.data.notesheet._id}`);
-      }, 1000);
+		  reset();
+		  setPdfFile(null);
+		  setPdfFileUrl(null);
+		  router.push(`/notesheet/${response.data.notesheet._id}`);
+		  onClose();
+      }, 800);
     } catch (error) {
       openDialog(error.response.data.message);
     } finally {
-      reset();
-      setPdfFile(null);
-      setPdfFileUrl(null);
       submitBtnRef.current.style.opacity = "1";
     }
   };
