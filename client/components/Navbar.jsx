@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DynamicLazyBlurImage, LazyBlurImage } from "./LazyBlurImage";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useDialog } from "@/contexts/DialogBoxContext";
 import axios from "axios";
 
@@ -129,8 +129,30 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
   const [showconfirmPassword, setShowConfirmPassword] = useState(false);
   const [edit, setedit] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.onkeydown = function (event) {
+        if (event.key === "Escape") {
+          setIsOpen(false);
+          setedit(false);
+          setShowConfirmPassword(false);
+          setShowNewPassword(false);
+          setShowPassword(false);
+          resetPassword();
+          reset();
+        }
+      };
+    }
+  }, [isOpen]);
+
   const handleClose = () => {
     setIsOpen(!isOpen);
+    setedit(false);
+    setShowConfirmPassword(false);
+    setShowNewPassword(false);
+    setShowPassword(false);
+    resetPassword();
+    reset();
   };
 
   const { user, logout } = useAuth();
@@ -145,8 +167,8 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
   const {
     register: registerPassword,
     handleSubmit: handleSubmitPassword,
-    reset : resetPassword,
-    formState: { errors : errorsPassword },
+    reset: resetPassword,
+    formState: { errors: errorsPassword },
   } = useForm();
 
   const onProfileError = (errorList) => {
@@ -175,6 +197,8 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
       );
 
       openDialog(response.data.message);
+      setedit(false);
+      reset();
     } catch (error) {
       openDialog(error?.message);
     }
@@ -223,8 +247,14 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
 
       openDialog(response.data.message);
       setTimeout(() => {
+        setedit(false);
+        setShowConfirmPassword(false);
+        setShowNewPassword(false);
+        setShowPassword(false);
+        resetPassword();
+        reset();
         logout();
-      }, 1000);
+      }, 800);
     } catch (error) {
       openDialog(error.response.data.message);
     }
@@ -245,8 +275,12 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
       className={`absolute z-10 inset-0 bg-black backdrop-blur-[7px] bg-opacity-30 flex items-center justify-center ${
         isOpen ? "" : "hidden"
       }`}
+      onClick={handleClose}
     >
-      <div className="bg-[#E5E7EB] p-6 rounded-lg shadow-lg h-auto md:max-w-5xl w-full flex flex-col gap-[2rem] overflow-y-auto max-h-screen max-w-[98vw]">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#E5E7EB] p-6 rounded-lg shadow-lg h-auto md:max-w-5xl w-full flex flex-col gap-[2rem] overflow-y-auto max-h-screen max-w-[98vw]"
+      >
         <div className="w-full flex justify-between items-center">
           <p className="uppercase text-[2rem] text-gray-500 font-bold flex gap-[1rem]">
             <Image

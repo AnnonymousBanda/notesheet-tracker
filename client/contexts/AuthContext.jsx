@@ -68,9 +68,10 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	const logout = () => {
+		setLoading(true)
 		localStorage.removeItem('jwt')
-
 		setUser(null)
+		setLoading(false)
 	}
 
 	return (
