@@ -4,8 +4,8 @@ const DialogBox = ({ isOpen, message, onClose }) => {
 
 	return (
 		<div className='fixed z-[1000] inset-0 bg-black bg-opacity-30 flex items-center justify-center'>
-			<div className='bg-white p-6 rounded-lg shadow-lg max-w-lg'>
-				<p className='text-[1.5rem] font-medium text-gray-800'>
+			<div className='bg-white p-6 rounded-lg shadow-lg min-w-[30rem] max-w-lg'>
+				<p className='text-[1.5rem] font-medium text-gray-800 break-words'>
 					{message}
 				</p>
 				<div className='flex justify-end mt-4'>
