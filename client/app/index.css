@@ -61,7 +61,7 @@ input[type="number"] {
   -moz-appearance: textfield; 
 }
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
   height: 6px;
 }
 
