@@ -106,12 +106,12 @@ const NewNotesheetForm = () => {
           onDragOver={(e) => e.preventDefault()}
           className="flex bg-gray-200 flex-col sticky z-[5] p-4 top-0 items-center justify-center text-center md:h-2/3 h-[15rem] md:w-2/5 w-full hover:bg-gray-100 border-gray-400 hover:border-black border-dashed border-[2px] px-[2.5rem] rounded-lg gap-8 transition-all duration-500 flex-wrap"
         >
-          <div className="w-full bg-gray-200">
+          <div className="w-full">
             {pdfFile ? (
-              <div className="overflow-hidden bg-gray-200 w-full">
+              <div className="overflow-hidden w-full">
                 <a
                   href={pdfFileUrl}
-                  className="text-[2.5rem] text-blue-600 truncate bg-gray-200"
+                  className="text-[2.5rem] text-blue-600 truncate "
                   target="_blank"
                 >
                   {pdfFile.name}
