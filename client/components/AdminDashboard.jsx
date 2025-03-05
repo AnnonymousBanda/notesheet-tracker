@@ -7,6 +7,7 @@ import Pagination from "./Pagination";
 import NoNotesheets from "./NoNotesheets";
 import { useAuth } from "@/contexts/AuthContext";
 import axios from "axios";
+import Image from "next/image";
 
 export default function AdminDashboard() {
   const { openDialog } = useDialog();
@@ -48,10 +49,10 @@ export default function AdminDashboard() {
     if (!user) return;
 
     const params = new URLSearchParams(searchparams);
-    if(!params.toString()) {
+    if (!params.toString()) {
       params.set("type", "raised");
-      params.set('sortBy', 'raisedAt');
-      params.set('order', 'desc');
+      params.set("sortBy", "raisedAt");
+      params.set("order", "desc");
       params.set("page", "1");
       replace(`${pathname}?${params.toString()}`);
       return;
@@ -64,7 +65,7 @@ export default function AdminDashboard() {
       } else {
         type = "to-approve";
       }
-    } else if (user.role.includes('admin')) {
+    } else if (user.role.includes("admin")) {
       const types = ["approved", "to-approve", "raised"];
       if (types.includes(params.get("type"))) {
         type = params.get("type");
@@ -116,116 +117,117 @@ export default function AdminDashboard() {
   return (
     <div className="flex h-full flex-col gap-12 overflow-hidden">
       <div className="flex flex-col items-center h-full">
-        <div className="flex w-fit justify-evenly rounded-t-xl bg-[#9ca3af8e]">
-          {user?.role.includes('superadmin') ? null : (
-            <>
-              <div
-                onClick={() => {
-                  params.set("type", "raised");
-                  params.delete("status");
-                  params.set("page", "1");
-                  replace(`${pathname}?${params.toString()}`);
-                }}
-                className={`p-3 text-gray-700 ${
-                  params.get("status") === null &&
-                  params.get("type") === "raised"
-                    ? "bg-gray-300"
-                    : "bg-transparent hover:bg-[#e5e7eba8]"
-                }  cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-              >
-                <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-                  ALL
-                </p>
-              </div>
-              <div
-                onClick={() => {
-                  params.set("type", "raised");
-                  params.set("status", "pending");
-                  params.set("page", "1");
-                  replace(`${pathname}?${params.toString()}`);
-                }}
-                className={`p-3 text-gray-700 ${
-                  params.get("status") === "pending" &&
-                  params.get("type") === "raised"
-                    ? "bg-gray-300"
-                    : "bg-transparent hover:bg-[#e5e7eba8]"
-                }  cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-              >
-                <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-                  PENDING
-                </p>
-              </div>
-              <div
-                onClick={() => {
-                  params.set("type", "raised");
-                  params.set("status", "approved");
-                  params.set("page", "1");
-                  replace(`${pathname}?${params.toString()}`);
-                }}
-                className={`p-3 text-gray-700 ${
-                  params.get("status") === "approved" &&
-                  params.get("type") === "raised"
-                    ? "bg-gray-300"
-                    : "bg-transparent hover:bg-[#e5e7eba8]"
-                }  cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-              >
-                <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-                  APPROVED
-                </p>
-              </div>
-              <div
-                onClick={() => {
-                  params.set("type", "raised");
-                  params.set("status", "rejected");
-                  params.set("page", "1");
-                  replace(`${pathname}?${params.toString()}`);
-                }}
-                className={`p-3 text-gray-700 ${
-                  params.get("status") === "rejected" &&
-                  params.get("type") === "raised"
-                    ? "bg-gray-300"
-                    : "bg-transparent hover:bg-[#e5e7eba8]"
-                }  cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-              >
-                <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-                  REJECTED
-                </p>
-              </div>
-            </>
-          )}
-          <div
-            onClick={() => {
-              params.delete("status");
-              params.set("type", "to-approve");
-              params.set("page", "1");
-              replace(`${pathname}?${params.toString()}`);
-            }}
-            className={`p-3 text-gray-700 ${
-              params.get("type") === "to-approve"
-                ? "bg-gray-300"
-                : "bg-transparent hover:bg-[#e5e7eba8]"
-            } cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-          >
-            <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-              TO APPROVE
-            </p>
+        <div className="flex w-full justify-evenly">
+          <div className="flex w-fit justify-evenly bg-[#9ca3af63] rounded-t-xl">
+            {user?.role.includes("superadmin") ? null : (
+              <>
+                <div
+                  onClick={() => {
+                    params.set("type", "raised");
+                    params.set("status", "pending");
+                    params.set("page", "1");
+                    replace(`${pathname}?${params.toString()}`);
+                  }}
+                  className={`p-3 text-gray-700 ${
+                    params.get("status") === "pending" &&
+                    params.get("type") === "raised"
+                      ? "bg-gray-300"
+                      : "bg-transparent hover:bg-[#e5e7eba8]"
+                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                >
+                  <Image
+                    src="/images/icons/pending.png"
+                    width={35}
+                    height={35}
+                    alt="Pending icon"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    params.set("type", "raised");
+                    params.set("status", "approved");
+                    params.set("page", "1");
+                    replace(`${pathname}?${params.toString()}`);
+                  }}
+                  className={`p-3 text-gray-700 ${
+                    params.get("status") === "approved" &&
+                    params.get("type") === "raised"
+                      ? "bg-gray-300"
+                      : "bg-transparent hover:bg-[#e5e7eba8]"
+                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                >
+                  <Image
+                    src="/images/icons/approved.png"
+                    width={35}
+                    height={35}
+                    alt="Approved icon"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    params.set("type", "raised");
+                    params.set("status", "rejected");
+                    params.set("page", "1");
+                    replace(`${pathname}?${params.toString()}`);
+                  }}
+                  className={`p-3 text-gray-700 ${
+                    params.get("status") === "rejected" &&
+                    params.get("type") === "raised"
+                      ? "bg-gray-300"
+                      : "bg-transparent hover:bg-[#e5e7eba8]"
+                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                >
+                  <Image
+                    src="/images/icons/rejected.png"
+                    width={35}
+                    height={35}
+                    alt="Rejected icon"
+                  />
+                </div>
+              </>
+            )}
           </div>
-          <div
-            onClick={() => {
-              params.delete("status");
-              params.set("type", "approved");
-              params.set("page", "1");
-              replace(`${pathname}?${params.toString()}`);
-            }}
-            className={`p-3 text-gray-700 ${
-              params.get("type") === "approved"
-                ? "bg-gray-300"
-                : "bg-transparent hover:bg-[#e5e7eba8]"
-            } cursor-pointer transition-all duration-500 w-[12rem] xl:w-[18rem] text-center rounded-t-xl`}
-          >
-            <p className="font-semibold text-[1.2rem] xl:text-[2rem]">
-              APPROVED BY ME
-            </p>
+          <div className="flex w-fit justify-evenly bg-[#9ca3af63] rounded-t-xl">
+            <div
+              onClick={() => {
+                params.delete("status");
+                params.set("type", "to-approve");
+                params.set("page", "1");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className={`p-3 text-gray-700 ${
+                params.get("type") === "to-approve"
+                  ? "bg-gray-300"
+                  : "bg-transparent hover:bg-[#e5e7eba8]"
+              } cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+            >
+              <Image
+                src="/images/icons/to-approve.png"
+                width={35}
+                height={35}
+                alt="Approved icon"
+              />
+            </div>
+            <div
+              onClick={() => {
+                params.delete("status");
+                params.set("type", "approved");
+                params.set("page", "1");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className={`p-3 text-gray-700 ${
+                params.get("type") === "approved"
+                  ? "bg-gray-300"
+                  : "bg-transparent hover:bg-[#e5e7eba8]"
+              } cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+            >
+              <Image
+                src="/images/icons/approved-by-me.png"
+                width={35}
+                height={35}
+                alt="Approved by me icon"
+              />
+            </div>
           </div>
         </div>
         {loading ? (
