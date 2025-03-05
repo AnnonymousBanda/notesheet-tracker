@@ -5,6 +5,47 @@ import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Select from "react-select";
+
+const MultiSelectDropdown = ({ user, setValue }) => {
+  const hierarchy = process.env.NEXT_PUBLIC_HIERARCHY.split(",");
+  const approvalOptions = [];
+  for(let i = 0; i < hierarchy.length; i++) {
+    approvalOptions.push({ value: hierarchy[i], label: hierarchy[i] });
+  }
+
+  const userIndex = ["gensec-tech", "vpg", "pic", "arsa", "drsa", "adean"].indexOf(user?.admin);
+  const availableOptions = approvalOptions.slice(userIndex + 1);
+
+  const adeanOption = availableOptions.find(option => option.value === "adean");
+
+  const [selectedOptions, setSelectedOptions] = React.useState(adeanOption ? [adeanOption] : []);
+
+  const handleChange = (options) => {
+    const updatedOptions = options ? options.filter(opt => opt.value !== "adean") : [];
+    setSelectedOptions([...updatedOptions, adeanOption]);
+
+    setValue("requiredApprovals", [...updatedOptions.map(opt => opt.value), adeanOption.value]);
+  };
+
+  return (
+    <div className="flex flex-col gap-4 w-[90%]">
+      <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
+        Approvals needed
+      </label>
+
+      <Select
+        options={availableOptions}
+        isMulti
+        onChange={handleChange}
+        className="w-full text-[2rem] px-[0.5rem] py-[0.5rem] rounded-lg"
+        placeholder="Select approvals..."
+        value={selectedOptions} 
+        isOptionDisabled={(option) => option.value === "adean"} 
+      />
+    </div>
+  );
+};
 
 const NewNotesheetForm = () => {
   const { register, handleSubmit, setValue, reset } = useForm();
@@ -18,6 +59,7 @@ const NewNotesheetForm = () => {
 
   const onSubmit = async (data) => {
     submitBtnRef.current.style.opacity = "0.5";
+    console.log(data.requiredApprovals);
 
     const formData = new FormData();
     formData.append("pdfFile", data.pdfFile);
@@ -205,11 +247,8 @@ const NewNotesheetForm = () => {
             </div>
 
             <div className="flex flex-col gap-4 w-[90%]">
-              <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
-                Approvals needed
-              </label>
               <div className="flex flex-wrap gap-10">
-                {["Gensec-Tech", "VPG", "PIC", "ARSA", "DRSA", "ADean"]
+                {/* {["Gensec-Tech", "VPG", "PIC", "ARSA", "DRSA", "ADean"]
                   .slice(
                     [
                       "gensec-tech",
@@ -236,7 +275,9 @@ const NewNotesheetForm = () => {
                       />
                       <p className="text-[2rem]">{approval}</p>
                     </label>
-                  ))}
+                  ))} */}
+
+                <MultiSelectDropdown user={user} setValue={setValue} />
               </div>
             </div>
           </div>
