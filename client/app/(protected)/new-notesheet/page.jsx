@@ -13,7 +13,7 @@ const MultiSelectDropdown = ({
   setSelectedOptions,
   selectedOptions,
   adeanOption,
-  availableOptions
+  availableOptions,
 }) => {
   const handleChange = (options) => {
     if (!options) return;
@@ -43,6 +43,13 @@ const MultiSelectDropdown = ({
     control: (provided) => ({
       ...provided,
       textTransform: "capitalize",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      textTransform: "capitalize",
+      zIndex: 10,
+      marginTop: 0,
+      width: "95%",
     }),
   };
 
@@ -274,23 +281,23 @@ const NewNotesheetForm = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-3 md:w-[50%] w-[90%]">
-              <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
-                Amount
-              </label>
-              <div className="w-full flex bg-white rounded-lg px-[1.5rem] py-[0.5rem] gap-2">
-                <span className="text-[2rem]">&#8377;</span>
-                <input
-                  {...register("amount", {
-                    required: "Please provide the amount required",
-                  })}
-                  className="text-[2rem] rounded-lg  w-full"
-                  type="number"
-                  placeholder="Enter Amount"
-                  autoComplete="off"
-                />
+              <div className="flex flex-col gap-3 md:w-[50%] w-[90%]">
+                <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
+                  Amount
+                </label>
+                <div className="w-full flex bg-white rounded-lg px-[1.5rem] py-[0.5rem] gap-2">
+                  <span className="text-[2rem]">&#8377;</span>
+                  <input
+                    {...register("amount", {
+                      required: "Please provide the amount required",
+                    })}
+                    className="text-[2rem] rounded-lg  w-full"
+                    type="number"
+                    placeholder="Enter Amount"
+                    autoComplete="off"
+                  />
+                </div>
               </div>
-            </div>
 
             <div className="flex flex-col gap-4 w-[90%]">
               <div className="flex flex-wrap gap-10">
