@@ -10,22 +10,38 @@ import Select from "react-select";
 const MultiSelectDropdown = ({ user, setValue }) => {
   const hierarchy = process.env.NEXT_PUBLIC_HIERARCHY.split(",");
   const approvalOptions = [];
-  for(let i = 0; i < hierarchy.length; i++) {
+  for (let i = 0; i < hierarchy.length; i++) {
     approvalOptions.push({ value: hierarchy[i], label: hierarchy[i] });
   }
 
-  const userIndex = ["gensec-tech", "vpg", "pic", "arsa", "drsa", "adean"].indexOf(user?.admin);
+  const userIndex = [
+    "gensec-tech",
+    "vpg",
+    "pic",
+    "arsa",
+    "drsa",
+    "adean",
+  ].indexOf(user?.admin);
   const availableOptions = approvalOptions.slice(userIndex + 1);
 
-  const adeanOption = availableOptions.find(option => option.value === "adean");
+  const adeanOption = availableOptions.find(
+    (option) => option.value === "adean"
+  );
 
-  const [selectedOptions, setSelectedOptions] = React.useState(adeanOption ? [adeanOption] : []);
+  const [selectedOptions, setSelectedOptions] = React.useState(
+    adeanOption ? [adeanOption] : []
+  );
 
   const handleChange = (options) => {
-    const updatedOptions = options ? options.filter(opt => opt.value !== "adean") : [];
+    const updatedOptions = options
+      ? options.filter((opt) => opt.value !== "adean")
+      : [];
     setSelectedOptions([...updatedOptions, adeanOption]);
 
-    setValue("requiredApprovals", [...updatedOptions.map(opt => opt.value), adeanOption.value]);
+    setValue("requiredApprovals", [
+      ...updatedOptions.map((opt) => opt.value),
+      adeanOption.value,
+    ]);
   };
 
   return (
@@ -40,8 +56,8 @@ const MultiSelectDropdown = ({ user, setValue }) => {
         onChange={handleChange}
         className="w-full text-[2rem] px-[0.5rem] py-[0.5rem] rounded-lg"
         placeholder="Select approvals..."
-        value={selectedOptions} 
-        isOptionDisabled={(option) => option.value === "adean"} 
+        value={selectedOptions}
+        isOptionDisabled={(option) => option.value === "adean"}
       />
     </div>
   );
@@ -82,11 +98,11 @@ const NewNotesheetForm = () => {
 
       openDialog("Notesheet submitted successfully");
       setTimeout(() => {
-		  reset();
-		  setPdfFile(null);
-		  setPdfFileUrl(null);
-		  router.push(`/notesheet/${response.data.notesheet._id}`);
-		  onClose();
+        reset();
+        setPdfFile(null);
+        setPdfFileUrl(null);
+        router.push(`/notesheet/${response.data.notesheet._id}`);
+        onClose();
       }, 800);
     } catch (error) {
       openDialog(error.response.data.message);
@@ -235,15 +251,18 @@ const NewNotesheetForm = () => {
               <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
                 Amount
               </label>
-              <input
-                {...register("amount", {
-                  required: "Please provide the amount required",
-                })}
-                className="text-[2rem] rounded-lg px-[1.5rem] py-[0.5rem] w-full"
-                type="number"
-                placeholder="Enter Amount"
-                autoComplete="off"
-              />
+              <div className="w-full flex bg-white rounded-lg px-[1.5rem] py-[0.5rem] gap-2">
+                <span className="text-[2rem]">&#8377;</span>
+                <input
+                  {...register("amount", {
+                    required: "Please provide the amount required",
+                  })}
+                  className="text-[2rem] rounded-lg  w-full"
+                  type="number"
+                  placeholder="Enter Amount"
+                  autoComplete="off"
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-4 w-[90%]">
