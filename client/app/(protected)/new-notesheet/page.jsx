@@ -7,7 +7,75 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Select from "react-select";
 
-const MultiSelectDropdown = ({ user, setValue }) => {
+const MultiSelectDropdown = ({
+  setValue,
+  hierarchy,
+  setSelectedOptions,
+  selectedOptions,
+  adeanOption,
+  availableOptions
+}) => {
+  const handleChange = (options) => {
+    if (!options) return;
+
+    const updatedOptions = options.filter((opt) => opt.value !== "adean");
+
+    const sortedOptions = updatedOptions.sort(
+      (a, b) => hierarchy.indexOf(a.value) - hierarchy.indexOf(b.value)
+    );
+
+    const finalOptions = adeanOption
+      ? [...sortedOptions, adeanOption]
+      : sortedOptions;
+
+    setSelectedOptions(finalOptions);
+    setValue(
+      "requiredApprovals",
+      finalOptions.map((opt) => opt.value)
+    );
+  };
+
+  const customStyles = {
+    option: (provided) => ({
+      ...provided,
+      textTransform: "capitalize",
+    }),
+    control: (provided) => ({
+      ...provided,
+      textTransform: "capitalize",
+    }),
+  };
+
+  return (
+    <div className="flex flex-col gap-4 w-[90%]">
+      <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
+        Approvals needed
+      </label>
+
+      <Select
+        options={availableOptions}
+        isMulti
+        styles={customStyles}
+        onChange={handleChange}
+        className="w-full text-[2rem] px-[0.5rem] py-[0.5rem] rounded-lg first-letter:capitalize"
+        placeholder="Select approvals..."
+        value={selectedOptions}
+        isOptionDisabled={(option) => option.value === "adean"}
+      />
+    </div>
+  );
+};
+
+const NewNotesheetForm = () => {
+  const { register, handleSubmit, setValue, reset } = useForm();
+  const { user } = useAuth();
+  const date = new Date().toISOString().split("T")[0];
+  const { openDialog, onClose } = useDialog();
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFileUrl, setPdfFileUrl] = useState(null);
+  const submitBtnRef = useRef(null);
+  const router = useRouter();
+
   const hierarchy = process.env.NEXT_PUBLIC_HIERARCHY.split(",");
   const approvalOptions = [];
   for (let i = 0; i < hierarchy.length; i++) {
@@ -28,50 +96,9 @@ const MultiSelectDropdown = ({ user, setValue }) => {
     (option) => option.value === "adean"
   );
 
-  const [selectedOptions, setSelectedOptions] = React.useState(
+  const [selectedOptions, setSelectedOptions] = useState(
     adeanOption ? [adeanOption] : []
   );
-
-  const handleChange = (options) => {
-    const updatedOptions = options
-      ? options.filter((opt) => opt.value !== "adean")
-      : [];
-    setSelectedOptions([...updatedOptions, adeanOption]);
-
-    setValue("requiredApprovals", [
-      ...updatedOptions.map((opt) => opt.value),
-      adeanOption.value,
-    ]);
-  };
-
-  return (
-    <div className="flex flex-col gap-4 w-[90%]">
-      <label className="text-[2rem] font-medium text-gray-700 pl-[0.5rem]">
-        Approvals needed
-      </label>
-
-      <Select
-        options={availableOptions}
-        isMulti
-        onChange={handleChange}
-        className="w-full text-[2rem] px-[0.5rem] py-[0.5rem] rounded-lg"
-        placeholder="Select approvals..."
-        value={selectedOptions}
-        isOptionDisabled={(option) => option.value === "adean"}
-      />
-    </div>
-  );
-};
-
-const NewNotesheetForm = () => {
-  const { register, handleSubmit, setValue, reset } = useForm();
-  const { user } = useAuth();
-  const date = new Date().toISOString().split("T")[0];
-  const { openDialog, onClose } = useDialog();
-  const [pdfFile, setPdfFile] = useState(null);
-  const [pdfFileUrl, setPdfFileUrl] = useState(null);
-  const submitBtnRef = useRef(null);
-  const router = useRouter();
 
   const onSubmit = async (data) => {
     submitBtnRef.current.style.opacity = "0.5";
@@ -296,7 +323,14 @@ const NewNotesheetForm = () => {
                     </label>
                   ))} */}
 
-                <MultiSelectDropdown user={user} setValue={setValue} />
+                <MultiSelectDropdown
+                  setValue={setValue}
+                  hierarchy={hierarchy}
+                  selectedOptions={selectedOptions}
+                  setSelectedOptions={setSelectedOptions}
+                  adeanOption={adeanOption}
+                  availableOptions={availableOptions}
+                />
               </div>
             </div>
           </div>
