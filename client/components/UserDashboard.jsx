@@ -7,6 +7,7 @@ import { isValidElement, useEffect, useState } from "react";
 import axios from "axios";
 import { useDialog } from "@/contexts/DialogBoxContext";
 import { useAuth } from "@/contexts/AuthContext";
+import Image from "next/image";
 
 export default function UserDashboard() {
   const { openDialog } = useDialog();
@@ -49,10 +50,10 @@ export default function UserDashboard() {
     if (!user) return;
 
     const params = new URLSearchParams(searchparams);
-    if(!params.toString()) {
+    if (!params.toString()) {
       params.set("type", "raised");
-      params.set('sortBy', 'raisedAt');
-      params.set('order', 'desc');
+      params.set("sortBy", "raisedAt");
+      params.set("order", "desc");
       params.set("page", "1");
       replace(`${pathname}?${params.toString()}`);
       return;
@@ -118,19 +119,7 @@ export default function UserDashboard() {
       <div className="flex flex-col items-center h-full">
         <div className="flex w-fit justify-evenly rounded-t-xl bg-[#9ca3af8e]">
           <div
-            onClick={() => {
-              params.delete("status");
-              replace(`${pathname}?${params.toString()}`);
-            }}
-            className={`p-3 text-gray-700 ${
-              params.get("status") === null
-                ? "bg-gray-300"
-                : "bg-transparent hover:bg-[#e5e7eba8]"
-            }  cursor-pointer  rounded-t-xl transition-all duration-500 w-[12rem] lg:w-[18rem] text-center`}
-          >
-            <p className="font-semibold  text-[2rem]">ALL</p>
-          </div>
-          <div
+          title="Pending"
             onClick={() => {
               params.set("status", "pending");
               params.set("page", "1");
@@ -140,11 +129,17 @@ export default function UserDashboard() {
               params.get("status") === "pending"
                 ? "bg-gray-300"
                 : "bg-transparent hover:bg-[#e5e7eba8]"
-            }  cursor-pointer rounded-t-xl transition-all duration-500 w-[12rem] lg:w-[18rem] text-center`}
+            }  cursor-pointer rounded-t-xl transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center`}
           >
-            <p className="font-semibold  text-[2rem]">PENDING</p>
+            <Image
+              src="/images/icons/pending.png"
+              width={35}
+              height={35}
+              alt="Pending icon"
+            />
           </div>
           <div
+          title="Approved"
             onClick={() => {
               params.set("status", "approved");
 
@@ -155,11 +150,17 @@ export default function UserDashboard() {
               params.get("status") === "approved"
                 ? "bg-gray-300"
                 : "bg-transparent hover:bg-[#e5e7eba8]"
-            }  cursor-pointer hover:bg-gray-300 rounded-t-xl transition-all duration-500 w-[12rem] lg:w-[18rem] text-center`}
+            }  cursor-pointer hover:bg-gray-300 rounded-t-xl transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center`}
           >
-            <p className="font-semibold  text-[2rem]">APPROVED</p>
+            <Image
+              src="/images/icons/approved.png"
+              width={35}
+              height={35}
+              alt="Approved icon"
+            />
           </div>
           <div
+          title="Rejected"
             onClick={() => {
               params.set("status", "rejected");
               params.set("page", "1");
@@ -169,9 +170,14 @@ export default function UserDashboard() {
               params.get("status") === "rejected"
                 ? "bg-gray-300"
                 : "bg-transparent hover:bg-[#e5e7eba8]"
-            }  cursor-pointer hover:bg-gray-300 rounded-t-xl transition-all duration-500 w-[12rem] lg:w-[18rem] text-center`}
+            }  cursor-pointer hover:bg-gray-300 rounded-t-xl transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center`}
           >
-            <p className="font-semibold  text-[2rem]">REJECTED</p>
+            <Image
+              src="/images/icons/rejected.png"
+              width={35}
+              height={35}
+              alt="Rejected icon"
+            />
           </div>
         </div>
         {loading ? (

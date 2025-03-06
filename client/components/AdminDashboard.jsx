@@ -122,6 +122,7 @@ export default function AdminDashboard() {
             {user?.role.includes("superadmin") ? null : (
               <>
                 <div
+                title="Pending"
                   onClick={() => {
                     params.set("type", "raised");
                     params.set("status", "pending");
@@ -143,6 +144,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div
+                title="Approved"
                   onClick={() => {
                     params.set("type", "raised");
                     params.set("status", "approved");
@@ -164,6 +166,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div
+                title="Rejected"
                   onClick={() => {
                     params.set("type", "raised");
                     params.set("status", "rejected");
@@ -189,6 +192,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex w-fit justify-evenly bg-[#9ca3af63] rounded-t-xl">
             <div
+            title="To Approve"
               onClick={() => {
                 params.delete("status");
                 params.set("type", "to-approve");
@@ -205,10 +209,11 @@ export default function AdminDashboard() {
                 src="/images/icons/to-approve.png"
                 width={35}
                 height={35}
-                alt="Approved icon"
+                alt="To approve icon"
               />
             </div>
             <div
+            title="Approved by me"
               onClick={() => {
                 params.delete("status");
                 params.set("type", "approved");
