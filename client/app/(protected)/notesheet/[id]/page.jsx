@@ -102,8 +102,8 @@ export default function NoteSheet() {
 
 	const NotesheetDetail = () => {
 		return (
-			<div className='lg:w-screen-md w-full mx-auto pt-3 flex flex-col gap-4'>
-				<p className='text-gray-500 font-bold text-[3rem] mb-12'>
+			<div className='lg:w-screen-md w-full mx-auto pt-[1rem] flex flex-col gap-4'>
+				<p className='text-gray-500 font-bold text-[3rem]'>
 					Notesheet Details
 				</p>
 				{loading ? (

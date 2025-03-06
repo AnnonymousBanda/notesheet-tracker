@@ -183,7 +183,7 @@ export default function UserDashboard() {
         {loading ? (
           <TableLoadingSkeleton params={params} />
         ) : notesheets?.length ? (
-          <div className="bg-white rounded-xl w-full h-[90%] overflow-auto no-scrollbar flex flex-col gap-12">
+          <div className="bg-white rounded-xl w-full h-fit overflow-auto no-scrollbar flex flex-col gap-12">
             <div className="flex justify-around rounded-t-xl w-full min-w-[900px] text-gray-700 bg-gray-300 font-semibold">
               <p className="w-[5%] p-3 rounded-xl">No.</p>
               <div className="w-[35.71%] max-w-[41.6667%] p-3 rounded-xl">
