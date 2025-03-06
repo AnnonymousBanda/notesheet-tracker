@@ -1,8 +1,8 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 
-export default function Pagination({total}) {
+export default function Pagination({ total }) {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = usePathname();
@@ -30,8 +30,7 @@ export default function Pagination({total}) {
 
   useEffect(() => {
     setCurrentPage(parseInt(searchParams.get("page")) || 1);
-    }
-  , [params.toString()]);
+  }, [params.toString()]);
 
   const renderPageNumbers = () =>
     Array.from({ length: totalPages }, (_, i) => (
@@ -40,29 +39,33 @@ export default function Pagination({total}) {
         onClick={() => updatePage(i + 1)}
         className={`py-1 px-4 ${
           currentPage === i + 1 ? "bg-gray-300" : ""
-        } text-[1.5rem] text-gray-700 hover:bg-gray-300 font-semibold rounded-full cursor-pointer transition-colors duration-200`}
+        } text-[1.5rem] text-gray-700 hover:bg-gray-300 font-bold rounded-full cursor-pointer transition-colors duration-200`}
       >
         {i + 1}
       </p>
     ));
 
   return (
-    <div className={`w-fit ${totalPages === 0 ? "hidden" : "flex"} justify-center absolute bottom-8 left-[50%] translate-x-[-50%]`}>
-      <div className="flex gap-[1rem] bg-white w-fit rounded-full p-2">
+    <div
+      className={`w-fit ${
+        totalPages === 0 ? "hidden" : "flex"
+      } justify-center absolute bottom-8 left-[50%] translate-x-[-50%]`}
+    >
+      <div className="flex gap-[1rem] bg-gray-400 w-fit rounded-full p-2">
         <button
           onClick={prevPage}
-          className="py-1 px-4 hover:bg-gray-300 cursor-pointer transition-colors duration-200 rounded-full"
+          className="py-1 px-4 hover:bg-gray-300 text-white font-bold cursor-pointer transition-colors duration-200 rounded-full"
           disabled={currentPage === 1}
         >
-          {"<<"}
+          &lt;&lt;
         </button>
         <div className="flex gap-[1rem]">{renderPageNumbers()}</div>
         <button
           onClick={nextPage}
-          className="px-4 py-2 hover:bg-gray-300 cursor-pointer transition-colors duration-200 rounded-full"
+          className="px-4 py-2 hover:bg-gray-300 text-white font-bold cursor-pointer transition-colors duration-200 rounded-full"
           disabled={currentPage === totalPages}
         >
-          {">>"}
+          &gt;&gt;
         </button>
       </div>
     </div>
