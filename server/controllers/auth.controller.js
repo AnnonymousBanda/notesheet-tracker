@@ -132,6 +132,24 @@ const reset = catchAsync(async (req, res) => {
 	user.passwordChangedAt = Date.now()
 	await user.save()
 
+	sendMail(
+		user.email,
+		'Password Reset Successfully',
+		`
+		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+		  <h2 style="color: #856404;">Password Reset Successfully</h2>
+		  <p>Dear ${user.name},</p>
+		  <p>Your password has been successfully reset. You can now log in with your new password.</p>
+		  <p><a href="${process.env.CLIENT_URL}/auth/login" style="color: #007bff; text-decoration: none;">Log in to your account</a></p>
+		  <br/>
+		  <p>If you did not request this password reset, please contact our support team immediately.</p>
+		  <p>Thank you,</p>
+		  <p><strong>Team Gymkhana</strong></p>
+		  <p>Indian Institute of Technology Patna</p>
+		</div>
+		`
+	)
+
 	return res
 		.status(200)
 		.json({ status: 200, message: 'Password reset successful' })
@@ -159,6 +177,23 @@ const changePassword = catchAsync(async (req, res) => {
 	user.confirmPassword = confirmPassword
 	user.passwordChangedAt = Date.now()
 	await user.save()
+
+	sendMail(
+		user.email,
+		'Password Changed Successfully',
+		`
+		<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+		  <h2 style="color: #856404;">Password Changed Successfully</h2>
+		  <p>Dear ${user.name},</p>
+		  <p>Your password has been successfully changed. If you made this change, no further action is required.</p>
+		  <br/>
+		  <p>If you did not change your password, please contact our support team immediately.</p>
+		  <p>Thank you,</p>
+		  <p><strong>Team Gymkhana</strong></p>
+		  <p>Indian Institute of Technology Patna</p>
+		</div>
+		`
+	)
 
 	return res
 		.status(200)
