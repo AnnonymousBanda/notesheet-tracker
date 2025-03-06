@@ -233,27 +233,27 @@ export default function AdminDashboard() {
         {loading ? (
           <TableLoadingSkeleton params={params} />
         ) : notesheets?.length ? (
-          <div className="bg-white lg:rounded-xl w-full h-[90%] overflow-auto flex flex-col gap-12 ">
+          <div className="bg-white lg:rounded-xl w-full h-[90%] overflow-auto flex flex-col gap-[1rem]">
             <div className="flex justify-around min-w-[900px] lg:rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center">
-              <p className="w-1/12 p-3 rounded-xl">No.</p>
-              <div className="w-5/12 max-w-[41.6667%] p-3 rounded-xl">
-                <p className="w-fit cursor-pointer" onClick={handleSort}>
+              <p className="w-[5%] p-3 rounded-xl">No.</p>
+              <div className="w-[35.71%] p-3 rounded-xl">
+                <p className="w-full cursor-pointer" onClick={handleSort}>
                   Subject
                 </p>
               </div>
-              <div className="w-2/12 p-3 rounded-xl flex justify-center">
+              <div className="w-[14.28%] p-3 rounded-xl flex justify-center">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Date
                 </p>
               </div>
-              <div className="w-1/12 p-3 rounded-xl">
-                <p className="w-fit cursor-pointer" onClick={handleSort}>
+              <div className="w-[14.28%] p-3 rounded-xl">
+                <p className="w-full cursor-pointer text-center" onClick={handleSort}>
                   Amount
                 </p>
               </div>
               {params.get("type") === "to-approve" ||
               params.get("type") === "approved" ? (
-                <div className="w-2/12 p-3 rounded-xl flex justify-center">
+                <div className="w-[14.28%] p-3 rounded-xl flex justify-center">
                   <p
                   // className='w-fit cursor-pointer'
                   // onClick={handleSort}
@@ -263,16 +263,16 @@ export default function AdminDashboard() {
                 </div>
               ) : null}
               {params.get("status") === "rejected" && (
-                <p className="w-2/12 max-w-[16.66666%] p-3 rounded-xl">
+                <p className="w-[14.28%] max-w-[16.66666%] p-3 rounded-xl">
                   Action Required
                 </p>
               )}
-              <div className="w-[8rem] p-3 rounded-xl flex justify-center">
+              <div className="w-[7.14%] p-3 rounded-xl flex justify-center">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Status
                 </p>
               </div>
-              <p className="w-[14rem] p-3 rounded-xl text-center">
+              <p className="w-[14.28%] p-3 rounded-xl text-center">
                 View/Download
               </p>
             </div>

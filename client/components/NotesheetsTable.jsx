@@ -22,28 +22,28 @@ export default function NotesheetsTable({ notesheets }) {
 					key={notesheet?.id || index}
 					className={`flex items-center ${index === notesheets.length - 1 ? 'rounded-b-xl' : ''} justify-around text-gray-700 font-semibold cursor-pointer hover:bg-blue-200 transition-colors duration-300`}
 				>
-					<p className='w-1/12 p-3 rounded-xl'>{index + 1}</p>
-					<p className='w-5/12 max-w-[41.6667%] p-3 rounded-xl break-words'>
+					<p className='w-[5%] p-3 rounded-xl'>{index + 1}</p>
+					<p className='w-[35.71%] p-3 rounded-xl break-words'>
 						{notesheet?.subject}
 					</p>
-					<p className='w-2/12 p-3 rounded-xl text-center'>
+					<p className='w-[14.28%] p-3 rounded-xl text-center'>
 						{formatDate(notesheet?.raisedAt)}
 					</p>
-					<p className='w-1/12 p-3 rounded-xl'>
+					<p className='w-[14.28%] p-3 px-0 rounded-xl text-center'>
 						{formatAmount(notesheet?.amount)}
 					</p>
 					{params.get('type') === 'to-approve' ||
 					params.get('type') === 'approved' ? (
-						<p className='w-2/12 p-3 rounded-xl text-center'>
+						<p className='w-[14.28%] p-3 rounded-xl text-center'>
 							{notesheet?.raiser}
 						</p>
 					) : null}
 					{params.get('status') === 'rejected' && (
-						<p className='w-2/12 max-w-[16.66666%] p-3 rounded-xl break-words'>
+						<p className='w-[14.28%] max-w-[16.66666%] p-3 rounded-xl break-words'>
 							{notesheet?.status?.rejectedBy?.comment}
 						</p>
 					)}
-					<div className='w-[8rem] p-3 rounded-xl flex justify-center'>
+					<div className='w-[7.14%] p-3 rounded-xl flex justify-center'>
 						<LazyBlurImage
 							src={`icons/${notesheet?.status?.state}.png`}
 							alt={notesheet?.status?.state || 'state'}
@@ -53,7 +53,7 @@ export default function NotesheetsTable({ notesheets }) {
 							bgColor={false}
 						/>
 					</div>
-					<p className='w-[14rem] p-3 rounded-xl flex justify-center gap-[2rem]'>
+					<p className='w-[14.28%] p-3 rounded-xl flex justify-center gap-[2rem]'>
 						<a
 							onClick={(e) => e.stopPropagation()}
 							href={notesheet?.pdf}

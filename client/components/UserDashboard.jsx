@@ -179,31 +179,31 @@ export default function UserDashboard() {
         ) : notesheets?.length ? (
           <div className="bg-white rounded-xl w-full h-[90%] overflow-auto no-scrollbar flex flex-col gap-12">
             <div className="flex justify-around rounded-t-xl w-full min-w-[900px] text-gray-700 bg-gray-300 font-semibold">
-              <p className="w-1/12 p-3 rounded-xl">No.</p>
-              <div className="w-5/12 max-w-[41.6667%] p-3 rounded-xl">
+              <p className="w-[5%] p-3 rounded-xl">No.</p>
+              <div className="w-[35.71%] max-w-[41.6667%] p-3 rounded-xl">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Subject
                 </p>
               </div>
-              <div className="w-2/12 p-3 rounded-xl flex justify-center">
+              <div className="w-[14.28%] p-3 rounded-xl flex justify-center">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Date
                 </p>
               </div>
-              <div className="w-1/12 py-3 rounded-xl">
+              <div className="w-[7.14%] py-3 rounded-xl">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Amount
                 </p>
               </div>
               {params.get("status") === "rejected" && (
-                <p className="w-2/12 p-3 rounded-xl">Action Required</p>
+                <p className="w-[14.28%] p-3 rounded-xl">Action Required</p>
               )}
-              <div className="w-[8rem] max-w-[16.66666%] p-3 rounded-xl flex justify-center">
+              <div className="w-[7.14%] max-w-[16.66666%] p-3 rounded-xl flex justify-center">
                 <p className="w-fit cursor-pointer" onClick={handleSort}>
                   Status
                 </p>
               </div>
-              <p className="w-[14rem] p-3 rounded-xl">View/Download</p>
+              <p className="w-[14.28%] p-3 rounded-xl">View/Download</p>
             </div>
             <div className="overflow-y-auto overflow-x-clip min-w-[900px] w-full h-full ">
               <NotesheetsTable notesheets={notesheets} />
