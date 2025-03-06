@@ -4,6 +4,7 @@ const { signToken, verifyToken, sendResetToken } = require('../utils/auth.util')
 const { catchAsync } = require('../utils/error.util')
 const { userModel } = require('../models')
 const { AppError } = require('../controllers/error.controller')
+const { sendMail } = require('../utils/api.util')
 
 const register = catchAsync(async (req, res) => {
 	const { name, email, password, confirmPassword, role, admin } = req.body
