@@ -50,12 +50,13 @@ export default function ApproveNotesheet() {
 			]
 
 			const pendingApprovals = notesheet.status.pendingApprovals
+			const generateHTML = await html(approvals, pendingApprovals, process.env.NEXT_PUBLIC_CLIENT_URL +'/notesheet/'+ notesheetID)
 
 			await axios.post(
 				'http://localhost:8000/pdf/create-sign',
 				{
 					filename: notesheet.pdf.split('/').pop(),
-					html: html(approvals, pendingApprovals),
+					html: generateHTML,
 				},
 				{
 					headers: {
@@ -121,7 +122,7 @@ export default function ApproveNotesheet() {
 			console.log('Starting PDF signing and merging...')
 			signAndMergePdf()
 		}
-	}, [notesheet.pdf])
+	}, [notesheet?.pdf])
 
 	return (
 		<div className='w-screen-md h-full mx-auto relative'>

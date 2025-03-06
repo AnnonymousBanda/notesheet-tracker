@@ -1,32 +1,45 @@
-const { signImages, iitplogo, stclogo } = require('./signature')
+const { signImages, iitplogo, stclogo } = require("./signature");
+import QrCode from "qrcode";
+import { useEffect, useState } from "react";
 
 const formatDate = (date) => {
-	const newDate = new Date(date)
-	const options = {
-		timeZone: 'Asia/Kolkata',
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-	}
-	const [day, month, year] = new Intl.DateTimeFormat('en-GB', options)
-		.format(newDate)
-		.split('/')
+  const newDate = new Date(date);
+  const options = {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  };
+  const [day, month, year] = new Intl.DateTimeFormat("en-GB", options)
+    .format(newDate)
+    .split("/");
 
-	return `${day}-${month}-${year}`
-}
+  return `${day}-${month}-${year}`;
+};
 
 const formatAmount = (amount) => {
-	const formatter = new Intl.NumberFormat('en-IN', {
-		style: 'currency',
-		currency: 'INR',
-	})
-	return formatter.format(amount)
-}
+  const formatter = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  });
+  return formatter.format(amount);
+};
 
-const html = (approvals, pendingApproval) => {
-	console.log(approvals, '\n', pendingApproval)
+const html = async (approvals, pendingApproval, pdf) => {
+  console.log(approvals, "\n", pendingApproval);
+  console.log(pdf);
+  const generateQR = async (pdf) => {
+    try {
+      const qrbase64 = await QrCode.toDataURL(pdf);
+      return qrbase64;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-	const HTML = `
+  const qr = await generateQR(pdf);
+
+  const HTML = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -99,6 +112,29 @@ const html = (approvals, pendingApproval) => {
 				padding: 0;
 				margin: 0;
 			}
+			footer {
+				position: absolute;
+				bottom: 60px;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+			}
+			footer img {
+				width: 100px;
+				height: 100px;
+				padding: 0px;
+				margin: 0px;
+			}
+			footer p {
+				font-size: 1rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0px;
+			}
 		</style>
     </head>
     <body>
@@ -116,25 +152,30 @@ const html = (approvals, pendingApproval) => {
 		</header>
         <main>
         ${approvals.map(
-			(authority) =>
-				`<div class="container">
+          (authority) =>
+            `<div class="container">
                     <img src="${signImages[authority.admin]}" alt="Signature">
                     <p>${authority.name}, ${authority.admin}</p>
             </div>`
-		)}
+        )}
 
         ${pendingApproval.map(
-			(authority) =>
-				`<div class="container">
+          (authority) =>
+            `<div class="container">
                     <div class="signature"></div>
                     <p>${authority.name}, ${authority.admin}</p>
 			</div>`
-		)}
+        )}
         </main>
+		<footer>
+			<p>Scan the QR Code to view the </br> status of the Notesheet</p>
+			<img src="${qr}" alt="QR Code" />
+			<p>QR Code</p>
+		</footer>
     </body>
-    </html>`
+    </html>`;
 
-	return HTML
-}
+  return HTML;
+};
 
-export { formatDate, formatAmount, html }
+export { formatDate, formatAmount, html };
