@@ -134,12 +134,13 @@ export default function AdminDashboard() {
                     params.get("type") === "raised"
                       ? "bg-gray-300"
                       : "bg-transparent hover:bg-[#e5e7eba8]"
-                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                  }  cursor-pointer transition-all duration-500 w-[5.5rem] py-[1rem] md:w-[10rem] flex justify-center rounded-t-xl`}
                 >
                   <Image
                     src="/images/icons/pending.png"
                     width={35}
                     height={35}
+                    className="md:w-[35px] md:h-[35px] w-[25px] h-[25px]"
                     alt="Pending icon"
                   />
                 </div>
@@ -156,13 +157,14 @@ export default function AdminDashboard() {
                     params.get("type") === "raised"
                       ? "bg-gray-300"
                       : "bg-transparent hover:bg-[#e5e7eba8]"
-                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                  }  cursor-pointer transition-all duration-500 w-[5.5rem] py-[1rem] md:w-[10rem] flex justify-center rounded-t-xl`}
                 >
                   <Image
                     src="/images/icons/approved.png"
                     width={35}
                     height={35}
                     alt="Approved icon"
+                    className="md:w-[40px] md:h-[40px] w-[25px] h-[25px]"
                   />
                 </div>
                 <div
@@ -178,13 +180,14 @@ export default function AdminDashboard() {
                     params.get("type") === "raised"
                       ? "bg-gray-300"
                       : "bg-transparent hover:bg-[#e5e7eba8]"
-                  }  cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+                  }  cursor-pointer transition-all duration-500 w-[5.5rem] py-[1rem] md:w-[10rem] flex justify-center rounded-t-xl`}
                 >
                   <Image
                     src="/images/icons/rejected.png"
                     width={35}
                     height={35}
                     alt="Rejected icon"
+                    className="md:w-[35px] md:h-[35px] w-[25px] h-[25px]"
                   />
                 </div>
               </>
@@ -203,13 +206,14 @@ export default function AdminDashboard() {
                 params.get("type") === "to-approve"
                   ? "bg-gray-300"
                   : "bg-transparent hover:bg-[#e5e7eba8]"
-              } cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+              } cursor-pointer transition-all duration-500 w-[5.5rem] py-[1rem] md:w-[10rem] flex justify-center rounded-t-xl`}
             >
               <Image
                 src="/images/icons/to-approve.png"
                 width={35}
                 height={35}
                 alt="To approve icon"
+                className="md:w-[35px] md:h-[35px] w-[25px] h-[25px]"
               />
             </div>
             <div
@@ -224,13 +228,14 @@ export default function AdminDashboard() {
                 params.get("type") === "approved"
                   ? "bg-gray-300"
                   : "bg-transparent hover:bg-[#e5e7eba8]"
-              } cursor-pointer transition-all duration-500 w-[8rem] py-[1rem] xl:w-[10rem] flex justify-center rounded-t-xl`}
+              } cursor-pointer transition-all duration-500 w-[5.5rem] py-[1rem] md:w-[10rem] flex justify-center rounded-t-xl`}
             >
               <Image
                 src="/images/icons/approved-by-me.png"
                 width={35}
                 height={35}
                 alt="Approved by me icon"
+                className="md:w-[35px] md:h-[35px] w-[25px] h-[25px]"
               />
             </div>
           </div>
@@ -238,7 +243,7 @@ export default function AdminDashboard() {
         {loading ? (
           <TableLoadingSkeleton params={params} />
         ) : notesheets?.length ? (
-          <div className="bg-white lg:rounded-xl w-full h-[90%] overflow-auto flex flex-col gap-[1rem]">
+          <div className="bg-white rounded-xl w-full h-fit overflow-auto flex flex-col gap-[1rem]">
             <div className="flex justify-around min-w-[900px] lg:rounded-t-xl text-gray-700 bg-gray-300 font-semibold items-center">
               <p className="w-[5%] p-3 rounded-xl">No.</p>
               <div className="w-[35.71%] p-3 rounded-xl">
@@ -293,7 +298,6 @@ export default function AdminDashboard() {
         )}
       </div>
       <Pagination total={totalPages} />
-      <div className="min-h-[4rem] w-full"></div>
     </div>
   );
 }
