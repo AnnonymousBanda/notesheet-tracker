@@ -1,0 +1,57 @@
+name: notesheet-tracker
+version: '3.8'
+services:
+    client:
+        container_name: notesheet-tracker-client
+        image: notesheet-tracker-client
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+            args:
+                PORT: 3000
+        command: run dev
+        ports:
+            - '3000:3000'
+        env_file:
+            - ./client/.env.local
+        environment:
+            - NEXT_PUBLIC_API_URL=http://server:8000
+        develop:
+            watch:
+                - action: sync
+                  path: ./client
+                  target: /app
+                  ignore:
+                      - node_modules
+                      - .next
+                - action: rebuild
+                  path: ./client/package.json
+
+    server:
+        container_name: notesheet-tracker-server
+        image: notesheet-tracker-server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+            args:
+                PORT: 8000
+        command: run dev
+        ports:
+            - '8000:8000'
+        env_file:
+            - ./server/.env
+        volumes:
+            - server-volume:/app/public/uploads
+        develop:
+            watch:
+                - action: sync
+                  path: ./server
+                  target: /app
+                  ignore:
+                      - node_modules
+                - action: rebuild
+                  path: ./server/package.json
+
+volumes:
+    server-volume:
+        name: server-volume
