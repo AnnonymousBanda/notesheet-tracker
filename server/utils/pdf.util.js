@@ -19,6 +19,10 @@ const copyPdfFile = catchAsync(async (sourceFilename, newFilename) => {
 		newFilename
 	)
 
+	await fs.mkdir(path.join(__dirname, '..', 'public', 'uploads'), {
+		recursive: true,
+	})
+
 	await fs.copyFile(sourceFilePath, newFilePath)
 
 	console.log('File copied from:', sourceFilePath)

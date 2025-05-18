@@ -36,14 +36,7 @@ const getUserByID = catchAsync(async (req, res) => {
 const downloadPDF = catchAsync(async (req, res) => {
 	const pdf = req.params.pdf
 
-	const pdfPath = path.join(
-		process.cwd(),
-		'..',
-		'server',
-		'public',
-		'uploads',
-		pdf
-	)
+	const pdfPath = path.join('..', 'public', 'uploads', pdf)
 
 	if (!fsSync.existsSync(pdfPath)) {
 		const custom404File = path.join(__dirname, '..', 'public', '404.html')
