@@ -42,6 +42,11 @@ services:
             - ./server/.env
         volumes:
             - server-volume:/app/public/uploads
+        security_opt:
+            - seccomp=unconfined
+        cap_add:
+            - SYS_ADMIN
+        shm_size: '1gb'
         develop:
             watch:
                 - action: sync
