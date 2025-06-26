@@ -26,6 +26,8 @@ services:
                       - .next
                 - action: rebuild
                   path: ./client/package.json
+                - action: rebuild
+                  path: ./client/.env.local
 
     server:
         container_name: notesheet-tracker-server
@@ -56,6 +58,8 @@ services:
                       - node_modules
                 - action: rebuild
                   path: ./server/package.json
+                - action: rebuild
+                  path: ./server/.env
 
 volumes:
     server-volume:

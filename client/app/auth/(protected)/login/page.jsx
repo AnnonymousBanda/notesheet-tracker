@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import Link from 'next/link'
 import { useDialog } from '@/contexts/DialogBoxContext'
 import Image from 'next/image'
+import { generatePKCE } from '@/utils/pkce'
 
 export default function Login() {
 	function LoginForm() {
@@ -52,8 +53,26 @@ export default function Login() {
 			}
 		}
 
+		// const handleOutlookLogin = async () => {
+		// 	window.location.href = 'http://localhost:8000/oauth/outlook'
+		// }
+
 		const handleOutlookLogin = async () => {
-			window.location.href = 'http://localhost:8000/oauth/outlook'
+			const { verifier, challenge } = await generatePKCE()
+			sessionStorage.setItem('pkce_verifier', verifier)
+
+			const params = new URLSearchParams({
+				client_id: process.env.NEXT_PUBLIC_OUTLOOK_CLIENT_ID,
+				response_type: 'code',
+				redirect_uri: 'http://localhost:3000/outlook',
+				response_mode: 'query',
+				scope: 'openid profile email offline_access https://graph.microsoft.com/User.Read',
+				code_challenge: challenge,
+				code_challenge_method: 'S256',
+				prompt: 'select_account',
+			})
+
+			window.location.href = `https://login.microsoftonline.com/${process.env.NEXT_PUBLIC_OUTLOOK_TENANT_ID}/oauth2/v2.0/authorize?${params.toString()}`
 		}
 
 		const onSubmit = (data) => {
