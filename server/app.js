@@ -33,6 +33,7 @@ const helmetConfig = helmet.contentSecurityPolicy({
 			"'self'",
 			'http://localhost:3000',
 			'http://localhost:8000',
+			process.env.CLIENT_URL
 		],
 		upgradeInsecureRequests: [],
 	},
