@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: notesheet-tracker-client
+    env: docker
+    repo: https://github.com/annonymousbanda/notesheet-tracker
+    rootDir: client
+    plan: free
+    autoDeploy: true
+    envVars:
+      - fromGroup: notesheet-client-env
+
+  - type: web
+    name: notesheet-tracker-server
+    env: docker
+    repo: https://github.com/annonymousbanda/notesheet-tracker
+    rootDir: server
+    plan: free
+    autoDeploy: true
+    envVars:
+      - fromGroup: notesheet-server-env
