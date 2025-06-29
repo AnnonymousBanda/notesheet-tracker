@@ -14,8 +14,6 @@ services:
             - '3000:3000'
         env_file:
             - ./client/.env.local
-        environment:
-            - NEXT_PUBLIC_API_URL=http://server:8000
         develop:
             watch:
                 - action: sync
