@@ -13,7 +13,7 @@ export default function ForgotPassword() {
 		const verifyToken = async () => {
 			try {
 				const response = await fetch(
-					`http://localhost:8000/auth/verify-password-reset-token`,
+					`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-password-reset-token`,
 					{
 						method: 'POST',
 						headers: {

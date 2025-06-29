@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null)
 	const [loading, setLoading] = useState(true)
 
-	const {openDialog} = useDialog()
+	const { openDialog } = useDialog()
 
 	useEffect(() => {
 		const checkLoggedIn = async () => {
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 			try {
 				if (token) {
 					const res = await fetch(
-						'http://localhost:8000/api/user/me',
+						`${process.env.NEXT_PUBLIC_API_URL}/api/user/me`,
 						{
 							headers: {
 								Authorization: `Bearer ${token}`,
@@ -48,11 +48,14 @@ export const AuthProvider = ({ children }) => {
 		localStorage.setItem('jwt', token)
 
 		try {
-			const res = await fetch('http://localhost:8000/api/user/me', {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_API_URL}/api/user/me`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
 
 			const data = await res.json()
 

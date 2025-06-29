@@ -12,12 +12,12 @@ export default function ForgotPasswordForm() {
 	} = useForm()
 	const { openDialog } = useDialog()
 	const onError = (errorList) => {
-			openDialog(errorList.email.message)
-		}
+		openDialog(errorList.email.message)
+	}
 	const onSubmit = async (data) => {
 		try {
 			const response = await fetch(
-				'http://localhost:8000/auth/get-password-reset-token',
+				`${process.env.NEXT_PUBLIC_API_URL}/auth/get-password-reset-token`,
 				{
 					method: 'POST',
 					headers: {
@@ -36,8 +36,6 @@ export default function ForgotPasswordForm() {
 			reset()
 		}
 	}
-
-	
 
 	return (
 		<>

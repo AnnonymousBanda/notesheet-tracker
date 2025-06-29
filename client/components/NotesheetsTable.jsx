@@ -69,7 +69,7 @@ export default function NotesheetsTable({ notesheets }) {
 						</a>
 						<a
 							onClick={(e) => e.stopPropagation()}
-							href={`http://localhost:8000/api/download/notesheet/${notesheet?.pdf.split('/').pop()}`}
+							href={`${process.env.NEXT_PUBLIC_API_URL}/api/download/notesheet/${notesheet?.pdf.split('/').pop()}`}
 							target='_blank'
 							download
 						>

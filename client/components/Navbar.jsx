@@ -184,7 +184,7 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.patch(
-        "http://localhost:8000/auth/update-profile",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/update-profile`,
         {
           name: data.name,
         },
@@ -231,7 +231,7 @@ const SettingsDialog = ({ isOpen, setIsOpen }) => {
 
     try {
       const response = await axios.patch(
-        "http://localhost:8000/auth/change-password",
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`,
         {
           oldPassword: data.oldPassword,
           password: data.newPassword,

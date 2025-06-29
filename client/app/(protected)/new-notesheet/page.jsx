@@ -120,7 +120,7 @@ const NewNotesheetForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/notesheet/create",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/create`,
         formData,
         {
           headers: {

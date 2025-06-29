@@ -16,7 +16,7 @@ const AuthSuccess = () => {
 			const login = async () => {
 				try {
 					const res = await fetch(
-						'http://localhost:8000/api/user/me',
+						`${process.env.NEXT_PUBLIC_API_URL}/api/user/me`,
 						{
 							headers: {
 								Authorization: `Bearer ${token}`,

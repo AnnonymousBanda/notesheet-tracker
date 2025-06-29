@@ -20,7 +20,7 @@ export default function OutlookCallback() {
 				client_id: process.env.NEXT_PUBLIC_OUTLOOK_CLIENT_ID,
 				grant_type: 'authorization_code',
 				code,
-				redirect_uri: 'http://localhost:3000/outlook',
+				redirect_uri: `${process.env.NEXT_PUBLIC_CLIENT_URL}/outlook`,
 				code_verifier: verifier,
 			})
 

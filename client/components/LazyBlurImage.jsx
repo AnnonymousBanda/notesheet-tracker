@@ -56,7 +56,7 @@ const DynamicLazyBlurImage = ({
     const fetchBlurData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8000/api/get-dynamic-blur-image",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/get-dynamic-blur-image`,
           {
             method: "POST",
             body: JSON.stringify({ url: src }),

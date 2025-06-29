@@ -24,7 +24,7 @@ export default function NoteSheet() {
 	const getNotesheet = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:8000/api/notesheet/${notesheetID}`,
+				`${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/${notesheetID}`,
 				{
 					method: 'GET',
 					headers: {
@@ -52,7 +52,7 @@ export default function NoteSheet() {
 		if (user.admin === 'adean') {
 			try {
 				const response = await axios.patch(
-					'http://localhost:8000/api/notesheet/approve',
+					`${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/approve`,
 					{ notesheetID },
 					{
 						headers: {
@@ -76,7 +76,7 @@ export default function NoteSheet() {
 		try {
 			rejectButtonRef.current.style.opacity = '0.5'
 			const response = await axios.delete(
-				`http://localhost:8000/api/notesheet/reject`,
+				`${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/reject`,
 				{
 					headers: {
 						'Content-Type': 'application/json',
@@ -188,7 +188,11 @@ export default function NoteSheet() {
 													/>
 												)}
 												<p>
-													{notesheet?.status?.currentRequiredApproval.name}
+													{
+														notesheet?.status
+															?.currentRequiredApproval
+															.name
+													}
 												</p>
 											</div>
 										</div>
@@ -237,9 +241,7 @@ export default function NoteSheet() {
 																rounded={true}
 															/>
 														)}
-														<p>
-															{admin.name}
-														</p>
+														<p>{admin.name}</p>
 													</div>
 												)
 											)}
@@ -303,27 +305,29 @@ export default function NoteSheet() {
 							<p className='text-gray-500 font-bold text-[2rem]'>
 								Status :
 							</p>
-							<divc className="flex justify-center gap-[0.5rem] items-center">
-							<LazyBlurImage
-								src={`icons/${notesheet?.status?.state}.png`}
-								alt={`${notesheet?.status?.state} icon`}
-								width={40}
-								height={40}
-								rounded={false}
-								bgColor={false}
-							/>
-							<p
-								className={
-									(notesheet?.status?.state === 'pending'
-										? 'text-yellow-400'
-										: notesheet?.status?.state ===
-											  'approved'
-											? 'text-green-400'
-											: 'text-red-500') + ' font-semibold'
-								}
-							>
-								{notesheet?.status?.state.toUpperCase()}
-							</p></divc>
+							<divc className='flex justify-center gap-[0.5rem] items-center'>
+								<LazyBlurImage
+									src={`icons/${notesheet?.status?.state}.png`}
+									alt={`${notesheet?.status?.state} icon`}
+									width={40}
+									height={40}
+									rounded={false}
+									bgColor={false}
+								/>
+								<p
+									className={
+										(notesheet?.status?.state === 'pending'
+											? 'text-yellow-400'
+											: notesheet?.status?.state ===
+												  'approved'
+												? 'text-green-400'
+												: 'text-red-500') +
+										' font-semibold'
+									}
+								>
+									{notesheet?.status?.state.toUpperCase()}
+								</p>
+							</divc>
 						</div>
 
 						{notesheet?.status?.state === 'rejected' && (
@@ -333,7 +337,10 @@ export default function NoteSheet() {
 										Rejected by :
 									</p>
 									<p className='text-gray-700 text-[2rem] font-bold'>
-										{notesheet?.status?.rejectedBy?.admin?.name}
+										{
+											notesheet?.status?.rejectedBy?.admin
+												?.name
+										}
 									</p>
 								</div>
 								<div className='flex gap-[1rem] items-center max-w-full flex-wrap'>
@@ -355,16 +362,19 @@ export default function NoteSheet() {
 							</>
 						)}
 
-						{notesheet?.status?.state === 'rejected' || notesheet?.status?.state === 'approved' ? null : <div className='flex gap-[1rem] items-center'>
-							<p className='text-gray-500 font-bold text-[2rem]'>
-								{Date.now() > new Date(notesheet?.expiresAt)
-									? 'Expired on :'
-									: 'Expires on :'}
-							</p>
-							<p className='text-gray-700 text-[2rem] font-bold'>
-								{formatDate(notesheet?.expiresAt)}
-							</p>
-						</div>}
+						{notesheet?.status?.state === 'rejected' ||
+						notesheet?.status?.state === 'approved' ? null : (
+							<div className='flex gap-[1rem] items-center'>
+								<p className='text-gray-500 font-bold text-[2rem]'>
+									{Date.now() > new Date(notesheet?.expiresAt)
+										? 'Expired on :'
+										: 'Expires on :'}
+								</p>
+								<p className='text-gray-700 text-[2rem] font-bold'>
+									{formatDate(notesheet?.expiresAt)}
+								</p>
+							</div>
+						)}
 					</div>
 				)}
 
@@ -375,7 +385,7 @@ export default function NoteSheet() {
 				) : (
 					<div
 						className={`p-3 ${
-							Date.now() > (new Date(notesheet?.expiresAt))
+							Date.now() > new Date(notesheet?.expiresAt)
 								? 'hidden'
 								: 'block'
 						}`}

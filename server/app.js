@@ -29,12 +29,7 @@ const helmetConfig = helmet.contentSecurityPolicy({
 		defaultSrc: ["'self'"],
 		scriptSrc: ["'self'"],
 		objectSrc: ["'none'"],
-		frameAncestors: [
-			"'self'",
-			'http://localhost:3000',
-			'http://localhost:8000',
-			process.env.CLIENT_URL
-		],
+		frameAncestors: ["'self'", process.env.CLIENT_URL, process.env.API_URL],
 		upgradeInsecureRequests: [],
 	},
 })

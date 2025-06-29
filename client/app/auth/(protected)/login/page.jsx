@@ -27,16 +27,19 @@ export default function Login() {
 
 		const handleLogin = async (data) => {
 			try {
-				const res = await fetch('http://localhost:8000/auth/login', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						email: data.email,
-						password: data.password,
-					}),
-				})
+				const res = await fetch(
+					`${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							email: data.email,
+							password: data.password,
+						}),
+					}
+				)
 
 				data = await res.json()
 
@@ -64,7 +67,7 @@ export default function Login() {
 			const params = new URLSearchParams({
 				client_id: process.env.NEXT_PUBLIC_OUTLOOK_CLIENT_ID,
 				response_type: 'code',
-				redirect_uri: 'http://localhost:3000/outlook',
+				redirect_uri: `${process.env.NEXT_PUBLIC_CLIENT_URL}/outlook`,
 				response_mode: 'query',
 				scope: 'openid profile email offline_access https://graph.microsoft.com/User.Read',
 				code_challenge: challenge,

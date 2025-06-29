@@ -20,7 +20,7 @@ export default function ApproveNotesheet() {
 		setLoading(true)
 		try {
 			const response = await fetch(
-				`http://localhost:8000/api/notesheet/${notesheetID}`,
+				`${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/${notesheetID}`,
 				{
 					method: 'GET',
 					headers: {
@@ -50,10 +50,14 @@ export default function ApproveNotesheet() {
 			]
 
 			const pendingApprovals = notesheet.status.pendingApprovals
-			const generateHTML = await html(approvals, pendingApprovals, process.env.NEXT_PUBLIC_CLIENT_URL +'/notesheet/'+ notesheetID)
+			const generateHTML = await html(
+				approvals,
+				pendingApprovals,
+				process.env.NEXT_PUBLIC_CLIENT_URL + '/notesheet/' + notesheetID
+			)
 
 			await axios.post(
-				'http://localhost:8000/pdf/create-sign',
+				`${process.env.NEXT_PUBLIC_API_URL}/pdf/create-sign`,
 				{
 					filename: notesheet.pdf.split('/').pop(),
 					html: generateHTML,
@@ -67,7 +71,7 @@ export default function ApproveNotesheet() {
 			)
 
 			await axios.post(
-				'http://localhost:8000/pdf/merge-sign',
+				`${process.env.NEXT_PUBLIC_API_URL}/pdf/merge-sign`,
 				{
 					filename: notesheet.pdf.split('/').pop(),
 				},
@@ -90,7 +94,7 @@ export default function ApproveNotesheet() {
 	const approveNotesheet = async () => {
 		try {
 			const response = await axios.patch(
-				'http://localhost:8000/api/notesheet/approve',
+				`${process.env.NEXT_PUBLIC_API_URL}/api/notesheet/approve`,
 				{ notesheetID },
 				{
 					headers: {
@@ -104,7 +108,7 @@ export default function ApproveNotesheet() {
 			setTimeout(
 				() =>
 					router.push(
-						`http://localhost:3000/notesheet/${notesheetID}`
+						`${process.env.NEXT_PUBLIC_CLIENT_URL}/notesheet/${notesheetID}`
 					),
 				250
 			)
